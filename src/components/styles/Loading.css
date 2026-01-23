@@ -197,6 +197,7 @@
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 0.2px;
+  color: #000 !important; /* Override parent's color for visibility on light loading screen */
 }
 .loader-title .logo-bracket {
   color: #10b981;

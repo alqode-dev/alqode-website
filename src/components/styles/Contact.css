@@ -303,3 +303,14 @@ a.contact-social {
     font-size: 20px;
   }
 }
+
+/* Touch device hover fixes */
+@media (hover: none) {
+  .contact-submit:hover {
+    background: #10b981;
+    transform: none;
+  }
+  a.contact-social:hover {
+    color: inherit;
+  }
+}

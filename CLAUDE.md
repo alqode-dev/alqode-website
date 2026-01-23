@@ -37,8 +37,37 @@ npm run preview  # Preview production build locally
 
 **Animation System**
 - `src/components/utils/GsapScroll.ts` coordinates scroll-linked GSAP timelines
+- `src/components/utils/initialFX.ts` handles initial page load animations (hero section text reveals)
 - `src/utils/textSplitter.ts` provides text splitting for character/word/line animations (custom replacement for GSAP SplitText)
 - Lenis smooth scroll integrated in Navbar.tsx
+
+**Mobile Typewriter Effect (Hero Tagline)**
+The hero tagline ("I build what others can't") uses a typewriter animation on mobile devices for increased visibility and engagement.
+
+- **File**: `src/components/utils/initialFX.ts` (lines 17-79)
+- **Breakpoint**: ≤768px viewport width
+- **Implementation Details**:
+  ```typescript
+  // Mobile detection
+  const isMobile = window.innerWidth <= 768;
+
+  // Typewriter animation config
+  gsap.to(taglineSplitter.chars, {
+    opacity: 1,
+    duration: 0.05,      // Quick reveal per character
+    stagger: 0.08,       // 80ms between each character (typing speed)
+    ease: "none",        // Linear for authentic typewriter feel
+    delay: 0.5,          // Wait for page to settle
+    onComplete: () => taglineElement.classList.add('typing-complete')
+  });
+  ```
+- **CSS Blinking Cursor** (`src/components/styles/Landing.css` lines 318-346):
+  - Uses `::after` pseudo-element with `|` character
+  - Accent color (#10b981) cursor
+  - `cursor-blink` keyframe animation (0.8s infinite)
+  - `typing-complete` class triggers fade behavior after animation
+- **Desktop Behavior**: Original slide-up + blur animation unchanged (>768px)
+- **Mobile Enhancements**: Font-weight 700 for bolder text visibility
 
 **State Management**
 - `src/context/LoadingProvider.tsx` provides global loading state via React Context
@@ -54,6 +83,7 @@ npm run preview  # Preview production build locally
 - `src/components/MainContainer.tsx` - Layout orchestrator
 - `src/components/Character/` - 3D character model with mouse tracking
 - `src/components/utils/GsapScroll.ts` - GSAP ScrollTrigger timeline setup
+- `src/components/utils/initialFX.ts` - Initial page load animations (hero text reveals, mobile typewriter)
 - `src/context/LoadingProvider.tsx` - Loading state context
 
 ### 3D Graphics Structure

@@ -250,6 +250,34 @@
     width: calc(100% - 25px);
   }
 }
+
+/* Tablet breakpoint */
+@media only screen and (max-width: 768px) {
+  .career-section h2 {
+    font-size: 44px;
+    line-height: 46px;
+    text-align: left;
+  }
+  .manifesto-text {
+    font-size: 17px;
+    line-height: 26px;
+  }
+  .career-info-in {
+    gap: 15px;
+  }
+  .career-info h4 {
+    font-size: 18px;
+    line-height: 20px;
+    width: auto;
+  }
+  .career-manifesto {
+    text-align: left;
+    margin-bottom: 40px;
+  }
+  .positions-title {
+    text-align: left;
+  }
+}
 @media only screen and (max-width: 600px) {
   .career-info {
     margin: 0;
@@ -316,5 +344,13 @@
   .career-cta-button {
     padding: 14px 30px;
     font-size: 14px;
+  }
+}
+
+/* Touch device hover fixes */
+@media (hover: none) {
+  .career-cta-button:hover {
+    background-color: #10b981;
+    color: #000;
   }
 }

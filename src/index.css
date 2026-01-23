@@ -21,6 +21,12 @@
   --accentColor: #10b981;
   --backgroundColor: #1d1d1d;
   --vh: 100svh;
+
+  /* Standardized breakpoints */
+  --bp-mobile: 480px;
+  --bp-tablet: 768px;
+  --bp-desktop: 1024px;
+  --bp-wide: 1400px;
 }
 h1,
 h2,
@@ -39,6 +45,12 @@ a {
 }
 a:hover {
   color: var(--accentColor);
+}
+/* Touch device hover fixes */
+@media (hover: none) {
+  a:hover {
+    color: inherit;
+  }
 }
 main {
   opacity: 1;

@@ -6,14 +6,14 @@ const Cursor = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(() => {
     if (typeof window !== "undefined") {
-      return window.innerWidth < 600 || "ontouchstart" in window;
+      return window.innerWidth < 768 || "ontouchstart" in window;
     }
     return false;
   });
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 600 || "ontouchstart" in window);
+      setIsMobile(window.innerWidth < 768 || "ontouchstart" in window);
     };
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);

@@ -13,6 +13,9 @@ const CTA_BOX_WIDTH = 350;
 
 const Work = () => {
   useEffect(() => {
+    // Skip horizontal scroll animation on mobile - use vertical layout instead
+    if (window.innerWidth <= 768) return;
+
     let translateX: number = 0;
 
     function setTranslateX() {

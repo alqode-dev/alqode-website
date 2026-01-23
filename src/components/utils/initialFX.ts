@@ -14,25 +14,69 @@ export function initialFX() {
     delay: 1,
   });
 
-  const selectors = [".landing-info h3", ".landing-intro h2", ".landing-intro h1"];
-  const elements = selectors.flatMap(selector => Array.from(document.querySelectorAll(selector)));
-  var landingText = new TextSplitter(elements, {
-    type: "chars,lines",
-    linesClass: "split-line",
-  });
-  gsap.fromTo(
-    landingText.chars,
-    { opacity: 0, y: 80, filter: "blur(5px)" },
-    {
+  const isMobile = window.innerWidth <= 768;
+  const taglineElement = document.querySelector('.landing-tagline');
+
+  if (isMobile && taglineElement) {
+    // Mobile: Typewriter effect for tagline
+    const taglineSplitter = new TextSplitter([taglineElement as HTMLElement], {
+      type: "chars",
+    });
+
+    gsap.set(taglineSplitter.chars, { opacity: 0 });
+    gsap.to(taglineSplitter.chars, {
       opacity: 1,
-      duration: 1.2,
-      filter: "blur(0px)",
-      ease: "power3.inOut",
-      y: 0,
-      stagger: 0.025,
-      delay: 0.3,
-    }
-  );
+      duration: 0.05,
+      stagger: 0.08,
+      ease: "none",
+      delay: 0.5,
+      onComplete: () => {
+        taglineElement.classList.add('typing-complete');
+      }
+    });
+
+    // Animate other elements (h1, h2) with normal animation
+    const otherSelectors = [".landing-intro h2", ".landing-intro h1"];
+    const otherElements = otherSelectors.flatMap(selector => Array.from(document.querySelectorAll(selector)));
+    const otherText = new TextSplitter(otherElements, {
+      type: "chars,lines",
+      linesClass: "split-line",
+    });
+    gsap.fromTo(
+      otherText.chars,
+      { opacity: 0, y: 80, filter: "blur(5px)" },
+      {
+        opacity: 1,
+        duration: 1.2,
+        filter: "blur(0px)",
+        ease: "power3.inOut",
+        y: 0,
+        stagger: 0.025,
+        delay: 0.3,
+      }
+    );
+  } else {
+    // Desktop: Keep existing animation for all elements
+    const selectors = [".landing-info h3", ".landing-intro h2", ".landing-intro h1"];
+    const elements = selectors.flatMap(selector => Array.from(document.querySelectorAll(selector)));
+    const landingText = new TextSplitter(elements, {
+      type: "chars,lines",
+      linesClass: "split-line",
+    });
+    gsap.fromTo(
+      landingText.chars,
+      { opacity: 0, y: 80, filter: "blur(5px)" },
+      {
+        opacity: 1,
+        duration: 1.2,
+        filter: "blur(0px)",
+        ease: "power3.inOut",
+        y: 0,
+        stagger: 0.025,
+        delay: 0.3,
+      }
+    );
+  }
 
   let TextProps = { type: "chars,lines", linesClass: "split-h2" };
 

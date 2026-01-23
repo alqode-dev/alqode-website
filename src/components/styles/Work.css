@@ -31,7 +31,8 @@
   padding: 80px;
   display: flex;
   flex-direction: column;
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   box-sizing: border-box;
   border-right: 1px solid #363636;
   flex-shrink: 0;
@@ -255,7 +256,7 @@
     font-size: 15px;
   }
   .work-box {
-    width: 350px;
+    max-width: 350px;
     padding: 30px;
   }
   .work-flex {
@@ -290,14 +291,20 @@
 
 /* Mobile Layout - Stack work boxes vertically */
 @media only screen and (max-width: 768px) {
+  .work-section {
+    height: auto;
+    min-height: auto;
+  }
   .work-flex {
     flex-direction: column;
     margin-left: 0;
     padding-right: 0;
     padding: 0 15px;
+    transform: none !important; /* Prevent GSAP transforms on mobile */
   }
   .work-box {
     width: 100%;
+    max-width: 100%;
     border-right: none;
     border-bottom: 1px solid #363636;
     padding: 40px 20px;
@@ -354,5 +361,23 @@
   }
   .work-description {
     font-size: 13px;
+  }
+}
+
+/* Touch device hover fixes */
+@media (hover: none) {
+  .work-view-link:hover {
+    background-color: transparent;
+    color: #10b981;
+  }
+  .work-cta-button:hover {
+    background-color: #10b981;
+    color: #000;
+  }
+  .work-link {
+    opacity: 1;
+  }
+  .work-image a:hover .work-link {
+    opacity: 1;
   }
 }

@@ -93,6 +93,124 @@
   }
 }
 
+/* Hamburger Menu Button */
+.navbar-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1001;
+}
+.navbar-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+.navbar-hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.navbar-hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.navbar-hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile Menu Backdrop */
+.navbar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 999;
+}
+.navbar-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Mobile Menu Panel */
+.navbar-mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 280px;
+  max-width: 85vw;
+  height: 100vh;
+  height: 100dvh;
+  background-color: #0a0a0a;
+  padding: 100px 30px 40px;
+  box-sizing: border-box;
+  transition: right 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+.navbar-mobile-menu.open {
+  right: 0;
+}
+.navbar-mobile-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.navbar-mobile-menu li {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.navbar-mobile-menu a {
+  display: block;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 15px 0;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.navbar-mobile-menu a:hover {
+  color: #10b981;
+}
+.navbar-mobile-email {
+  margin-top: auto;
+  font-size: 14px;
+  color: #10b981;
+  text-align: center;
+}
+
+/* Mobile styles - show hamburger, hide links */
+@media only screen and (max-width: 768px) {
+  .header {
+    align-items: center; /* Vertically align logo and hamburger */
+  }
+  .navbar-hamburger {
+    display: flex;
+  }
+  .header .navbar-links {
+    display: none !important; /* Higher specificity to override .header ul styles */
+  }
+  .navbar-connect {
+    display: none !important;
+  }
+}
+
 /* Extra small phones */
 @media only screen and (max-width: 375px) {
   .header {
