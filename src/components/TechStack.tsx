@@ -24,9 +24,16 @@ const imageUrls = [
 ];
 const textures = imageUrls.map((url) => textureLoader.load(url));
 
-const sphereGeometry = new THREE.SphereGeometry(1, 28, 28);
+// Desktop: 28x28 segments (784 triangles per sphere)
+// Mobile: 16x16 segments (256 triangles per sphere)
+const sphereGeometryDesktop = new THREE.SphereGeometry(1, 28, 28);
+const sphereGeometryMobile = new THREE.SphereGeometry(1, 16, 16);
 
-const spheres = [...Array(30)].map(() => ({
+// Desktop: 30 spheres, Mobile: 10 spheres
+const spheresDesktop = [...Array(30)].map(() => ({
+  scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
+}));
+const spheresMobile = [...Array(10)].map(() => ({
   scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
 }));
 
@@ -36,6 +43,8 @@ type SphereProps = {
   r?: typeof THREE.MathUtils.randFloatSpread;
   material: THREE.MeshPhysicalMaterial;
   isActive: boolean;
+  geometry: THREE.SphereGeometry;
+  isMobile: boolean;
 };
 
 function SphereGeo({
@@ -44,6 +53,8 @@ function SphereGeo({
   r = THREE.MathUtils.randFloatSpread,
   material,
   isActive,
+  geometry,
+  isMobile,
 }: SphereProps) {
   const api = useRef<RapierRigidBody | null>(null);
 
@@ -80,10 +91,10 @@ function SphereGeo({
         args={[0.15 * scale, 0.275 * scale]}
       />
       <mesh
-        castShadow
-        receiveShadow
+        castShadow={!isMobile}
+        receiveShadow={!isMobile}
         scale={scale}
-        geometry={sphereGeometry}
+        geometry={geometry}
         material={material}
         rotation={[0.3, 1, 1]}
       />
@@ -126,8 +137,16 @@ function Pointer({ vec = new THREE.Vector3(), isActive }: PointerProps) {
 
 const TechStack = () => {
   const [isActive, setIsActive] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // Detect mobile on mount and resize
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
     const handleScroll = () => {
       const scrollY = window.scrollY || document.documentElement.scrollTop;
       const threshold = document
@@ -149,8 +168,13 @@ const TechStack = () => {
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", checkMobile);
     };
   }, []);
+
+  const spheres = isMobile ? spheresMobile : spheresDesktop;
+  const sphereGeometry = isMobile ? sphereGeometryMobile : sphereGeometryDesktop;
+
   const materials = useMemo(() => {
     return textures.map(
       (texture) =>
@@ -168,12 +192,13 @@ const TechStack = () => {
 
   return (
     <div className="techstack">
-      <h2> My Techstack</h2>
+      <h2> Our Techstack</h2>
 
       <Canvas
-        shadows
+        shadows={!isMobile}
         gl={{ alpha: true, stencil: false, depth: false, antialias: false }}
         camera={{ position: [0, 0, 20], fov: 32.5, near: 1, far: 100 }}
+        dpr={isMobile ? 1 : [1, 2]}
         onCreated={(state) => (state.gl.toneMappingExposure = 1.5)}
         className="tech-canvas"
         style={{ position: 'relative', zIndex: 2 }}
@@ -184,8 +209,8 @@ const TechStack = () => {
           penumbra={1}
           angle={0.2}
           color="white"
-          castShadow
-          shadow-mapSize={[512, 512]}
+          castShadow={!isMobile}
+          shadow-mapSize={isMobile ? [256, 256] : [512, 512]}
         />
         <directionalLight position={[0, 5, -4]} intensity={2} />
         <Physics gravity={[0, 0, 0]}>
@@ -196,6 +221,8 @@ const TechStack = () => {
               {...props}
               material={materials[Math.floor(Math.random() * materials.length)]}
               isActive={isActive}
+              geometry={sphereGeometry}
+              isMobile={isMobile}
             />
           ))}
         </Physics>
@@ -204,9 +231,11 @@ const TechStack = () => {
           environmentIntensity={0.5}
           environmentRotation={[0, 4, 2]}
         />
-        <EffectComposer enableNormalPass={false}>
-          <N8AO color="#0f002c" aoRadius={2} intensity={1.15} />
-        </EffectComposer>
+        {!isMobile && (
+          <EffectComposer enableNormalPass={false}>
+            <N8AO color="#001a1f" aoRadius={2} intensity={1.15} />
+          </EffectComposer>
+        )}
       </Canvas>
     </div>
   );

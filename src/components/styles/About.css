@@ -1,33 +1,122 @@
 .about-section {
   display: flex;
   align-items: center;
-  justify-content: left;
-  place-items: center;
+  justify-content: center;
   position: relative;
   opacity: 1;
   height: auto;
   width: var(--cWidth);
   margin: auto;
+  padding: 80px 0;
 }
-.about-me {
-  padding: 50px 0px;
-  padding-bottom: 0;
-  width: 500px;
-  max-width: calc(100% - 15px);
+
+.about-container {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 }
-.about-me h3 {
+
+.about-story {
+  padding: 0;
+}
+
+.about-title {
   font-size: 25px;
   text-transform: uppercase;
   letter-spacing: 7px;
   font-weight: 400;
   color: var(--accentColor);
+  margin: 0 0 20px 0;
 }
 
-.about-me p {
-  font-size: 33px;
+.about-intro {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 34px;
+  letter-spacing: 0.5px;
+  margin: 0;
+  color: #fff;
+}
+
+.about-subtitle {
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 400;
+  color: var(--accentColor);
+  margin: 0 0 20px 0;
+}
+
+.about-claims {
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.claims-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.claim-item {
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff;
+  padding-left: 25px;
+  position: relative;
+}
+
+.claim-item::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: #10b981;
+}
+
+.about-proof {
+  padding: 30px;
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+}
+
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 25px;
+}
+
+.proof-item {
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.proof-item:last-child {
+  border-bottom: none;
+}
+
+.proof-title {
+  font-size: 16px;
   font-weight: 600;
-  line-height: 36px;
+  color: #10b981;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+.proof-result {
+  font-size: 15px;
+  font-weight: 300;
+  color: #ccc;
+  margin: 0;
+  line-height: 22px;
 }
 
 @media only screen and (min-width: 600px) {
@@ -35,37 +124,126 @@
     justify-content: center;
   }
 }
+
 @media only screen and (min-width: 768px) {
-  .about-me {
-    width: 500px;
-    max-width: calc(100% - 70px);
-    transform: translateY(0%);
+  .about-container {
+    max-width: 700px;
   }
-  .about-section {
-    opacity: 1;
+  .about-intro {
+    font-size: 28px;
+    line-height: 38px;
   }
 }
+
 @media only screen and (min-width: 1025px) {
   .about-section {
     width: var(--cWidth);
-    justify-content: right;
+    justify-content: flex-end;
     max-width: 1920px;
     height: var(--vh);
     padding: 0px;
     opacity: 1;
   }
-  .about-me {
-    padding: 0px;
+  .about-container {
     width: 50%;
+    max-width: 600px;
   }
-  .about-me p {
-    font-size: 1.9vw;
-    line-height: 2.3vw;
+  .about-intro {
+    font-size: 1.6vw;
+    line-height: 2.2vw;
+  }
+  .claim-item {
+    font-size: 1.1vw;
+  }
+  .proof-title {
+    font-size: 0.9vw;
+  }
+  .proof-result {
+    font-size: 0.85vw;
   }
 }
+
 @media only screen and (min-width: 1950px) {
-  .about-me p {
-    font-size: 2.5rem;
-    line-height: 2.7rem;
+  .about-intro {
+    font-size: 1.8rem;
+    line-height: 2.4rem;
+  }
+  .claim-item {
+    font-size: 1.1rem;
+  }
+  .proof-title {
+    font-size: 1rem;
+  }
+  .proof-result {
+    font-size: 0.95rem;
+  }
+}
+
+/* Mobile About Section */
+@media only screen and (max-width: 600px) {
+  .about-section {
+    padding: 50px 0;
+  }
+  .about-container {
+    gap: 35px;
+  }
+  .about-title {
+    font-size: 20px;
+    letter-spacing: 4px;
+  }
+  .about-intro {
+    font-size: 18px;
+    line-height: 28px;
+  }
+  .about-claims,
+  .about-proof {
+    padding: 20px;
+  }
+  .claim-item {
+    font-size: 15px;
+    padding-left: 18px;
+  }
+}
+
+@media only screen and (max-width: 414px) {
+  .about-section {
+    padding: 40px 0;
+  }
+  .about-container {
+    gap: 30px;
+  }
+  .about-title {
+    font-size: 18px;
+    letter-spacing: 3px;
+  }
+  .about-intro {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .about-subtitle {
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+  .claim-item {
+    font-size: 14px;
+    padding-left: 15px;
+  }
+  .proof-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+  }
+  .proof-item {
+    padding: 15px;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .about-title {
+    font-size: 16px;
+    letter-spacing: 2px;
+  }
+  .about-intro {
+    font-size: 15px;
+    line-height: 22px;
   }
 }

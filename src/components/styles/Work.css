@@ -8,7 +8,7 @@
 }
 .work-section {
   transition: 0s;
-  height: 100vh;
+  height: var(--vh);
   box-sizing: border-box;
   will-change: transform;
 }
@@ -85,6 +85,107 @@
 .work-info > p {
   width: 90%;
 }
+.work-description {
+  font-size: 14px;
+  line-height: 20px;
+  color: #fff;
+  font-weight: 300;
+  margin: 15px 0;
+}
+.work-info {
+  position: relative;
+}
+.work-logo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+.work-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.work-view-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: transparent;
+  color: #10b981;
+  border: 1px solid #10b981;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+.work-view-link:hover {
+  background-color: #10b981;
+  color: #000;
+}
+.work-cta-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px dashed rgba(16, 185, 129, 0.3);
+  border-right: 1px solid #363636;
+}
+.work-cta-content {
+  text-align: center;
+  padding: 40px;
+}
+.work-cta-content h3 {
+  font-size: 32px;
+  color: #10b981;
+  margin: 0 0 15px 0;
+  font-weight: 500;
+}
+.work-cta-content p {
+  font-size: 16px;
+  color: #ccc;
+  margin: 0 0 25px 0;
+  line-height: 24px;
+}
+.work-cta-button {
+  display: inline-block;
+  padding: 14px 32px;
+  background-color: #10b981;
+  color: #000;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  border: 2px solid #10b981;
+}
+.work-cta-button:hover {
+  background-color: transparent;
+  color: #10b981;
+}
+
+.work-cta-button:focus-visible,
+.work-view-link:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
 .work-image {
   display: flex;
   width: 100%;
@@ -154,25 +255,15 @@
     font-size: 15px;
   }
   .work-box {
-    width: 450px;
-    padding: 50px;
-  }
-  .work-flex {
-    margin-left: -50px;
-    padding-right: 75px;
-  }
-  .work-section h2 {
-    font-size: 50px;
-  }
-}
-@media only screen and (max-width: 1400px) {
-  .work-box {
     width: 350px;
     padding: 30px;
   }
   .work-flex {
     margin-left: -30px;
     padding-right: 45px;
+  }
+  .work-section h2 {
+    font-size: 50px;
   }
 }
 
@@ -188,23 +279,80 @@
     gap: 20px;
   }
 }
-/* @media only screen and (max-width: 900px) {
-  .work-image img {
-    max-height: 200px;
-  }
-  .work-section h2 {
-    font-size: 40px;
-    margin-bottom: 20px;
-  }
-  .work-box {
-    gap: 20px;
-  }
-} */
 @media only screen and (max-width: 1025px) {
   .work-container {
     align-content: normal;
   }
   .work-flex {
     height: auto;
+  }
+}
+
+/* Mobile Layout - Stack work boxes vertically */
+@media only screen and (max-width: 768px) {
+  .work-flex {
+    flex-direction: column;
+    margin-left: 0;
+    padding-right: 0;
+    padding: 0 15px;
+  }
+  .work-box {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #363636;
+    padding: 40px 20px;
+  }
+  .work-flex .work-box:nth-child(even) {
+    flex-direction: column;
+  }
+  .work-section h2 {
+    font-size: 40px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+  }
+  .work-title h3 {
+    font-size: 28px;
+    line-height: 32px;
+  }
+  .work-image img {
+    max-height: 220px;
+  }
+  .work-cta-box {
+    border-right: none;
+    padding: 30px 20px;
+  }
+  .work-cta-content h3 {
+    font-size: 24px;
+  }
+  .work-cta-content p {
+    font-size: 14px;
+  }
+  /* Make work-link always visible on touch devices */
+  .work-link {
+    opacity: 1;
+  }
+}
+
+/* Small phones */
+@media only screen and (max-width: 414px) {
+  .work-section h2 {
+    font-size: 32px;
+  }
+  .work-title h3 {
+    font-size: 24px;
+    line-height: 28px;
+  }
+  .work-box {
+    padding: 30px 15px;
+    gap: 30px;
+  }
+  .work-info h4 {
+    font-size: 14px;
+  }
+  .work-info p {
+    font-size: 12px;
+  }
+  .work-description {
+    font-size: 13px;
   }
 }

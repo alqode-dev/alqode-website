@@ -3,32 +3,44 @@ import "./styles/Landing.css";
 import { config } from "../config";
 
 const Landing = ({ children }: PropsWithChildren) => {
-  const nameParts = config.developer.fullName.split(" ");
-  const firstName = nameParts[0] || config.developer.name;
-  const lastName = nameParts.slice(1).join(" ") || "";
+  const handleScrollTo = (e: React.MouseEvent, target: string) => {
+    e.preventDefault();
+    const element = document.querySelector(target) as HTMLElement | null;
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <>
       <div className="landing-section" id="landingDiv">
         <div className="landing-container">
           <div className="landing-intro">
-            <h2>Hello! I'm</h2>
-            <h1>
-              {firstName.toUpperCase()}
-              <br />
-              {lastName && <span>{lastName.toUpperCase()}</span>}
-            </h1>
+            <h1>{config.developer.fullName}</h1>
+            <h2>{config.developer.title}</h2>
           </div>
           <div className="landing-info">
-            <h3>A Creative</h3>
-            <h2 className="landing-info-h2">
-              <div className="landing-h2-1">Designer</div>
-              <div className="landing-h2-2">Developer</div>
-            </h2>
-            <h2>
-              <div className="landing-h2-info">Developer</div>
-              <div className="landing-h2-info-1">Designer</div>
-            </h2>
+            <h3 className="landing-tagline">"{config.developer.tagline}"</h3>
+            <div className="landing-cta-buttons">
+              <a
+                href="#contact"
+                className="cta-button cta-primary"
+                data-cursor="disable"
+                aria-label="Start your project - scroll to contact form"
+                onClick={(e) => handleScrollTo(e, "#contact")}
+              >
+                Start Your Project
+              </a>
+              <a
+                href="#work"
+                className="cta-button cta-secondary"
+                data-cursor="disable"
+                aria-label="View my portfolio work"
+                onClick={(e) => handleScrollTo(e, "#work")}
+              >
+                View My Work
+              </a>
+            </div>
           </div>
         </div>
         {children}

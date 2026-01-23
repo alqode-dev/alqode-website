@@ -11,8 +11,8 @@
   position: absolute;
   left: -20px;
   bottom: 20px;
-  display: none;
-  flex-direction: column;
+  display: flex;
+  flex-direction: row;
   gap: 8px;
   z-index: 999;
   padding: 10px;
@@ -23,7 +23,6 @@
 }
 .social-icons a:hover {
   color: var(--backgroundColor);
-  /* transform: scale(1.2); */
 }
 .social-icons span {
   width: 50px;
@@ -39,28 +38,39 @@
   top: var(--siTop, 50%);
   transform: translate(-50%, -50%);
   display: flex;
-  font-size: 23px;
+  font-size: 20px;
   will-change: left, top;
   transition: transform 0.3s ease-out;
+  /* Ensure minimum touch target size */
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
 }
 .resume-button {
   position: absolute;
   z-index: 99;
   display: flex;
   gap: 5px;
-  bottom: 40px;
+  bottom: 20px;
   right: 0;
   width: auto;
   text-wrap: nowrap;
-  letter-spacing: 4px;
-  font-size: 15px;
-  line-height: 15px;
+  letter-spacing: 2px;
+  font-size: 12px;
+  line-height: 12px;
   font-weight: 600;
-  color: #5e5e5e;
+  color: #fff;
   cursor: pointer;
   transition: 0.5s;
   transform-origin: left bottom;
-  transform: translateX(100%) rotateZ(-90deg);
+  transform: none;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  min-height: 44px;
+  align-items: center;
 }
 .resume-button:hover {
   color: #fff;
@@ -81,18 +91,62 @@ div.resume-button span {
   width: 100%;
   z-index: 99999;
 }
+/* Mobile positioning for social icons */
+@media only screen and (max-width: 767px) {
+  .icons-section {
+    bottom: 10px;
+  }
+  .social-icons {
+    left: 0;
+    bottom: 0;
+    position: relative;
+  }
+  .social-icons span {
+    width: 44px;
+    height: 44px;
+  }
+  .resume-button {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    margin-left: auto;
+  }
+  div.resume-button span {
+    font-size: 14px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .resume-button {
+    transform: translateX(100%) rotateZ(-90deg);
+    background: transparent;
+    border: none;
+    padding: 0;
+    min-height: auto;
+    font-size: 15px;
+    line-height: 15px;
+    letter-spacing: 4px;
+    color: #5e5e5e;
+    bottom: 40px;
+  }
+  div.resume-button span {
+    font-size: 17px;
+    margin-top: -1px;
+  }
+}
+
 @media only screen and (min-width: 900px) {
   .social-icons {
-    display: flex;
+    flex-direction: column;
     gap: 20px;
   }
   .social-icons a {
     font-size: 28px;
   }
 }
-@media only screen and (min-width: 768px) {
+
+@media only screen and (min-width: 1024px) {
   .resume-button {
-    transform: none;
     font-size: 20px;
     line-height: 20px;
   }

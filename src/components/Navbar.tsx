@@ -18,7 +18,7 @@ const Navbar = () => {
       gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 1.7,
-      touchMultiplier: 2,
+      touchMultiplier: 1.3,
       infinite: false,
     });
 
@@ -67,14 +67,14 @@ const Navbar = () => {
     <>
       <div className="header">
         <a href="/#" className="navbar-title" data-cursor="disable">
-          Logo
+          <span className="logo-bracket">{"{"}</span>alqode<span className="logo-bracket">{"}"}</span>
         </a>
         <a
-          href="mailto:example@mail.com"
+          href="mailto:alqodez@gmail.com"
           className="navbar-connect"
           data-cursor="disable"
         >
-          example@mail.com
+          alqodez@gmail.com
         </a>
         <ul>
           <li>

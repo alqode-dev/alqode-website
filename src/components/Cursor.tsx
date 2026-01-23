@@ -1,12 +1,30 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./styles/Cursor.css";
 import gsap from "gsap";
 
 const Cursor = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 600 || "ontouchstart" in window;
+    }
+    return false;
+  });
+
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 600 || "ontouchstart" in window);
+    };
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) return;
+
     let hover = false;
-    const cursor = cursorRef.current!;
+    const cursor = cursorRef.current;
+    if (!cursor) return;
     const mousePos = { x: 0, y: 0 };
     const cursorPos = { x: 0, y: 0 };
     document.addEventListener("mousemove", (e) => {
@@ -46,7 +64,10 @@ const Cursor = () => {
         hover = false;
       });
     });
-  }, []);
+  }, [isMobile]);
+
+  // Don't render on mobile devices
+  if (isMobile) return null;
 
   return <div className="cursor-main" ref={cursorRef}></div>;
 };

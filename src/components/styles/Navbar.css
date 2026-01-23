@@ -30,6 +30,13 @@
   font-weight: 600;
   cursor: pointer;
 }
+.header ul li a {
+  display: inline-block;
+  padding: 10px 5px;
+  min-height: 44px;
+  min-width: 44px;
+  box-sizing: border-box;
+}
 .navbar-connect {
   position: absolute;
   display: none;
@@ -41,9 +48,13 @@
   font-weight: 500;
 }
 .navbar-title {
+  font-family: "Space Grotesk", sans-serif;
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 0.2px;
+}
+.logo-bracket {
+  color: #10b981;
 }
 @media only screen and (min-width: 500px) {
   .header {
@@ -79,5 +90,22 @@
   }
   .navbar-title {
     font-size: 18px;
+  }
+}
+
+/* Extra small phones */
+@media only screen and (max-width: 375px) {
+  .header {
+    padding: 15px 0;
+  }
+  .header ul {
+    font-size: 11px;
+    row-gap: 6px;
+  }
+  .header ul li a {
+    padding: 8px 4px;
+  }
+  .navbar-title {
+    font-size: 12px;
   }
 }
