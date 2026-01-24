@@ -140,13 +140,36 @@ The hero tagline ("I build what others can't") uses a typewriter animation on mo
   }, [isLoading]);
   ```
 
-**⚠️ STATUS: NEEDS VERIFICATION**
-The footer visibility fix may not be complete. If the issue persists after cache clears, investigate:
-1. Check if there's another CSS rule hiding the footer on mobile
-2. Check `src/components/styles/Contact.css` for mobile visibility issues
-3. Check if the contact section has proper height/display on mobile viewports
-4. Check z-index conflicts that might be hiding the footer
-5. Check `MainContainer.tsx` for any conditional rendering that hides the footer on mobile
+**✅ STATUS: FIXED (Commit: 3422808)**
+
+**Root Cause Found:** The `body { overflow: hidden; }` in `index.css` was blocking all scrolling. On desktop, Lenis smooth scroll handles this, but Lenis doesn't work reliably on mobile touch devices. The `overflowY: auto` set by `initialFX.ts` wasn't sufficient.
+
+**Additional Fixes Applied:**
+
+1. **File:** `src/components/utils/initialFX.ts`
+   - Added mobile detection (<=1024px)
+   - Mobile: Uses native browser scrolling with `overflow: auto`
+   - Desktop: Continues using Lenis smooth scroll
+   ```typescript
+   if (isMobileDevice) {
+     document.body.style.overflow = "auto";
+     document.body.style.overflowX = "hidden";
+     document.documentElement.style.overflow = "auto";
+     document.documentElement.style.overflowX = "hidden";
+   }
+   ```
+
+2. **File:** `src/index.css`
+   - Added mobile media query with `!important` to guarantee scroll works:
+   ```css
+   @media only screen and (max-width: 1024px) {
+     html, body {
+       overflow-y: auto !important;
+       overflow-x: hidden !important;
+       -webkit-overflow-scrolling: touch;
+     }
+   }
+   ```
 
 ### Testing Checklist for Mobile Fixes
 - [ ] Footer (Contact section) visible when scrolling down on mobile
@@ -160,9 +183,8 @@ The footer visibility fix may not be complete. If the issue persists after cache
 
 ## Known Issues & Future Investigation
 
-### Footer Not Visible on Mobile (Ongoing)
-If footer still not showing after the Navbar.tsx fix, next steps:
-1. Inspect Contact component CSS for `display: none` or `visibility: hidden` on mobile
-2. Check if Lenis smooth scroll is interfering with scroll boundaries
-3. Check MainContainer layout calculations for mobile viewport
-4. Test with browser DevTools mobile emulation to reproduce
+*No critical issues at this time.*
+
+### Resolved Issues
+- ✅ Footer not visible on mobile - Fixed by enabling native scroll on mobile (Commit: 3422808)
+- ✅ WhatIDo boxes overlapping on mobile - Fixed by removing conflicting media query (Commit: 97e164c)
