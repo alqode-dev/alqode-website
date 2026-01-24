@@ -24,6 +24,21 @@ const Navbar = () => {
     document.body.style.overflow = "";
   };
 
+  // Cleanup body overflow on unmount
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  // Reset overflow when loading state changes
+  useEffect(() => {
+    if (isLoading) {
+      document.body.style.overflow = "";
+      setIsMobileMenuOpen(false);
+    }
+  }, [isLoading]);
+
   useEffect(() => {
     // Initialize Lenis smooth scroll
     lenis = new Lenis({
