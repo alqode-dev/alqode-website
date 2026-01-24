@@ -98,3 +98,71 @@ The hero tagline ("I build what others can't") uses a typewriter animation on mo
 - Component styles in `src/components/styles/` with matching filenames
 - Error boundary wraps entire app in `main.tsx`
 - Aria labels required on interactive elements
+
+---
+
+## Bug Fixes & Change Log
+
+### 2026-01-24: Mobile UI Fixes (Commit: 97e164c)
+
+#### Issue 1: WhatIDo Section Boxes Blocking Each Other on Mobile
+**Problem:** When a service box was tapped/expanded on mobile, it would block/overlap the other boxes.
+
+**Root Cause:** A conflicting "Touch device support" media query at the bottom of `WhatIDo.css` (lines 457-494) was overriding the existing mobile styles. It set `min-height: auto` and `padding: 25px` for ALL states including `.what-content-active` and `.what-sibling`, conflicting with the proper mobile layouts already defined in `@media (max-width: 900px)`, `(max-width: 550px)`, and `(max-width: 375px)`.
+
+**Fix Applied:**
+- **File:** `src/components/styles/WhatIDo.css`
+- **Change:** Deleted the entire "Touch device support" media query block (lines 457-494)
+- The existing mobile media queries already handle layout correctly with `height: auto` on all boxes
+
+#### Issue 2: Footer (Contact Section) Not Visible on Mobile
+**Problem:** Users cannot scroll to the footer/contact section on mobile devices.
+
+**Suspected Cause:** The mobile menu toggle sets `document.body.style.overflow = "hidden"` when opened. If there's any state issue or the menu doesn't properly reset, body overflow stays hidden, preventing scroll to footer.
+
+**Fix Applied:**
+- **File:** `src/components/Navbar.tsx`
+- **Change:** Added two useEffect hooks:
+  ```typescript
+  // Cleanup body overflow on unmount
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  // Reset overflow when loading state changes
+  useEffect(() => {
+    if (isLoading) {
+      document.body.style.overflow = "";
+      setIsMobileMenuOpen(false);
+    }
+  }, [isLoading]);
+  ```
+
+**⚠️ STATUS: NEEDS VERIFICATION**
+The footer visibility fix may not be complete. If the issue persists after cache clears, investigate:
+1. Check if there's another CSS rule hiding the footer on mobile
+2. Check `src/components/styles/Contact.css` for mobile visibility issues
+3. Check if the contact section has proper height/display on mobile viewports
+4. Check z-index conflicts that might be hiding the footer
+5. Check `MainContainer.tsx` for any conditional rendering that hides the footer on mobile
+
+### Testing Checklist for Mobile Fixes
+- [ ] Footer (Contact section) visible when scrolling down on mobile
+- [ ] All 3 WhatIDo boxes fully visible, no overlapping
+- [ ] Each WhatIDo box content readable
+- [ ] Hamburger menu opens/closes properly
+- [ ] Body scrolls normally after menu close
+- [ ] Desktop hover effects still work on WhatIDo section
+
+---
+
+## Known Issues & Future Investigation
+
+### Footer Not Visible on Mobile (Ongoing)
+If footer still not showing after the Navbar.tsx fix, next steps:
+1. Inspect Contact component CSS for `display: none` or `visibility: hidden` on mobile
+2. Check if Lenis smooth scroll is interfering with scroll boundaries
+3. Check MainContainer layout calculations for mobile viewport
+4. Test with browser DevTools mobile emulation to reproduce
