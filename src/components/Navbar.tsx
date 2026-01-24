@@ -16,18 +16,28 @@ const Navbar = () => {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
     // Lock/unlock body scroll when menu is open
-    document.body.style.overflow = !isMobileMenuOpen ? "hidden" : "";
+    if (!isMobileMenuOpen) {
+      // Opening menu - lock scroll
+      document.body.style.overflow = "hidden";
+    } else {
+      // Closing menu - restore scroll (must use overflowY to not break Lenis)
+      document.body.style.overflow = "";
+      document.body.style.overflowY = "auto";
+    }
   };
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+    // Restore scroll (must use overflowY to not break Lenis)
     document.body.style.overflow = "";
+    document.body.style.overflowY = "auto";
   };
 
   // Cleanup body overflow on unmount
   useEffect(() => {
     return () => {
       document.body.style.overflow = "";
+      document.body.style.overflowY = "auto";
     };
   }, []);
 

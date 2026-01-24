@@ -3,21 +3,9 @@ import gsap from "gsap";
 import { lenis } from "../Navbar";
 
 export function initialFX() {
-  const isMobileDevice = window.innerWidth <= 1024;
-
-  // Enable scrolling - use native scroll on mobile, Lenis on desktop
-  if (isMobileDevice) {
-    // Mobile: Use native scrolling
-    document.body.style.overflow = "auto";
-    document.body.style.overflowX = "hidden";
-    document.documentElement.style.overflow = "auto";
-    document.documentElement.style.overflowX = "hidden";
-  } else {
-    // Desktop: Use Lenis smooth scroll
-    document.body.style.overflowY = "auto";
-    if (lenis) {
-      lenis.start();
-    }
+  document.body.style.overflowY = "auto";
+  if (lenis) {
+    lenis.start();
   }
   document.getElementsByTagName("main")[0].classList.add("main-active");
   gsap.to("body", {

@@ -140,36 +140,53 @@ The hero tagline ("I build what others can't") uses a typewriter animation on mo
   }, [isLoading]);
   ```
 
-**✅ STATUS: FIXED (Commit: 3422808)**
+**✅ STATUS: FIXED (Commit: 3422808, refined in subsequent commit)**
 
-**Root Cause Found:** The `body { overflow: hidden; }` in `index.css` was blocking all scrolling. On desktop, Lenis smooth scroll handles this, but Lenis doesn't work reliably on mobile touch devices. The `overflowY: auto` set by `initialFX.ts` wasn't sufficient.
+**Root Cause Found:** The previous "fix" that tried to bypass Lenis on mobile actually broke scrolling entirely. The real issue was:
+1. `initialFX.ts` sets `overflowY: auto` to enable scrolling
+2. But `Navbar.tsx` mobile menu was resetting `overflow = ""` when closed
+3. This removed the inline style, reverting to CSS `overflow: hidden`
+4. Result: scroll broke after using mobile menu
 
-**Additional Fixes Applied:**
+**Correct Fix Applied:**
 
 1. **File:** `src/components/utils/initialFX.ts`
-   - Added mobile detection (<=1024px)
-   - Mobile: Uses native browser scrolling with `overflow: auto`
-   - Desktop: Continues using Lenis smooth scroll
+   - Reverted to original simple approach - Lenis works on ALL devices including mobile
+   - Lenis has `touchMultiplier: 1.3` which handles touch scrolling
    ```typescript
-   if (isMobileDevice) {
-     document.body.style.overflow = "auto";
-     document.body.style.overflowX = "hidden";
-     document.documentElement.style.overflow = "auto";
-     document.documentElement.style.overflowX = "hidden";
+   export function initialFX() {
+     document.body.style.overflowY = "auto";
+     if (lenis) {
+       lenis.start();
+     }
+     // ...
    }
    ```
 
-2. **File:** `src/index.css`
-   - Added mobile media query with `!important` to guarantee scroll works:
-   ```css
-   @media only screen and (max-width: 1024px) {
-     html, body {
-       overflow-y: auto !important;
-       overflow-x: hidden !important;
-       -webkit-overflow-scrolling: touch;
-     }
-   }
+2. **File:** `src/components/Navbar.tsx`
+   - Fixed mobile menu overflow handling to preserve scroll after closing
+   - When closing menu, now restores `overflowY: auto` instead of clearing all overflow
+   ```typescript
+   const closeMobileMenu = () => {
+     setIsMobileMenuOpen(false);
+     document.body.style.overflow = "";
+     document.body.style.overflowY = "auto";  // Restore scroll capability
+   };
    ```
+
+3. **File:** `src/index.css`
+   - Removed the broken mobile scroll override that was conflicting with Lenis
+
+#### Issue 3: Loading Text Overlap on Mobile
+**Problem:** "W" from "Welcome" appears next to "L" from "Loading" on small mobile screens.
+
+**Root Cause:** The `--Lsize` variable was too small for mobile (120px and 100px).
+
+**Fix Applied:**
+- **File:** `src/components/styles/Loading.css`
+- Increased mobile widths:
+  - ≤500px: 120px → **140px**
+  - ≤375px: 100px → **120px**
 
 ### Testing Checklist for Mobile Fixes
 - [ ] Footer (Contact section) visible when scrolling down on mobile
@@ -178,6 +195,7 @@ The hero tagline ("I build what others can't") uses a typewriter animation on mo
 - [ ] Hamburger menu opens/closes properly
 - [ ] Body scrolls normally after menu close
 - [ ] Desktop hover effects still work on WhatIDo section
+- [ ] Loading screen text displays without overlap on mobile
 
 ---
 
@@ -186,5 +204,6 @@ The hero tagline ("I build what others can't") uses a typewriter animation on mo
 *No critical issues at this time.*
 
 ### Resolved Issues
-- ✅ Footer not visible on mobile - Fixed by enabling native scroll on mobile (Commit: 3422808)
+- ✅ Footer not visible on mobile - Fixed by using Lenis on all devices + proper overflow handling
 - ✅ WhatIDo boxes overlapping on mobile - Fixed by removing conflicting media query (Commit: 97e164c)
+- ✅ Loading text overlap on mobile - Fixed by increasing --Lsize values

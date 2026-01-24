@@ -383,7 +383,7 @@
     font-size: 14px;
   }
   .loading-wrap {
-    --Lsize: 120px;
+    --Lsize: 140px;
   }
 }
 
@@ -396,6 +396,6 @@
     font-size: 13px;
   }
   .loading-wrap {
-    --Lsize: 100px;
+    --Lsize: 120px;
   }
 }

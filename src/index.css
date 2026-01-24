@@ -181,20 +181,6 @@ body {
   }
 }
 
-/* Mobile: Enable native scrolling */
-@media only screen and (max-width: 1024px) {
-  html,
-  body {
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .main-body {
-    overflow: visible;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
