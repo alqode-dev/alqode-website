@@ -26,3 +26,8 @@ dist-ssr
 
 backup/
 .env
+
+# Private project documentation (not for public repo)
+CLAUDE.md
+ALQODE-PROJECT-STATUS.md
+.claude/
