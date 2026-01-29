@@ -46,6 +46,17 @@ a {
 a:hover {
   color: var(--accentColor);
 }
+
+/* ACCESSIBILITY: Focus indicators for keyboard navigation */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accentColor);
+  outline-offset: 2px;
+}
+
 /* Touch device hover fixes */
 @media (hover: none) {
   a:hover {
@@ -161,6 +172,16 @@ body {
 @media screen and (max-width: 900px) {
   .techstack h2 {
     font-size: 40px;
+  }
+}
+
+/* MOBILE: Reduce TechStack height for better scroll experience */
+@media screen and (max-width: 768px) {
+  .techstack {
+    height: auto;
+    min-height: 70vh;
+    padding-top: 100px;
+    padding-bottom: 100px;
   }
 }
 

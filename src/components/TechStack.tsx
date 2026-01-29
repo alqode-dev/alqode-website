@@ -148,27 +148,54 @@ const TechStack = () => {
     window.addEventListener("resize", checkMobile);
 
     const handleScroll = () => {
+      const workElement = document.getElementById("work");
+      if (!workElement) return;
+
       const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const threshold = document
-        .getElementById("work")!
-        .getBoundingClientRect().top;
+      const threshold = workElement.getBoundingClientRect().top;
       setIsActive(scrollY > threshold);
     };
+
+    // Store click handlers for cleanup
+    const clickHandlers = new Map<Element, EventListener>();
+    let activeInterval: ReturnType<typeof setInterval> | null = null;
+
     document.querySelectorAll(".header a").forEach((elem) => {
-      const element = elem as HTMLAnchorElement;
-      element.addEventListener("click", () => {
-        const interval = setInterval(() => {
+      const handler = () => {
+        // Clear any existing interval first
+        if (activeInterval) {
+          clearInterval(activeInterval);
+        }
+        // Use 50ms instead of 10ms - much more reasonable
+        activeInterval = setInterval(() => {
           handleScroll();
-        }, 10);
+        }, 50);
         setTimeout(() => {
-          clearInterval(interval);
+          if (activeInterval) {
+            clearInterval(activeInterval);
+            activeInterval = null;
+          }
         }, 1000);
-      });
+      };
+      clickHandlers.set(elem, handler);
+      elem.addEventListener("click", handler);
     });
+
     window.addEventListener("scroll", handleScroll);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", checkMobile);
+
+      // Cleanup click handlers
+      clickHandlers.forEach((handler, elem) => {
+        elem.removeEventListener("click", handler);
+      });
+
+      // Clear any active interval
+      if (activeInterval) {
+        clearInterval(activeInterval);
+      }
     };
   }, []);
 

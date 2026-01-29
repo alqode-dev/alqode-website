@@ -65,22 +65,28 @@ const Navbar = () => {
     // Start paused
     lenis.stop();
 
-    // Handle smooth scroll animation frame
-    function raf(time: number) {
-      lenis?.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+    // CRITICAL: Connect Lenis to GSAP ScrollTrigger
+    // This ensures scroll-triggered animations work with smooth scroll
+    lenis.on('scroll', ScrollTrigger.update);
+
+    // Use GSAP ticker for smoother integration (better than raw RAF)
+    gsap.ticker.add((time) => {
+      lenis?.raf(time * 1000);
+    });
+
+    // Disable GSAP lag smoothing for precise scroll sync
+    gsap.ticker.lagSmoothing(0);
 
     // Handle navigation links
-    let links = document.querySelectorAll(".header ul a");
+    const links = document.querySelectorAll(".header ul a");
+    const clickHandlers = new Map<Element, EventListener>();
+
     links.forEach((elem) => {
-      let element = elem as HTMLAnchorElement;
-      element.addEventListener("click", (e) => {
+      const handler = (e: Event) => {
         if (window.innerWidth > 1024) {
           e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
+          const anchor = e.currentTarget as HTMLAnchorElement;
+          const section = anchor.getAttribute("data-href");
           if (section && lenis) {
             const target = document.querySelector(section) as HTMLElement;
             if (target) {
@@ -91,15 +97,33 @@ const Navbar = () => {
             }
           }
         }
-      });
+      };
+      clickHandlers.set(elem, handler);
+      elem.addEventListener("click", handler);
     });
 
     // Handle resize
-    window.addEventListener("resize", () => {
+    const resizeHandler = () => {
       lenis?.resize();
-    });
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener("resize", resizeHandler);
 
     return () => {
+      // Cleanup: remove GSAP ticker
+      gsap.ticker.remove((time) => {
+        lenis?.raf(time * 1000);
+      });
+
+      // Cleanup: remove click handlers
+      clickHandlers.forEach((handler, elem) => {
+        elem.removeEventListener("click", handler);
+      });
+
+      // Cleanup: remove resize handler
+      window.removeEventListener("resize", resizeHandler);
+
+      // Cleanup: destroy Lenis
       lenis?.destroy();
     };
   }, []);

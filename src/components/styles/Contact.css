@@ -10,6 +10,12 @@
   flex-direction: column;
   justify-content: flex-start;
 }
+
+/* SAFETY FALLBACK: Ensure contact boxes are visible even if GSAP fails */
+/* GSAP will override these with inline styles when animations work */
+.contact-box {
+  opacity: 1;
+}
 .contact-section h3 {
   font-size: 60px;
   font-weight: 400;
@@ -301,6 +307,35 @@ a.contact-social {
   }
   .contact-form-box h4 {
     font-size: 20px;
+  }
+}
+
+/* Very small phones (iPhone SE 1st gen, etc.) */
+@media only screen and (max-width: 320px) {
+  .contact-section h3 {
+    font-size: 24px;
+  }
+  .contact-subtitle {
+    font-size: 12px;
+  }
+  .contact-response-badge {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+  .contact-box h2 {
+    font-size: 14px;
+  }
+  .contact-box h5 {
+    font-size: 14px;
+  }
+  .contact-form-box h4 {
+    font-size: 18px;
+  }
+  .form-group label {
+    font-size: 10px;
+  }
+  a.contact-social {
+    font-size: 18px;
   }
 }
 

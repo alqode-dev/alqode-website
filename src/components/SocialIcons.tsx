@@ -12,17 +12,23 @@ import { config } from "../config";
 
 const SocialIcons = () => {
   useEffect(() => {
-    const social = document.getElementById("social") as HTMLElement;
+    const social = document.getElementById("social");
+    if (!social) return;
+
+    // Store cleanup functions for each icon
+    const cleanupFunctions: (() => void)[] = [];
 
     social.querySelectorAll("span").forEach((item) => {
       const elem = item as HTMLElement;
       const link = elem.querySelector("a") as HTMLElement;
+      if (!link) return;
 
       const rect = elem.getBoundingClientRect();
       let mouseX = rect.width / 2;
       let mouseY = rect.height / 2;
       let currentX = 0;
       let currentY = 0;
+      let animationFrameId: number | null = null;
 
       const updatePosition = () => {
         currentX += (mouseX - currentX) * 0.1;
@@ -31,7 +37,7 @@ const SocialIcons = () => {
         link.style.setProperty("--siLeft", `${currentX}px`);
         link.style.setProperty("--siTop", `${currentY}px`);
 
-        requestAnimationFrame(updatePosition);
+        animationFrameId = requestAnimationFrame(updatePosition);
       };
 
       const onMouseMove = (e: MouseEvent) => {
@@ -47,14 +53,27 @@ const SocialIcons = () => {
         }
       };
 
+      // Add listener to document (correct)
       document.addEventListener("mousemove", onMouseMove);
 
+      // Start animation loop
       updatePosition();
 
-      return () => {
-        elem.removeEventListener("mousemove", onMouseMove);
-      };
+      // Store cleanup function
+      cleanupFunctions.push(() => {
+        // Remove from document (was incorrectly removing from elem before)
+        document.removeEventListener("mousemove", onMouseMove);
+        // Cancel animation frame
+        if (animationFrameId !== null) {
+          cancelAnimationFrame(animationFrameId);
+        }
+      });
     });
+
+    // Return cleanup function that calls all stored cleanups
+    return () => {
+      cleanupFunctions.forEach((cleanup) => cleanup());
+    };
   }, []);
 
   return (

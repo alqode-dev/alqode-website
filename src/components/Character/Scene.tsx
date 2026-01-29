@@ -19,7 +19,7 @@ const Scene = () => {
   const sceneRef = useRef(new THREE.Scene());
   const { setLoading } = useLoading();
 
-  const [character, setChar] = useState<THREE.Object3D | null>(null);
+  const [, setChar] = useState<THREE.Object3D | null>(null);
   useEffect(() => {
     if (canvasDiv.current) {
       let rect = canvasDiv.current.getBoundingClientRect();
@@ -53,25 +53,26 @@ const Scene = () => {
       let progress = setProgress((value) => setLoading(value));
       const { loadCharacter } = setCharacter(renderer, scene, camera);
 
+      // Store character reference for resize handler
+      let loadedCharacter: THREE.Object3D | null = null;
+
       loadCharacter().then((gltf) => {
         if (gltf) {
           const animations = setAnimations(gltf);
           hoverDivRef.current && animations.hover(gltf, hoverDivRef.current);
           mixer = animations.mixer;
-          let character = gltf.scene;
-          setChar(character);
-          scene.add(character);
-          headBone = character.getObjectByName("spine006") || null;
-          screenLight = character.getObjectByName("screenlight") || null;
+          loadedCharacter = gltf.scene;
+          setChar(loadedCharacter);
+          scene.add(loadedCharacter);
+          headBone = loadedCharacter.getObjectByName("spine006") || null;
+          screenLight = loadedCharacter.getObjectByName("screenlight") || null;
           progress.loaded().then(() => {
             setTimeout(() => {
               light.turnOnLights();
               animations.startIntro();
             }, 2500);
           });
-          window.addEventListener("resize", () =>
-            handleResize(renderer, camera, canvasDiv, character)
-          );
+          // Note: resize handler is added outside this callback for proper cleanup
         }
       });
 
@@ -81,13 +82,18 @@ const Scene = () => {
       const onMouseMove = (event: MouseEvent) => {
         handleMouseMove(event, (x, y) => (mouse = { x, y }));
       };
-      let debounce: number | undefined;
+
+      let debounce: ReturnType<typeof setTimeout> | undefined;
+      let touchMoveHandler: ((e: TouchEvent) => void) | null = null;
+      let touchTargetElement: HTMLElement | null = null;
+
       const onTouchStart = (event: TouchEvent) => {
         const element = event.target as HTMLElement;
+        touchTargetElement = element;
         debounce = setTimeout(() => {
-          element?.addEventListener("touchmove", (e: TouchEvent) =>
-            handleTouchMove(e, (x, y) => (mouse = { x, y }))
-          );
+          touchMoveHandler = (e: TouchEvent) =>
+            handleTouchMove(e, (x, y) => (mouse = { x, y }));
+          element?.addEventListener("touchmove", touchMoveHandler);
         }, 200);
       };
 
@@ -96,18 +102,36 @@ const Scene = () => {
           mouse = { x, y };
           interpolation = { x: interpolationX, y: interpolationY };
         });
+        // Clean up touchmove handler
+        if (touchTargetElement && touchMoveHandler) {
+          touchTargetElement.removeEventListener("touchmove", touchMoveHandler);
+          touchMoveHandler = null;
+          touchTargetElement = null;
+        }
       };
 
-      document.addEventListener("mousemove", (event) => {
-        onMouseMove(event);
-      });
+      // Store resize handler for proper cleanup
+      const resizeHandler = () => {
+        if (loadedCharacter) {
+          handleResize(renderer, camera, canvasDiv, loadedCharacter);
+        }
+      };
+
+      // Add event listeners (store references for cleanup)
+      document.addEventListener("mousemove", onMouseMove);
+      window.addEventListener("resize", resizeHandler);
+
       const landingDiv = document.getElementById("landingDiv");
       if (landingDiv) {
         landingDiv.addEventListener("touchstart", onTouchStart);
         landingDiv.addEventListener("touchend", onTouchEnd);
       }
+
+      // Animation loop with cancellation support
+      let animationFrameId: number | null = null;
+
       const animate = () => {
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
         if (headBone) {
           handleHeadRotation(
             headBone,
@@ -126,20 +150,33 @@ const Scene = () => {
         renderer.render(scene, camera);
       };
       animate();
+
       return () => {
+        // Cancel animation frame
+        if (animationFrameId !== null) {
+          cancelAnimationFrame(animationFrameId);
+        }
+
         clearTimeout(debounce);
         scene.clear();
         renderer.dispose();
-        window.removeEventListener("resize", () =>
-          handleResize(renderer, camera, canvasDiv, character!)
-        );
+
+        // Remove event listeners (use same references)
+        document.removeEventListener("mousemove", onMouseMove);
+        window.removeEventListener("resize", resizeHandler);
+
         if (canvasDiv.current) {
           canvasDiv.current.removeChild(renderer.domElement);
         }
+
         if (landingDiv) {
-          document.removeEventListener("mousemove", onMouseMove);
           landingDiv.removeEventListener("touchstart", onTouchStart);
           landingDiv.removeEventListener("touchend", onTouchEnd);
+        }
+
+        // Clean up any lingering touchmove handler
+        if (touchTargetElement && touchMoveHandler) {
+          touchTargetElement.removeEventListener("touchmove", touchMoveHandler);
         }
       };
     }
