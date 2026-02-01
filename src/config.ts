@@ -1,4 +1,81 @@
-export const config = {
+// TypeScript interfaces for type safety
+export interface Project {
+    id: number;
+    title: string;
+    category: string;
+    description: string;
+    technologies: string;
+    image: string;
+    url: string | null;
+}
+
+export interface Skill {
+    title: string;
+    description: string;
+    details: string;
+    tools: string[];
+}
+
+export interface Experience {
+    position: string;
+    company: string;
+    period: string;
+    location: string;
+    description: string;
+}
+
+export interface Proof {
+    title: string;
+    result: string;
+}
+
+export interface Config {
+    developer: {
+        name: string;
+        fullName: string;
+        title: string;
+        tagline: string;
+        description: string;
+    };
+    social: {
+        github: string;
+        email: string;
+        location: string;
+        whatsapp: string;
+        instagram: string;
+    };
+    about: {
+        title: string;
+        intro: string;
+        claims: string[];
+        proof: Proof[];
+    };
+    experiences: Experience[];
+    projects: Project[];
+    contact: {
+        email: string;
+        github: string;
+        linkedin: string;
+        twitter: string;
+        instagram: string;
+        whatsapp: string;
+        responseTime: string;
+    };
+    careers: {
+        headline: string;
+        manifesto: string;
+        cta: string;
+        positionsTitle: string;
+    };
+    skills: {
+        build: Skill;
+        automate: Skill;
+        support: Skill;
+    };
+    services: string[];
+}
+
+export const config: Config = {
     developer: {
         name: "Alqode",
         fullName: "Mohammed Hamdaan Dhaler",
@@ -113,5 +190,15 @@ export const config = {
             details: "We don't just build and leave. We provide ongoing maintenance, monitoring, and strategic support to help your business grow. Think of us as your long-term technology partner.",
             tools: ["Monitoring", "Maintenance", "Analytics", "Performance", "Updates", "Security", "Scaling", "Support"]
         }
-    }
+    },
+    services: [
+        "Website Development",
+        "Web Application",
+        "Automation & Workflows",
+        "AI Integration",
+        "E-Commerce",
+        "UI/UX Design",
+        "Security & Maintenance",
+        "Other"
+    ]
 };

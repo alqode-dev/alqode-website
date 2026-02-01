@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
@@ -12,6 +12,7 @@ export let lenis: Lenis | null = null;
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isLoading } = useLoading();
+  const tickerCallbackRef = useRef<((time: number) => void) | null>(null);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -70,9 +71,11 @@ const Navbar = () => {
     lenis.on('scroll', ScrollTrigger.update);
 
     // Use GSAP ticker for smoother integration (better than raw RAF)
-    gsap.ticker.add((time) => {
+    // Store callback reference for proper cleanup
+    tickerCallbackRef.current = (time: number) => {
       lenis?.raf(time * 1000);
-    });
+    };
+    gsap.ticker.add(tickerCallbackRef.current);
 
     // Disable GSAP lag smoothing for precise scroll sync
     gsap.ticker.lagSmoothing(0);
@@ -110,10 +113,10 @@ const Navbar = () => {
     window.addEventListener("resize", resizeHandler);
 
     return () => {
-      // Cleanup: remove GSAP ticker
-      gsap.ticker.remove((time) => {
-        lenis?.raf(time * 1000);
-      });
+      // Cleanup: remove GSAP ticker using stored reference
+      if (tickerCallbackRef.current) {
+        gsap.ticker.remove(tickerCallbackRef.current);
+      }
 
       // Cleanup: remove click handlers
       clickHandlers.forEach((handler, elem) => {
@@ -129,6 +132,9 @@ const Navbar = () => {
   }, []);
   return (
     <>
+      {/* Skip to main content link for accessibility */}
+      <a href="#main-content" className="skip-link">Skip to main content</a>
+
       {/* Hide entire navbar during loading - loading screen has its own logo */}
       {!isLoading && (
         <div className="header">

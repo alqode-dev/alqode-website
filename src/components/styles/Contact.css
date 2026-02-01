@@ -3,12 +3,39 @@
   padding-bottom: 150px;
   margin-top: 0;
   position: relative;
-  z-index: 1;
+  z-index: 10;
   background-color: var(--backgroundColor);
   min-height: 60vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+}
+
+/* Toast Notification */
+.contact-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--accentColor);
+  color: #000;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+  max-width: calc(100% - 40px);
+  text-align: center;
+}
+
+.contact-toast-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* SAFETY FALLBACK: Ensure contact boxes are visible even if GSAP fails */
@@ -175,6 +202,31 @@ a.contact-social {
 .form-group input::placeholder,
 .form-group textarea::placeholder {
   color: rgba(255, 255, 255, 0.3);
+  transition: opacity 0.2s ease;
+}
+
+/* Animated placeholder styling */
+.form-group input.animated-placeholder::placeholder,
+.form-group textarea.animated-placeholder::placeholder {
+  color: var(--accentColor);
+  opacity: 0.7;
+}
+
+.form-group input:focus::placeholder,
+.form-group textarea:focus::placeholder {
+  opacity: 0.4;
+}
+
+/* Form validation styling */
+.form-group input:invalid:not(:placeholder-shown):not(:focus),
+.form-group textarea:invalid:not(:placeholder-shown):not(:focus) {
+  border-color: #ef4444;
+}
+
+.form-group input:valid:not(:placeholder-shown),
+.form-group textarea:valid:not(:placeholder-shown),
+.form-group select:valid:not([value=""]) {
+  border-color: var(--accentColor);
 }
 
 .form-group input:focus,
@@ -210,6 +262,16 @@ a.contact-social {
 .contact-submit:hover {
   background: #0ea472;
   transform: translateY(-2px);
+}
+
+.contact-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.contact-submit-success {
+  background: #059669;
 }
 
 .contact-submit svg {

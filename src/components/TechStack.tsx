@@ -29,12 +29,20 @@ const textures = imageUrls.map((url) => textureLoader.load(url));
 const sphereGeometryDesktop = new THREE.SphereGeometry(1, 28, 28);
 const sphereGeometryMobile = new THREE.SphereGeometry(1, 16, 16);
 
+// Scale options for spheres
+const scaleOptions = [0.7, 1, 0.8, 1, 1];
+
 // Desktop: 30 spheres, Mobile: 10 spheres
-const spheresDesktop = [...Array(30)].map(() => ({
-  scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
+// Assign stable IDs and pre-computed material indices
+const spheresDesktop = [...Array(30)].map((_, i) => ({
+  id: `desktop-sphere-${i}`,
+  scale: scaleOptions[Math.floor(Math.random() * scaleOptions.length)],
+  materialIndex: Math.floor(Math.random() * 8), // Pre-compute material index (8 textures)
 }));
-const spheresMobile = [...Array(10)].map(() => ({
-  scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
+const spheresMobile = [...Array(10)].map((_, i) => ({
+  id: `mobile-sphere-${i}`,
+  scale: scaleOptions[Math.floor(Math.random() * scaleOptions.length)],
+  materialIndex: Math.floor(Math.random() * 8),
 }));
 
 type SphereProps = {
@@ -228,7 +236,7 @@ const TechStack = () => {
         dpr={isMobile ? 1 : [1, 2]}
         onCreated={(state) => (state.gl.toneMappingExposure = 1.5)}
         className="tech-canvas"
-        style={{ position: 'relative', zIndex: 2 }}
+        style={{ position: 'relative' }}
       >
         <ambientLight intensity={1} />
         <spotLight
@@ -242,11 +250,11 @@ const TechStack = () => {
         <directionalLight position={[0, 5, -4]} intensity={2} />
         <Physics gravity={[0, 0, 0]}>
           <Pointer isActive={isActive} />
-          {spheres.map((props, i) => (
+          {spheres.map((props) => (
             <SphereGeo
-              key={i}
-              {...props}
-              material={materials[Math.floor(Math.random() * materials.length)]}
+              key={props.id}
+              scale={props.scale}
+              material={materials[props.materialIndex]}
               isActive={isActive}
               geometry={sphereGeometry}
               isMobile={isMobile}

@@ -1,10 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./styles/WhatIDo.css";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { config } from "../config";
 
 const WhatIDo = () => {
   const containerRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const setRef = (el: HTMLDivElement | null, index: number) => {
     containerRef.current[index] = el;
   };
@@ -13,10 +14,14 @@ const WhatIDo = () => {
     const handlers = new Map<HTMLDivElement, () => void>();
 
     if (ScrollTrigger.isTouch) {
-      containerRef.current.forEach((container) => {
+      containerRef.current.forEach((container, index) => {
         if (container) {
           container.classList.remove("what-noTouch");
-          const handler = () => handleClick(container);
+          const handler = () => {
+            handleClick(container);
+            // Update active index for ARIA
+            setActiveIndex((prev) => prev === index ? null : index);
+          };
           handlers.set(container, handler);
           container.addEventListener("click", handler);
         }
@@ -66,11 +71,15 @@ const WhatIDo = () => {
               />
             </svg>
           </div>
-          {skills.map((skill) => (
+          {skills.map((skill, index) => (
             <div
               key={skill.title}
               className="what-content what-noTouch"
-              ref={(el) => setRef(el, skills.indexOf(skill))}
+              ref={(el) => setRef(el, index)}
+              role="button"
+              tabIndex={0}
+              aria-expanded={activeIndex === index}
+              aria-label={`${skill.title} - ${skill.description}`}
             >
               <div className="what-border1">
                 <svg height="100%">

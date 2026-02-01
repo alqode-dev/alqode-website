@@ -294,13 +294,16 @@
   .work-section {
     height: auto;
     min-height: auto;
+    overflow-x: hidden; /* Prevent horizontal scroll */
   }
   .work-flex {
     flex-direction: column;
+    flex-wrap: wrap; /* Allow wrapping */
     margin-left: 0;
     padding-right: 0;
     padding: 0 15px;
     transform: none !important; /* Prevent GSAP transforms on mobile */
+    overflow-x: hidden; /* Prevent horizontal scroll */
   }
   .work-box {
     width: 100%;

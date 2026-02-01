@@ -10,28 +10,40 @@ const Loading = ({ percent }: { percent: number }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [clicked, setClicked] = useState(false);
 
-  if (percent >= 100) {
-    setTimeout(() => {
-      setLoaded(true);
-      setTimeout(() => {
+  // Handle loading completion - trigger transition when percent hits 100
+  useEffect(() => {
+    if (percent >= 100 && !loaded) {
+      const timer1 = setTimeout(() => {
+        setLoaded(true);
+      }, 600);
+      return () => clearTimeout(timer1);
+    }
+  }, [percent, loaded]);
+
+  // After loaded, wait then set isLoaded
+  useEffect(() => {
+    if (loaded && !isLoaded) {
+      const timer2 = setTimeout(() => {
         setIsLoaded(true);
       }, 1000);
-    }, 600);
-  }
+      return () => clearTimeout(timer2);
+    }
+  }, [loaded, isLoaded]);
 
+  // After isLoaded, trigger the initial FX and complete loading
   useEffect(() => {
-    import("./utils/initialFX").then((module) => {
-      if (isLoaded) {
-        setClicked(true);
+    if (isLoaded && !clicked) {
+      setClicked(true);
+      import("./utils/initialFX").then((module) => {
         setTimeout(() => {
           if (module.initialFX) {
             module.initialFX();
           }
           setIsLoading(false);
         }, 900);
-      }
-    });
-  }, [isLoaded]);
+      });
+    }
+  }, [isLoaded, clicked, setIsLoading]);
 
   function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
     const { currentTarget: target } = e;
@@ -93,43 +105,58 @@ const Loading = ({ percent }: { percent: number }) => {
 export default Loading;
 
 export const setProgress = (setLoading: (value: number) => void) => {
-  let percent: number = 0;
+  let percent = 0;
+  let fastInterval: ReturnType<typeof setInterval> | null = null;
+  let slowInterval: ReturnType<typeof setInterval> | null = null;
 
-  let interval = setInterval(() => {
-    if (percent <= 50) {
-      let rand = Math.round(Math.random() * 5);
-      percent = percent + rand;
-      setLoading(percent);
-    } else {
-      clearInterval(interval);
-      interval = setInterval(() => {
-        percent = percent + Math.round(Math.random());
-        setLoading(percent);
-        if (percent > 91) {
-          clearInterval(interval);
+  // Phase 1: Fast initial progress (0-30% in 1.5s)
+  fastInterval = setInterval(() => {
+    percent += 2;
+    setLoading(percent);
+    if (percent >= 30) {
+      if (fastInterval) clearInterval(fastInterval);
+      fastInterval = null;
+      // Phase 2: Slow crawl to prevent stall (30-90% over time)
+      slowInterval = setInterval(() => {
+        if (percent < 90) {
+          percent += 1;
+          setLoading(percent);
+        } else {
+          if (slowInterval) clearInterval(slowInterval);
+          slowInterval = null;
         }
-      }, 2000);
+      }, 300);
     }
-  }, 100);
+  }, 50);
 
   function clear() {
-    clearInterval(interval);
+    if (fastInterval) clearInterval(fastInterval);
+    if (slowInterval) clearInterval(slowInterval);
     setLoading(100);
   }
 
   function loaded() {
     return new Promise<number>((resolve) => {
-      clearInterval(interval);
-      interval = setInterval(() => {
-        if (percent < 100) {
-          percent++;
-          setLoading(percent);
-        } else {
-          resolve(percent);
-          clearInterval(interval);
+      // Clear all progress intervals
+      if (fastInterval) {
+        clearInterval(fastInterval);
+        fastInterval = null;
+      }
+      if (slowInterval) {
+        clearInterval(slowInterval);
+        slowInterval = null;
+      }
+      // Quick completion when actually loaded
+      const completeInterval = setInterval(() => {
+        percent = Math.min(percent + 5, 100);
+        setLoading(percent);
+        if (percent >= 100) {
+          clearInterval(completeInterval);
+          resolve(100);
         }
-      }, 2);
+      }, 20);
     });
   }
+
   return { loaded, percent, clear };
 };

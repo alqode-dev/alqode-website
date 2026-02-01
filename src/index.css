@@ -37,7 +37,15 @@ h6 {
   font-family: "Syne", sans-serif;
 }
 body {
+  margin: 0;
+  height: auto;
+  background-color: #000;
+  flex-grow: 1;
+  --cWidth: calc(100% - 30px);
+  --cMaxWidth: 1920px;
+  max-width: 100vw;
   overflow: hidden;
+  overflow-x: hidden;
 }
 a {
   color: inherit;
@@ -45,6 +53,13 @@ a {
 }
 a:hover {
   color: var(--accentColor);
+}
+
+/* Button active/pressed states */
+button:active:not(:disabled),
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+  opacity: 0.9;
 }
 
 /* ACCESSIBILITY: Focus indicators for keyboard navigation */
@@ -57,10 +72,52 @@ select:focus-visible {
   outline-offset: 2px;
 }
 
+/* ACCESSIBILITY: Skip to content link */
+.skip-link {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  padding: 8px 16px;
+  background: var(--accentColor);
+  color: #000;
+  font-weight: 600;
+  font-size: 14px;
+  z-index: 10000;
+  border-radius: 0 0 4px 0;
+  transition: top 0.2s ease;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 0;
+  color: #000;
+}
+
+/* Link hover underline animation - opt-in class */
+a.link-underline {
+  position: relative;
+  display: inline-block;
+}
+a.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accentColor);
+  transition: width 0.3s ease;
+}
+a.link-underline:hover::after {
+  width: 100%;
+}
+
 /* Touch device hover fixes */
 @media (hover: none) {
   a:hover {
     color: inherit;
+  }
+  a.link-underline:hover::after {
+    width: 0;
   }
 }
 main {
@@ -76,16 +133,6 @@ main {
   100% {
     opacity: 1;
   }
-}
-body {
-  margin: 0;
-  height: auto;
-  background-color: #000;
-  flex-grow: 1;
-  --cWidth: calc(100% - 30px);
-  --cMaxWidth: 1920px;
-  max-width: 100vw;
-  overflow-x: hidden;
 }
 .main-body {
   max-width: 100vw;
@@ -125,11 +172,12 @@ body {
   padding-bottom: 150px;
   background: linear-gradient(180deg, rgba(29, 29, 29, 0.95) 0%, rgba(29, 29, 29, 0.98) 100%);
   background-color: var(--backgroundColor);
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  z-index: 1;
 }
 
 .techstack::before {

@@ -56,25 +56,39 @@ const Scene = () => {
       // Store character reference for resize handler
       let loadedCharacter: THREE.Object3D | null = null;
 
-      loadCharacter().then((gltf) => {
-        if (gltf) {
-          const animations = setAnimations(gltf);
-          hoverDivRef.current && animations.hover(gltf, hoverDivRef.current);
-          mixer = animations.mixer;
-          loadedCharacter = gltf.scene;
-          setChar(loadedCharacter);
-          scene.add(loadedCharacter);
-          headBone = loadedCharacter.getObjectByName("spine006") || null;
-          screenLight = loadedCharacter.getObjectByName("screenlight") || null;
-          progress.loaded().then(() => {
-            setTimeout(() => {
-              light.turnOnLights();
-              animations.startIntro();
-            }, 2500);
-          });
-          // Note: resize handler is added outside this callback for proper cleanup
-        }
-      });
+      // Add 10-second timeout to prevent infinite loading
+      const loadingTimeout = setTimeout(() => {
+        console.warn('3D model load timeout - forcing completion');
+        progress.clear();
+      }, 10000);
+
+      loadCharacter()
+        .then((gltf) => {
+          clearTimeout(loadingTimeout); // Cancel timeout on success
+          if (gltf) {
+            const animations = setAnimations(gltf);
+            hoverDivRef.current && animations.hover(gltf, hoverDivRef.current);
+            mixer = animations.mixer;
+            loadedCharacter = gltf.scene;
+            setChar(loadedCharacter);
+            scene.add(loadedCharacter);
+            headBone = loadedCharacter.getObjectByName("spine006") || null;
+            screenLight = loadedCharacter.getObjectByName("screenlight") || null;
+            progress.loaded().then(() => {
+              setTimeout(() => {
+                light.turnOnLights();
+                animations.startIntro();
+              }, 500); // Reduced from 2500ms - just enough for GPU stabilization
+            });
+            // Note: resize handler is added outside this callback for proper cleanup
+          }
+        })
+        .catch((error) => {
+          clearTimeout(loadingTimeout); // Cancel timeout on error
+          console.error("Failed to load 3D character model:", error);
+          // Still complete the loading progress so the site remains usable
+          progress.clear();
+        });
 
       let mouse = { x: 0, y: 0 },
         interpolation = { x: 0.1, y: 0.2 };
@@ -98,11 +112,18 @@ const Scene = () => {
       };
 
       const onTouchEnd = () => {
+        // FIRST: Clear the debounce to prevent handler attachment
+        if (debounce) {
+          clearTimeout(debounce);
+          debounce = undefined;
+        }
+
         handleTouchEnd((x, y, interpolationX, interpolationY) => {
           mouse = { x, y };
           interpolation = { x: interpolationX, y: interpolationY };
         });
-        // Clean up touchmove handler
+
+        // Clean up touchmove handler if it was attached
         if (touchTargetElement && touchMoveHandler) {
           touchTargetElement.removeEventListener("touchmove", touchMoveHandler);
           touchMoveHandler = null;

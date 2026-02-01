@@ -1,4 +1,4 @@
-import { lazy, PropsWithChildren, Suspense, useEffect, useState } from "react";
+import { lazy, PropsWithChildren, Suspense, useEffect } from "react";
 import About from "./About";
 import Career from "./Career";
 import Contact from "./Contact";
@@ -9,43 +9,48 @@ import SocialIcons from "./SocialIcons";
 import WhatIDo from "./WhatIDo";
 import Work from "./Work";
 import setSplitText from "./utils/splitText";
+import { useBreakpoint } from "../hooks/useBreakpoint";
 
 const TechStack = lazy(() => import("./TechStack"));
 
+// Loading fallback for TechStack
+const TechStackFallback = () => (
+  <div className="techstack" style={{ opacity: 0.5 }}>
+    <h2>Our Techstack</h2>
+  </div>
+);
+
 const MainContainer = ({ children }: PropsWithChildren) => {
-  const [isDesktopView, setIsDesktopView] = useState<boolean>(
-    window.innerWidth > 1024
-  );
+  const { isDesktop } = useBreakpoint();
 
   useEffect(() => {
     const resizeHandler = () => {
       setSplitText();
-      setIsDesktopView(window.innerWidth > 1024);
     };
     resizeHandler();
     window.addEventListener("resize", resizeHandler);
     return () => {
       window.removeEventListener("resize", resizeHandler);
     };
-  }, [isDesktopView]);
+  }, []);
 
   return (
     <div className="container-main">
       <Cursor />
       <Navbar />
       <SocialIcons />
-      {isDesktopView && children}
-      <div className="container-main">
-        <Landing>{!isDesktopView && children}</Landing>
+      {isDesktop && children}
+      <main id="main-content" className="container-main">
+        <Landing>{!isDesktop && children}</Landing>
         <About />
         <WhatIDo />
         <Career />
         <Work />
-        <Suspense fallback={<div>Loading....</div>}>
+        <Suspense fallback={<TechStackFallback />}>
           <TechStack />
         </Suspense>
         <Contact />
-      </div>
+      </main>
     </div>
   );
 };

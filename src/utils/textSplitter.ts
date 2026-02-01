@@ -6,6 +6,7 @@ export class TextSplitter {
   elements: Element[] = [];
   selector: string | Function;
   private originalHTML: Map<Element, string> = new Map();
+  private rafIds: number[] = [];
 
   constructor(target: string | Element | NodeListOf<Element> | Element[], vars?: { type?: string; linesClass?: string }) {
     const type = vars?.type || "chars,words,lines";
@@ -95,7 +96,7 @@ export class TextSplitter {
 
   private splitLines(element: Element, linesClass: string) {
     // Use requestAnimationFrame to ensure layout is complete
-    requestAnimationFrame(() => {
+    const rafId = requestAnimationFrame(() => {
       const items = element.querySelectorAll(".split-word, .split-char");
       if (items.length === 0) return;
 
@@ -142,9 +143,13 @@ export class TextSplitter {
 
       this.lines.push(...Array.from(element.querySelectorAll(`.${linesClass}`)));
     });
+    this.rafIds.push(rafId);
   }
 
   revert() {
+    // Cancel any pending RAF callbacks
+    this.rafIds.forEach((id) => cancelAnimationFrame(id));
+    this.rafIds = [];
     this.elements.forEach((element) => {
       const original = this.originalHTML.get(element);
       if (original !== undefined) {
