@@ -31,3 +31,9 @@ backup/
 CLAUDE.md
 ALQODE-PROJECT-STATUS.md
 .claude/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
