@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    @apply bg-void text-white antialiased;
+  }
+
+  ::selection {
+    @apply bg-terminal/30 text-white;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Dot grid background pattern */
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Interactive dot-grid glow (follows mouse, desktop only) */
+.dot-grid-glow {
+  background-image: radial-gradient(circle, rgba(16, 185, 129, 0.5) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(circle 150px, black 0%, transparent 100%);
+  mask-image: radial-gradient(circle 150px, black 0%, transparent 100%);
+  -webkit-mask-size: 300px 300px;
+  mask-size: 300px 300px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* Terminal green glow */
+.glow-terminal {
+  background: radial-gradient(
+    ellipse 60% 50% at 20% 50%,
+    rgba(16, 185, 129, 0.06) 0%,
+    transparent 70%
+  );
+}
+
+/* Cursor blink animation */
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.animate-cursor-blink {
+  animation: cursor-blink 530ms infinite;
+}
+
+/* Smooth section transitions */
+.section-padding {
+  @apply px-5 py-16 md:px-8 md:py-24 lg:px-12 lg:py-32;
+}
+
+.container-width {
+  @apply mx-auto w-full max-w-[1200px];
+}
+
+/* Gradient divider */
+.gradient-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #2a2a2a, transparent);
+}
+
+/* Tech marquee - CSS-only infinite scroll */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-content {
+  display: flex;
+  flex-shrink: 0;
+}

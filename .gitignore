@@ -1,39 +1,51 @@
-# Logs
-logs
-*.log
+# Dependencies
+node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Local env files
+.env*.local
+.env
 
-# Editor directories and files
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Editor
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-.npmrc
 
-backup/
-.env
-
-# Private project documentation (not for public repo)
+# Project docs (private)
 CLAUDE.md
-ALQODE-PROJECT-STATUS.md
+FULL_SPEC.md
+notion_spec.md
+wireframe.jsx
 .claude/
 
-# Playwright
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
+# Temp files
+_out.txt
+_pn.py
+_ul
