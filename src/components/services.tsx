@@ -31,23 +31,25 @@ export function Services() {
           sectionInView = entry.isIntersecting;
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.3 }
     );
     observer.observe(section);
 
     const handleWheel = (e: WheelEvent) => {
       if (!sectionInView) return;
 
-      const now = Date.now();
-      if (now - lastWheel.current < 400) return;
-
       const scrollingDown = e.deltaY > 0;
       const scrollingUp = e.deltaY < 0;
 
+      // At boundaries: let page scroll naturally
       if (scrollingUp && currentIndex === 0) return;
       if (scrollingDown && currentIndex === TOTAL - 1) return;
 
+      // Block scroll while section is locked (even during debounce)
       e.preventDefault();
+
+      const now = Date.now();
+      if (now - lastWheel.current < 400) return;
       lastWheel.current = now;
 
       if (scrollingDown && currentIndex < TOTAL - 1) {
@@ -115,10 +117,10 @@ export function Services() {
         </p>
 
         {/* Desktop: scroll-controlled slideshow with horizontal layout */}
-        <div className="hidden lg:block">
-          <div className="flex items-center gap-12">
+        <div className="hidden lg:block py-8">
+          <div className="flex items-center gap-16">
             {/* Left: Icon morph area */}
-            <div className="relative w-[140px] h-[140px] flex-shrink-0">
+            <div className="relative w-[160px] h-[160px] flex-shrink-0">
               {ICONS.map((Icon, i) => (
                 <div
                   key={i}
@@ -136,7 +138,7 @@ export function Services() {
             </div>
 
             {/* Right: Card content area */}
-            <div className="relative flex-1 min-h-[200px]">
+            <div className="relative flex-1 min-h-[220px]">
               {SERVICES.cards.map((card, i) => (
                 <div
                   key={card.title}
@@ -167,7 +169,7 @@ export function Services() {
           </div>
 
           {/* Progress dots - aligned under text column */}
-          <div className="flex gap-2 mt-8 pl-[188px]">
+          <div className="flex gap-2 mt-10 pl-[224px]">
             {SERVICES.cards.map((_, i) => (
               <button
                 key={i}

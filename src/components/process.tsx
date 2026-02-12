@@ -39,15 +39,12 @@ export function Process() {
           sectionInView = entry.isIntersecting;
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.3 }
     );
     observer.observe(section);
 
     const handleWheel = (e: WheelEvent) => {
       if (!sectionInView) return;
-
-      const now = Date.now();
-      if (now - lastWheel.current < 400) return;
 
       const scrollingDown = e.deltaY > 0;
       const scrollingUp = e.deltaY < 0;
@@ -56,7 +53,11 @@ export function Process() {
       if (scrollingUp && currentActive <= -1) return;
       if (scrollingDown && currentActive >= TOTAL - 1) return;
 
+      // Block scroll while section is locked (even during debounce)
       e.preventDefault();
+
+      const now = Date.now();
+      if (now - lastWheel.current < 400) return;
       lastWheel.current = now;
 
       if (scrollingDown) {
