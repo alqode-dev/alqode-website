@@ -6,16 +6,13 @@ import { SERVICES } from "@/lib/constants";
 
 const ICONS = [Braces, Zap, ShieldCheck] as const;
 const TOTAL = SERVICES.cards.length; // 3
+const DEBOUNCE = 250; // ms between card switches
 
 export function Services() {
   const sectionRef = useRef<HTMLElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isLocked, setIsLocked] = useState(false);
-  const lockTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastWheel = useRef(0);
 
-  // Desktop: scroll-controlled card switching
-  // Uses wheel event to switch cards while section is in viewport
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -24,11 +21,14 @@ export function Services() {
     let currentIndex = 0;
     let sectionInView = false;
     let wheelAttached = false;
+    let hasScrolledInto = false;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           sectionInView = entry.isIntersecting;
+          // Reset scroll-into flag when section leaves view
+          if (!entry.isIntersecting) hasScrolledInto = false;
         });
       },
       { threshold: 0.3 }
@@ -45,11 +45,19 @@ export function Services() {
       if (scrollingUp && currentIndex === 0) return;
       if (scrollingDown && currentIndex === TOTAL - 1) return;
 
-      // Block scroll while section is locked (even during debounce)
+      // Kill the event — capture phase + stopPropagation ensures Lenis never sees it
       e.preventDefault();
+      e.stopPropagation();
 
+      // Scroll section into center view on first lock engagement
+      if (!hasScrolledInto) {
+        hasScrolledInto = true;
+        section.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      // Debounce the actual card switch
       const now = Date.now();
-      if (now - lastWheel.current < 400) return;
+      if (now - lastWheel.current < DEBOUNCE) return;
       lastWheel.current = now;
 
       if (scrollingDown && currentIndex < TOTAL - 1) {
@@ -59,27 +67,22 @@ export function Services() {
       }
 
       setActiveIndex(currentIndex);
-      setIsLocked(true);
-
-      if (lockTimeout.current) clearTimeout(lockTimeout.current);
-      lockTimeout.current = setTimeout(() => setIsLocked(false), 500);
     };
 
     function attachWheel() {
       if (!wheelAttached) {
-        window.addEventListener("wheel", handleWheel, { passive: false });
+        window.addEventListener("wheel", handleWheel, { capture: true, passive: false });
         wheelAttached = true;
       }
     }
 
     function detachWheel() {
       if (wheelAttached) {
-        window.removeEventListener("wheel", handleWheel);
+        window.removeEventListener("wheel", handleWheel, { capture: true });
         wheelAttached = false;
       }
     }
 
-    // Respond to breakpoint changes (desktop <-> mobile)
     const handleBreakpoint = () => {
       if (mql.matches) {
         attachWheel();
@@ -97,7 +100,6 @@ export function Services() {
       detachWheel();
       mql.removeEventListener("change", handleBreakpoint);
       observer.disconnect();
-      if (lockTimeout.current) clearTimeout(lockTimeout.current);
     };
   }, []);
 
@@ -132,7 +134,7 @@ export function Services() {
                     transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
                   }}
                 >
-                  <Icon size={64} className="text-terminal" strokeWidth={1.5} />
+                  <Icon size={72} className="text-terminal" strokeWidth={1.5} />
                 </div>
               ))}
             </div>

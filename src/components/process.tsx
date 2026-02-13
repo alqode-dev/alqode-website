@@ -5,6 +5,7 @@ import { useScrollReveal } from "@/lib/animations";
 import { PROCESS } from "@/lib/constants";
 
 const TOTAL = PROCESS.steps.length; // 4
+const DEBOUNCE = 300; // ms between step switches
 
 export function Process() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -32,11 +33,21 @@ export function Process() {
     let wheelAttached = false;
     let currentActive = -1;
     let currentHighest = -1;
+    let hasScrolledInto = false;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           sectionInView = entry.isIntersecting;
+          if (!entry.isIntersecting) {
+            hasScrolledInto = false;
+          } else if (mql.matches && currentActive === -1 && currentHighest === -1) {
+            // Auto-reveal step 0 when section enters viewport (eliminate empty state)
+            currentActive = 0;
+            currentHighest = 0;
+            setActiveStep(0);
+            setHighestRevealed(0);
+          }
         });
       },
       { threshold: 0.3 }
@@ -49,15 +60,23 @@ export function Process() {
       const scrollingDown = e.deltaY > 0;
       const scrollingUp = e.deltaY < 0;
 
-      // Boundary: at step -1 scrolling up, or at last step scrolling down → let page scroll
-      if (scrollingUp && currentActive <= -1) return;
+      // Boundary: let page scroll naturally (don't block)
+      if (scrollingUp && currentActive <= 0) return;
       if (scrollingDown && currentActive >= TOTAL - 1) return;
 
-      // Block scroll while section is locked (even during debounce)
+      // Kill the event — capture phase + stopPropagation ensures Lenis never sees it
       e.preventDefault();
+      e.stopPropagation();
 
+      // Scroll section into center view on first lock engagement
+      if (!hasScrolledInto) {
+        hasScrolledInto = true;
+        section.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      // Debounce the actual step switch
       const now = Date.now();
-      if (now - lastWheel.current < 400) return;
+      if (now - lastWheel.current < DEBOUNCE) return;
       lastWheel.current = now;
 
       if (scrollingDown) {
@@ -77,14 +96,14 @@ export function Process() {
 
     function attachWheel() {
       if (!wheelAttached) {
-        window.addEventListener("wheel", handleWheel, { passive: false });
+        window.addEventListener("wheel", handleWheel, { capture: true, passive: false });
         wheelAttached = true;
       }
     }
 
     function detachWheel() {
       if (wheelAttached) {
-        window.removeEventListener("wheel", handleWheel);
+        window.removeEventListener("wheel", handleWheel, { capture: true });
         wheelAttached = false;
       }
     }
@@ -94,7 +113,6 @@ export function Process() {
         attachWheel();
       } else {
         detachWheel();
-        // Reset desktop state when switching to mobile
         currentActive = -1;
         currentHighest = -1;
         setActiveStep(-1);
@@ -185,8 +203,10 @@ export function Process() {
 
   // Desktop step visibility: revealed if <= highestRevealed
   const isDesktopStepRevealed = (i: number) => i <= highestRevealed;
-  // Desktop step highlight: activeStep is the current focus
-  const isDesktopStepActive = (i: number) => i <= activeStep;
+  // Desktop step highlight: currently focused step
+  const isDesktopStepActive = (i: number) => i === activeStep;
+  // Desktop step in range: revealed and at or below active
+  const isDesktopStepInRange = (i: number) => i <= activeStep;
 
   return (
     <section
@@ -220,13 +240,14 @@ export function Process() {
             {PROCESS.steps.map((step, i) => {
               const revealed = isDesktopStepRevealed(i);
               const active = isDesktopStepActive(i);
+              const inRange = isDesktopStepInRange(i);
               return (
                 <div key={step.num} className="relative">
                   {/* Number circle */}
                   <div
                     className="w-9 h-9 rounded-full border-2 border-terminal bg-void flex items-center justify-center text-xs font-bold text-terminal mb-4 relative z-10"
                     style={{
-                      opacity: revealed ? 1 : 0.3,
+                      opacity: revealed ? 1 : 0.25,
                       transform: revealed ? "scale(1)" : "scale(0.8)",
                       transition: "opacity 0.4s ease, transform 0.4s ease",
                     }}
@@ -237,7 +258,7 @@ export function Process() {
                   {/* Content */}
                   <div
                     style={{
-                      opacity: revealed ? (active ? 1 : 0.6) : 0.2,
+                      opacity: active ? 1 : inRange ? 0.7 : revealed ? 0.5 : 0.15,
                       transform: revealed ? "translateY(0)" : "translateY(8px)",
                       transition: "opacity 0.4s ease, transform 0.4s ease",
                     }}
