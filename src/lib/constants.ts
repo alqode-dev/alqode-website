@@ -3,7 +3,7 @@ export const SITE = {
   domain: "alqode.com",
   title: "{alqode} | Digital Systems Agency, Cape Town",
   description:
-    "Custom web apps, automation, and AI systems that cut your costs, multiply your output, and never clock out. Founded by Mohammed Hamdaan Dhaler.",
+    "Custom web apps, automation, and smart systems that cut your costs, multiply your output, and never clock out. Founded by Mohammed Hamdaan Dhaler.",
   url: "https://alqode.com",
   founder: "Mohammed Hamdaan Dhaler",
   location: "Cape Town, South Africa",
@@ -26,7 +26,7 @@ export const HERO = {
   headline: "We don't build websites.",
   headlineAccent: "We build machines that make you money.",
   subline:
-    "{alqode} builds custom web apps, automation, and AI systems that cut your costs, multiply your output, and never clock out.",
+    "{alqode} builds custom web apps, automation, and smart systems that cut your costs, multiply your output, and never clock out.",
   primaryCta: "Get a system built",
   secondaryCta: "See our work",
   founderTag: "Founded by Mohammed Hamdaan Dhaler. Cape Town.",
@@ -44,7 +44,7 @@ export const SERVICES = {
     {
       icon: "zap" as const,
       title: "Automate",
-      body: "Your receptionist or admin goes home at 5. Your AI doesn't. Lead generation, WhatsApp automation, workflow systems that run while you sleep.",
+      body: "Your receptionist or admin goes home at 5. Your machine doesn't. Lead generation, WhatsApp automation, workflow systems that run while you sleep.",
     },
     {
       icon: "shield" as const,

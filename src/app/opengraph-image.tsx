@@ -55,7 +55,7 @@ export default async function Image() {
             letterSpacing: 2,
           }}
         >
-          WEB APPS &bull; AUTOMATION &bull; AI SYSTEMS
+          WEB APPS &bull; AUTOMATION &bull; SMART SYSTEMS
         </div>
       </div>
     ),

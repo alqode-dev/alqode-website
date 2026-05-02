@@ -119,14 +119,14 @@ npm run lint       # ESLint check
 ### Build Stats (as of Feb 2026)
 ```
 Route                    Size       First Load JS
-/                        60.9 kB    148 kB
+/                        57.6 kB    145 kB
 /_not-found              138 B      87.5 kB
 /opengraph-image         0 B        0 B (edge runtime)
 /sitemap.xml             0 B        0 B
 
 Shared JS: 87.3 kB
 ```
-**Target: <200KB gzipped first load. Current: 148KB.**
+**Target: <200KB gzipped first load. Current: 145KB.**
 
 ---
 
@@ -164,18 +164,18 @@ alqode-website/
 │   ├── app/
 │   │   ├── layout.tsx                 # Root: Space Grotesk font, metadata, JSON-LD, LenisProvider, Analytics
 │   │   ├── page.tsx                   # Home: assembles CursorGlow + Nav + TechMarquee + 7 sections + Footer + ScrollToTop
-│   │   ├── globals.css                # Tailwind directives + dot-grid + dot-grid-glow + glow + cursor-blink + section-padding + container-width + gradient-divider + marquee
+│   │   ├── globals.css                # Tailwind directives + dot-grid + glow + cursor-blink + section-padding + container-width + gradient-divider + marquee
 │   │   ├── not-found.tsx              # 404 page with "Back to home" CTA
 │   │   ├── sitemap.ts                 # Dynamic XML sitemap for alqode.com
 │   │   └── opengraph-image.tsx        # Edge runtime OG image (1200x630)
 │   │
 │   ├── components/
 │   │   ├── nav.tsx                    # Sticky nav + mobile hamburger (Framer Motion slide-in)
-│   │   ├── hero.tsx                   # Typewriter tag + word-by-word headline stagger + CTAs + dot-grid glow + decrypt on hover
-│   │   ├── services.tsx               # Wheel-hijack horizontal 2-col slideshow (desktop), stacked cards (mobile)
+│   │   ├── hero.tsx                   # Typewriter tag + word-by-word headline stagger + CTAs
+│   │   ├── services.tsx               # Scroll-driven 2-col layout with sticky icon morphing (desktop), stacked cards (mobile)
 │   │   ├── portfolio.tsx              # 3 project cards with screenshots + SVG tech logos
-│   │   ├── about.tsx                  # Light bg section: founder photo left, story right + decrypt on hover
-│   │   ├── process.tsx                # 4-step timeline: wheel-hijack (desktop), scroll-driven (mobile)
+│   │   ├── about.tsx                  # Light bg section: founder photo left, story right
+│   │   ├── process.tsx                # 4-step timeline with individual scroll reveals per step
 │   │   ├── contact.tsx                # WhatsApp CTA + signature typing animation form
 │   │   ├── footer.tsx                 # 3-column grid: logo, navigate links, social icons
 │   │   ├── tech-icons.tsx             # 14 inline SVG brand logos + TECH_COLORS brand color map + style prop support
@@ -186,8 +186,7 @@ alqode-website/
 │   │
 │   └── lib/
 │       ├── constants.ts               # ALL site copy - SINGLE SOURCE OF TRUTH
-│       ├── animations.ts              # useScrollReveal + useScrollRevealDramatic hooks (IntersectionObserver)
-│       └── decrypt.ts                 # useDecryptOnHover hook - text scramble/resolve on mouseenter (desktop only)
+│       └── animations.ts              # useScrollReveal + useScrollRevealDramatic hooks (IntersectionObserver)
 │
 ├── CLAUDE.md                          # THIS FILE - complete rebuild blueprint
 ├── package.json                       # Dependencies and scripts
@@ -259,7 +258,7 @@ The site is one page (`src/app/page.tsx`) with 7 scroll sections in this exact o
                    gradient-divider
 ┌─────────────── Services (#services) ─────────────┐
 │ "What we do" heading                               │
-│ Desktop: scroll-controlled slideshow, icon morphing│
+│ Desktop: 2-col sticky icon morphing + stacked cards│
 │ Mobile: stacked cards with inline icons            │
 └──────────────────────────────────────────────────┘
                    gradient-divider
@@ -316,7 +315,6 @@ CSS: `height: 1px; background: linear-gradient(90deg, transparent, #2a2a2a, tran
 **Desktop (lg+):**
 - Logo left, 5 nav links center-right, green CTA button far right
 - Links: Services, Work, About, Process, Contact
-- Link hover color: `hover:text-terminal` (terminal green, matches footer links)
 - CTA: "Get a system built" → opens WhatsApp
 
 **Mobile (<lg):**
@@ -339,15 +337,6 @@ CSS: `height: 1px; background: linear-gradient(90deg, transparent, #2a2a2a, tran
 - Background: dot-grid pattern (24px spacing, 0.04 opacity dots) + green radial glow from left
 - Container max-width 1200px, left-aligned text
 
-**Interactive dot-grid glow (desktop only, lg+ non-touch):**
-- Second dot-grid layer with green dots (rgba(16, 185, 129, 0.5)) overlaid on the base dot-grid
-- Masked with 300px radial gradient circle (`mask-image`) that follows the mouse
-- Only dots near the cursor are visible in green — aligned perfectly with 24px base grid
-- CSS class `.dot-grid-glow` in globals.css, mask-position set via inline style from `mousePos` state
-- `onMouseMove` on the `<section>` element tracks mouse relative to section bounds
-- `isDesktop` state gated by `matchMedia("(min-width: 1024px)")` + non-coarse pointer
-- Zero JS animation loops — CSS mask-position is GPU-composited
-
 **Animation sequence (runs once on mount):**
 1. **{alqode} tag typewriter:** Characters appear one at a time at 80ms/char with blinking cursor
 2. **Cursor disappears** 0.5s after typewriter finishes
@@ -357,22 +346,14 @@ CSS: `height: 1px; background: linear-gradient(90deg, transparent, #2a2a2a, tran
 4. **Subline fades in** 0.3s after last headline word (0.7s transition)
 5. **CTAs fade in** 0.2s after subline (0.7s transition)
 6. **Founder tag** fades in with 0.3s delay after CTAs
-7. **Entry done** (`entryDone` state) set 700ms after CTAs appear — enables decrypt hover effect
-
-**Decrypt on hover (desktop only):**
-- Uses `useDecryptOnHover` hook from `src/lib/decrypt.ts`
-- Applied to elements with `data-decrypt` attribute: `<h1>`, subline `<p>`, founder tag `<p>`
-- NOT applied to CTA buttons (no `data-decrypt` attribute)
-- Only activates after `entryDone` is true (entry animation must complete first)
-- On mouseenter: text scrambles through random characters, then resolves left-to-right (~30ms/char)
 
 **Elements:**
 - Tag: `{alqode}` in terminal green, xs text, 2px letter spacing, uppercase
-- Headline: `clamp(1.75rem, 5vw, 3.5rem)`, extrabold, max-w-2xl, `data-decrypt`
-- Subline: sm/base text, muted color, max-w-md, `data-decrypt`
-- Primary CTA: green bg, void text, "Get a system built" + ArrowRight icon → WhatsApp (NO decrypt)
-- Secondary CTA: bordered, white text, "See our work" → scrolls to #work (NO decrypt)
-- Founder tag: xs, muted, "Founded by Mohammed Hamdaan Dhaler. Cape Town.", `data-decrypt`
+- Headline: `clamp(1.75rem, 5vw, 3.5rem)`, extrabold, max-w-2xl
+- Subline: sm/base text, muted color, max-w-md
+- Primary CTA: green bg, void text, "Get a system built" + ArrowRight icon → WhatsApp
+- Secondary CTA: bordered, white text, "See our work" → scrolls to #work
+- Founder tag: xs, muted, "Founded by Mohammed Hamdaan Dhaler. Cape Town."
 
 ### 9.3 Services (`src/components/services.tsx`)
 
@@ -380,39 +361,31 @@ CSS: `height: 1px; background: linear-gradient(90deg, transparent, #2a2a2a, tran
 - Dark background, section-padding
 - Heading: "What we do" + subline "Three things. We do them extremely well."
 
-**Desktop (lg+): Horizontal 2-column scroll-controlled slideshow**
-- `flex items-center gap-12` row container
-- Left: 140x140px icon morph area (`flex-shrink-0`)
-- Right: `flex-1` text area (number badge, title, body) — left-aligned
-- Wheel event listener (passive: false) hijacks scroll while section is 50%+ in view
-- One scroll = one card switch (Build → Automate → Support)
-- At first card scrolling up, or last card scrolling down, normal scrolling resumes
-- 400ms debounce between switches to prevent scroll-through
-
-**Icon morphing area (no border, no frame):**
-- 140x140 container, 3 Lucide icons overlaid absolutely
-- Active icon: `opacity: 1, scale: 1, blur: 0` / Inactive: `opacity: 0, scale: 0.7, blur: 8px`
-- CSS transitions: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1)`
-- Icons rendered at 64px with `strokeWidth: 1.5`
-
-**Card content area:**
-- Left-aligned text to the right of icon, `max-w-lg` on body
-- Number badge (01/02/03), title (2xl bold), body text (sm muted)
-- Active card: `opacity: 1, translateY: 0` / Inactive: slides up or down 20px
-- Progress dots below, aligned under text column (`pl-[188px]` = 140px icon + 48px gap)
+**Desktop (lg+): Two-column layout with sticky icon morphing**
+- Left column (200px): Sticky icon area at `top: calc(50vh - 80px)`
+  - 160x160 container with all 3 icons overlaid
+  - Active icon: `opacity: 1, scale: 1` / Inactive: `opacity: 0, scale: 0.8`
+  - CSS transitions (0.5s) for smooth morphing between icons
+  - Active card title label below icon
+- Right column: 3 cards stacked vertically with `space-y-16`
+  - Each card has IntersectionObserver (threshold 0.5, rootMargin `-100px`)
+  - When card enters view, it sets `activeIndex` → morphs left icon
+- Cards: `bg-card-bg`, `border-border`, `rounded-xl`, `p-8 lg:p-10`
+  - Hover: `border-terminal/40` + bottom accent line grows
+  - No "Learn more" CTA (removed — goes nowhere)
 
 **Mobile (<lg): Stacked cards**
-- Each card has its own inline icon (no morphing, no scroll hijacking)
-- `gap-3`, `p-5`, `bg-card-bg`, `border-border`, `rounded-xl`
+- Each card has its own inline icon (no morphing, no sticky)
+- `gap-3`, `p-5`
 
-**Icons:** Lucide icons array (indexed by card position):
+**Icons:** Lucide icons mapped via ICONS object:
 - Build → `Braces` (curly braces `{}`)
 - Automate → `Zap` (lightning bolt)
 - Support → `ShieldCheck` (shield)
 
 **Card content (from constants.ts):**
 1. **Build** - "Custom web apps, e-commerce stores, websites, and digital experiences. Modern frameworks, clean code, built to scale. Not to break."
-2. **Automate** - "Your receptionist or admin goes home at 5. Your AI doesn't. Lead generation, WhatsApp automation, workflow systems that run while you sleep."
+2. **Automate** - "Your receptionist or admin goes home at 5. Your machine doesn't. Lead generation, WhatsApp automation, workflow systems that run while you sleep."
 3. **Support** - "We don't disappear after launch. As technology evolves, so do your systems. Ongoing improvements, performance upgrades, and scaling support to keep you ahead."
 
 ### 9.4 Portfolio / Work (`src/components/portfolio.tsx`)
@@ -433,10 +406,7 @@ CSS: `height: 1px; background: linear-gradient(90deg, transparent, #2a2a2a, tran
 - Tech pills: bordered (border-border), muted text, 10px font, WITH SVG brand logo icon left of text
 
 **SVG Tech Icons** (`src/components/tech-icons.tsx`):
-14 inline SVG brand logos sourced from Simple Icons, with brand colors. Icons use official paths:
-- GSAP: GreenSock mascot (official path), n8n: connected-circles workflow logo, Node.js: hexagon frame + "js" text, Airtable: multi-color faces (yellow #FCB400 top, blue #18BFFF right, pink #F82B60 left), Supabase: corrected lightning bolt shape.
-- Other colors: Meta (#0866FF), TypeScript (#3178C6), Python (#3776AB), Next.js (#fff), Tailwind (#06B6D4), Vercel (#fff), React (#61DAFB), GitHub (#fff), JSON (#F7DF1E), GSAP (#88CE02), Supabase (#3ECF8E).
-- Mapped via `TECH_ICON_MAP` record, colored via `TECH_COLORS` map + `style` prop. Airtable uses hardcoded multi-color fills instead of `fill="currentColor"`.
+14 inline SVG brand logos with brand colors: Meta (#0866FF), n8n (#EA4B71), TypeScript (#3178C6), Python (#3776AB), Next.js (#fff), Tailwind (#06B6D4), Vercel (#fff), React (#61DAFB), Node.js (#339933), GitHub (#fff), JSON (#F7DF1E), GSAP (#88CE02), Supabase (#3ECF8E), Airtable (#18BFFF). Mapped via `TECH_ICON_MAP` record, colored via `TECH_COLORS` map + `style` prop on SVG icons.
 
 **Projects (from constants.ts):**
 
@@ -477,9 +447,6 @@ CSS: `height: 1px; background: linear-gradient(90deg, transparent, #2a2a2a, tran
 **Text paragraphs** (each is a `reveal-item` using `useScrollRevealDramatic` for dramatic stagger):
 - translateY: 32px (more travel), stagger: 0.25s (wider gaps), duration: 0.8s (slower)
 - Threshold: 0.15, rootMargin: `-80px` (triggers later for visible cascade)
-- `onReveal` callback fires after each item's transition completes (stagger + 800ms)
-- Callback adds item index to `revealedSet` state (Set<number>)
-- Revealed paragraphs get `data-revealed` attribute (gated by index offset: heading=0, photo=1, paragraphs=i+2)
 
 Paragraphs have 3 styles based on `bold` and `highlight` flags:
 1. **Bold + highlight (intro):** `text-void font-semibold text-[15px] md:text-base` - "I'm Mohammed Hamdaan Dhaler, founder of {alqode}, based in Cape Town."
@@ -487,12 +454,6 @@ Paragraphs have 3 styles based on `bold` and `highlight` flags:
 3. **Bold standalone (punch line):** `text-void font-bold text-xl md:text-[22px]` - "So I built the systems."
 
 **{alqode} rendering:** Uses `renderText()` helper that splits on `{alqode}` and renders it with `text-terminal font-semibold`.
-
-**Decrypt on hover (desktop only):**
-- Uses `useDecryptOnHover` hook targeting `p[data-revealed]` selector
-- Only activates when `revealedSet.size > 0` (at least one paragraph finished reveal animation)
-- Scramble preserves `{alqode}` green `<span>` child nodes via DOM text-node walking
-- Re-triggers on each mouseenter per paragraph
 
 **Full paragraphs:**
 1. (bold+highlight) "I'm Mohammed Hamdaan Dhaler, founder of {alqode}, based in Cape Town."
@@ -507,45 +468,24 @@ Paragraphs have 3 styles based on `bold` and `highlight` flags:
 - Heading: "How it works"
 - Subline: "From first message to live system. No fluff, no delays."
 
-**Desktop (lg+): Horizontal timeline with wheel-hijack**
+**Desktop (lg+): Horizontal timeline**
 - `grid grid-cols-4 gap-6`
 - Horizontal connecting line: absolute, `top-[18px]`, spans full width
-- Line draws progressively (25% per step) based on `highestRevealed` state
+- Line draws from 0% to 100% width on scroll (green gradient: terminal to terminal/40)
 - Number circles: 36x36, rounded-full, terminal border, void bg, terminal text
-- Circles animate in sequence: opacity + scale tied to revealed state
+- Circles animate in sequence: opacity + scale tied to line progress
 
-**Desktop wheel-hijack behavior:**
-- IntersectionObserver (50% threshold) gates the wheel listener
-- Scroll down: reveals next step (step -1 → 0 → 1 → 2 → 3)
-- Steps **accumulate** — once revealed, they stay visible (don't fade out)
-- After step 3 (last), next scroll down releases the lock (page continues scrolling)
-- Scroll up: moves `activeStep` back. At step -1 + scroll up: releases lock, page scrolls up
-- 400ms debounce between step switches
-- `e.preventDefault()` on `passive: false` wheel listener stops Lenis from processing
-
-**Desktop state model:**
-- `activeStep` (-1 to 3): current highlighted step, can decrease on scroll up
-- `highestRevealed` (-1 to 3): tracks max reached, never decreases
-- `desktopLineProgress` derived: `((highestRevealed + 1) / 4) * 100`
-- Step visibility: `i <= highestRevealed` (accumulated, stays visible)
-- Step highlight: `i <= activeStep` (full opacity 1, vs revealed-but-not-active at 0.6)
-- Unrevealed steps: opacity 0.2, translateY 8px
-
-**Mobile: Vertical timeline (continuous scroll-driven)**
+**Mobile: Vertical timeline**
 - Flex layout with timeline column (circles + connecting lines) on left, content on right
 - Vertical connecting lines between circles, fill from top to bottom tied to scroll progress
 - Padding: `pt-1.5 pb-6` per step
-- Continuous scroll-driven via `window.addEventListener("scroll", { passive: true })`
-- `mobileLineProgress` (0-100) mapped from section's scroll position in viewport
-- Starts when section top reaches 80% of viewport, completes when bottom reaches 30%
-- **Fully reversible:** scrolling back up decreases progress, steps fade back out
-- Each step's active state derived: `threshold = ((i + 0.5) / 4) * 100`
 
-**Desktop/Mobile switching:**
-- `matchMedia("(min-width: 1024px)")` determines which behavior is active
-- Desktop: attaches wheel listener, detaches scroll listener
-- Mobile: attaches scroll listener, detaches wheel listener
-- On resize across breakpoint: resets state and swaps listeners
+**Animation:** Each step has its own IntersectionObserver (threshold 0.3, rootMargin `-100px`):
+- Steps fade in individually as user scrolls past each one (not all at once)
+- Each step: `opacity 0→1`, `translateY(20px→0)`, 0.6s ease transition
+- `revealedSteps` boolean array tracks which steps have appeared
+- Line progress = `(revealedCount / 4) * 100` with CSS `transition: width/height 0.6s ease`
+- Number circles: `scale(0.8)→scale(1)` + `opacity 0.3→1` on reveal
 - Heading/subline still use standard `useScrollReveal` with `reveal-item` class
 
 **Steps (from constants.ts):**
@@ -660,7 +600,7 @@ How it works:
 
 **Used in:** Services, Portfolio, Process, Contact sections. Each section wraps content in a ref and applies the hook.
 
-**`useScrollRevealDramatic(ref, onReveal?)`** - Dramatic variant for About section.
+**`useScrollRevealDramatic(ref)`** - Dramatic variant for About section.
 
 Same mechanism as `useScrollReveal` but with more visible cascade:
 - `translateY`: 32px (vs 20px)
@@ -668,9 +608,6 @@ Same mechanism as `useScrollReveal` but with more visible cascade:
 - Transition duration: 0.8s (vs 0.6s)
 - Threshold: 0.15 (vs 0.1)
 - rootMargin: `-80px` (vs `-50px`)
-- Optional `onReveal(index)` callback fires after each item's transition completes
-  - Delay: `index * 250 + 800` ms (stagger + transition duration)
-  - Used by About section to track which paragraphs have finished revealing
 
 **Used in:** About section only.
 
@@ -680,7 +617,6 @@ All implemented via `useState` + `useEffect` + `setTimeout`/`setInterval`:
 - Typewriter: `setInterval` at 80ms, updates `tagText` state
 - Word stagger: `setInterval` at 50ms, increments `wordsRevealed` counter
 - Subline/CTA: `setTimeout` cascading after previous completes
-- `entryDone`: `setTimeout` 700ms after CTAs appear — enables decrypt hover
 
 ### Contact Typing Animation (`src/components/contact.tsx`)
 
@@ -701,64 +637,18 @@ async function typeText(setter, text, speed, field) {
 - Duration: 0.3s, tween, easeOut
 - Links: `initial={{ opacity: 0, y: 20 }}`, delay: `i * 0.1`
 
-### Text Decrypt/Scramble on Hover (`src/lib/decrypt.ts`)
-Reusable hook: `useDecryptOnHover(containerRef, selector, options?)`
-
-**Behavior:**
-- On `mouseenter`, text characters scramble through random chars then resolve left-to-right
-- Re-triggers on each hover. Desktop only (lg+ non-touch).
-- Character set: `!@#$%^&*()_+-=[]{}|;:ABCDEFabcdef0123456789`
-
-**Implementation:**
-- DOM text-node walking via `document.createTreeWalker(el, NodeFilter.SHOW_TEXT)`
-- Preserves child element nodes (e.g. `{alqode}` green `<span>` in About section)
-- Phase 1: Scramble all text nodes instantly (spaces/newlines preserved)
-- Phase 2: Resolve left-to-right at ~30ms per char, unresolved chars keep scrambling at 50ms
-- Stores originals, restores exactly after animation completes
-- `animatingRef` Set prevents re-entry while animation is running
-- `enabled` option gates activation (Hero waits for entry animation, About waits for reveal)
-
-**Options:**
-```typescript
-interface DecryptOptions {
-  enabled?: boolean;  // default: true — gates when hook is active
-  speed?: number;     // default: 30 — ms per character resolve
-}
-```
-
-**Used in:**
-- Hero: selector `[data-decrypt]`, enabled after `entryDone`
-- About: selector `p[data-revealed]`, enabled when `revealedSet.size > 0`
-
-### Interactive Dot-Grid Glow (`src/app/globals.css` + `src/components/hero.tsx`)
-- CSS class `.dot-grid-glow` defines green dot layer with CSS `mask-image` (300px radial gradient)
-- `mask-position` updated via inline style from React `mousePos` state
-- `onMouseMove` handler on hero `<section>` calculates position relative to section bounds
-- Desktop only: gated by `isDesktop` state (matchMedia lg+ and non-coarse pointer)
-- Green dots at 0.5 opacity, same 24px grid as base dot-grid, align perfectly
-- Performance: GPU-composited CSS mask, no JS animation loop, no RAF
-
 ### Process Timeline Animation
-**Desktop:** Discrete wheel-hijack (same pattern as Services)
-- `activeStep` and `highestRevealed` state driven by wheel events
-- `desktopLineProgress` derived from `highestRevealed`: `((highestRevealed + 1) / 4) * 100`
-- Steps accumulate (stay visible once revealed), activeStep can go back on scroll up
-- CSS `transition: width 0.4s ease-out` (line) / `0.4s ease` (circles/content)
+- Each step has its own IntersectionObserver (threshold 0.3, rootMargin `-100px`)
+- Steps fade in individually as scrolled into view
+- Line progress tied to revealed step count: `(revealedCount / 4) * 100`
+- CSS `transition: width 0.6s ease` (desktop) / `height 0.6s ease` (mobile)
+- Number circles: scale + opacity tied to individual step reveal state
 
-**Mobile:** Continuous scroll-driven
-- `mobileLineProgress` (0-100) mapped from section's scroll position in viewport
-- **Reverses on scroll up** — steps fade back out, line retracts
-- CSS `transition: height 0.4s ease-out` / `0.4s ease` (circles/content)
-- Number circles: scale + opacity tied to derived active state (0.4s transitions)
-
-### Services Scroll-Controlled Slideshow (desktop only)
-- `wheel` event listener (passive: false) on window, gated by IntersectionObserver
-- When section is 50%+ visible, wheel events are intercepted
-- One scroll = one card switch, 400ms debounce between switches
-- At boundaries (first card + scroll up, last card + scroll down), normal scrolling resumes
-- Icon morph: blur(8px) + scale(0.7) + opacity(0) → blur(0) + scale(1) + opacity(1)
-- Card content: translateY(±20px) + opacity(0) → translateY(0) + opacity(1)
-- All transitions: `0.5s cubic-bezier(0.4, 0, 0.2, 1)`
+### Services Icon Morphing (desktop only)
+- Each card has IntersectionObserver (threshold 0.5, rootMargin `-100px`)
+- When card enters view, `activeIndex` state updates
+- Left sticky column: 3 overlaid icons with CSS opacity/scale transitions (0.5s)
+- Active icon: `opacity: 1, scale: 1` / Inactive: `opacity: 0, scale: 0.8`
 
 ### Tech Marquee (`src/components/tech-marquee.tsx`)
 - Pure CSS animation: `@keyframes marquee { 0% { translateX(0) } 100% { translateX(-50%) } }`
@@ -819,7 +709,7 @@ These are non-negotiable requirements:
 | Metric | Target | Current |
 |--------|--------|---------|
 | Lighthouse mobile (all categories) | 90+ | Not yet audited |
-| First Load JS | <200KB gzipped | 148KB |
+| First Load JS | <200KB gzipped | 145KB |
 | No Three.js/WebGL/particles | Enforced | Yes |
 | All animations one-shot or scroll-triggered | Enforced | Yes |
 | Images via Next.js Image component | Enforced | Yes |
@@ -845,13 +735,11 @@ Defined in `tailwind.config.ts` under `theme.extend.screens`:
 ### Key responsive behaviors:
 | Feature | Mobile (<lg) | Desktop (lg+) |
 |---------|-------------|----------------|
-| Nav | Hamburger + overlay | Horizontal links (hover: terminal green) |
-| Hero dot-grid glow | Hidden | Green dots follow mouse via CSS mask |
-| Hero/About decrypt | Disabled | Text scramble on hover |
-| Services | Stacked cards, inline icons | Horizontal 2-col slideshow with icon morphing |
+| Nav | Hamburger + overlay | Horizontal links |
+| Services | Stacked cards, inline icons | 2-col: sticky morphing icon + stacked cards |
 | Portfolio | 1 col, md: 2 col | 3 col at xl |
 | About | Stacked (photo above) | Side-by-side (photo 40% left) |
-| Process | Vertical timeline (scroll-driven) | Horizontal timeline (wheel-hijack, steps accumulate) |
+| Process | Vertical timeline | Horizontal timeline |
 | Contact | Same layout | Same layout |
 | Footer | Stacked | 3-column grid |
 | Cursor glow | Hidden | Visible |
@@ -864,13 +752,13 @@ Defined in `tailwind.config.ts` under `theme.extend.screens`:
 `{alqode} | Digital Systems Agency, Cape Town`
 
 ### Meta description
-`Custom web apps, automation, and AI systems that cut your costs, multiply your output, and never clock out. Founded by Mohammed Hamdaan Dhaler.`
+`Custom web apps, automation, and smart systems that cut your costs, multiply your output, and never clock out. Founded by Mohammed Hamdaan Dhaler.`
 
 ### Open Graph
 - Type: website
 - Locale: en_ZA
 - Image: auto-generated via `opengraph-image.tsx` (1200x630, edge runtime)
-- Shows: `{alqode}` logo, "Digital Systems Agency. Cape Town.", "WEB APPS - AUTOMATION - AI SYSTEMS"
+- Shows: `{alqode}` logo, "Digital Systems Agency. Cape Town.", "WEB APPS - AUTOMATION - SMART SYSTEMS"
 
 ### Twitter Card
 - Type: summary_large_image
@@ -1003,43 +891,9 @@ Modify `CONTACT.typingCycles` array in constants.ts.
 
 6. **GSAP installed but unused** - `gsap` is in package.json but no component imports it. Kept for potential future use. Using IntersectionObserver for scroll reveals instead (lighter weight, same visual result).
 
-7. **Wheel-hijack + Lenis interaction** - Services and Process both use `wheel` event listeners with `passive: false` and `e.preventDefault()` to stop Lenis from processing scroll events while they control card/step switching. This is the proven pattern — Lenis respects `preventDefault()`.
-
-8. **Decrypt hook desktop gate** - `useDecryptOnHover` checks `matchMedia("(min-width: 1024px)")` and `(pointer: coarse)` on mount only. It does not re-check on resize (listeners just won't fire meaningfully on mobile). This is acceptable since touch devices don't have mouseenter.
-
-9. **About paragraph reveal index offset** - In `about.tsx`, heading is reveal-item index 0, photo is index 1, so paragraph `i` maps to reveal index `i + 2`. The `onReveal` callback fires with the raw index, so `revealedSet.has(i + 2)` is used to match paragraphs.
-
 ---
 
 ## 20. VERSION HISTORY
-
-### v2.3 - Visual Adjustments & Desktop Interactions (Feb 11 2026)
-Six desktop-focused enhancements. Mobile behavior preserved across all changes.
-
-**What changed:**
-- **Nav hover color:** Desktop nav links now hover to terminal green (`hover:text-terminal`) instead of white, matching footer link behavior.
-- **Interactive dot-grid glow (Hero):** New CSS mask-based green dot layer follows the mouse cursor on desktop. Green dots at 0.5 opacity overlay the base dot-grid, visible within a 300px radius of the cursor. GPU-composited, zero JS animation loops.
-- **Text decrypt/scramble on hover:** New reusable `useDecryptOnHover` hook (`src/lib/decrypt.ts`). On mouseenter, text characters scramble through random chars then resolve left-to-right (~30ms/char). DOM text-node walking preserves child elements (e.g. `{alqode}` green spans). Desktop only.
-  - Applied to Hero: h1, subline, founder tag (NOT CTA buttons). Gated by `entryDone` (700ms after entry animation).
-  - Applied to About: paragraphs with `data-revealed` attribute (after scroll reveal transition completes).
-- **Services horizontal layout (desktop):** Changed from centered vertical stack (icon above, text below) to horizontal 2-column layout (140px icon left, text right). Progress dots aligned under text column. Wheel handler and mobile stacked cards untouched.
-- **Process wheel-hijack (desktop):** Replaced continuous scroll-driven animation with discrete wheel-hijack. One scroll = one step revealed. Steps accumulate (don't fade out). `activeStep` can go back on scroll up. At boundaries, normal scrolling resumes. Mobile kept as continuous scroll-driven.
-- **About reveal tracking:** `useScrollRevealDramatic` now accepts optional `onReveal(index)` callback. About tracks revealed paragraphs in a Set, adds `data-revealed` attribute, which gates the decrypt hover effect.
-
-**New file:** `src/lib/decrypt.ts` — `useDecryptOnHover` hook.
-
-**Build stats:** 148KB first load JS (was 147KB, +1KB from decrypt hook + dot-grid glow CSS).
-
-### v2.2 - Second Feedback Round (Feb 10 2026)
-Addressed second visual audit after v2.1. User tested each section at desktop resolution.
-
-**What changed:**
-- Services: Complete rewrite to scroll-controlled slideshow. Wheel events hijacked while in view — one scroll = one card switch. Icon morphs with blur+scale+opacity effect, no border/frame. Progress dots for navigation. Mobile stays as stacked cards.
-- Process: Replaced one-shot IntersectionObservers with continuous scroll-driven animation. Line progress maps to section scroll position. **Fully reversible** — scrolling back up retracts line and fades out steps.
-- SVG Icons: 5 icons corrected from Simple Icons official paths — GSAP (GreenSock mascot replacing S-in-circle), Node.js (added "js" text subpath), n8n (connected-circles replacing cut-off version), Airtable (multi-color faces: yellow/blue/pink), Supabase (corrected lightning bolt shape).
-- CLAUDE.md: Updated services, process, animation, icons, and version history sections.
-
-**Build stats:** 147KB first load JS (was 145KB, +2KB from corrected SVG paths).
 
 ### v2.1 - User Feedback Iteration (Feb 10 2026)
 Addressed naked-eye audit feedback across 6 areas:
@@ -1103,29 +957,24 @@ Complete rewrite from Vite/React/Three.js to Next.js 14 + Tailwind.
 - [ ] Nav hamburger opens and closes
 - [ ] Scroll works after menu close
 - [ ] Hero typewriter + word stagger plays
-- [ ] No dot-grid glow visible (desktop only)
-- [ ] No decrypt scramble on hover (desktop only)
 - [ ] Services cards stack with inline icons
 - [ ] Portfolio cards single column
 - [ ] About photo above text
-- [ ] Process vertical timeline: continuous scroll-driven, steps fade in on scroll
+- [ ] Process steps fade in individually on scroll
 - [ ] Tech marquee scrolls horizontally
 - [ ] Contact typing animation cycles
 - [ ] WhatsApp CTA links correctly
 - [ ] Footer stacks cleanly
 
 ### Desktop (1440px viewport)
-- [ ] Nav shows horizontal links + CTA, links hover to terminal green
+- [ ] Nav shows horizontal links + CTA
 - [ ] Hero animation sequence plays fully
-- [ ] Hero dot-grid glow: green dots light up near cursor on mouse move
-- [ ] Hero decrypt: hovering h1/subline/founder tag scrambles then resolves text (not CTAs)
-- [ ] Services scroll-controlled slideshow: horizontal layout (icon left, text right), one scroll = one card
+- [ ] Services sticky icon morphs as cards scroll (Braces → Zap → Shield)
 - [ ] Tech marquee scrolls, pauses on hover
 - [ ] Portfolio 3-column grid
 - [ ] About side-by-side (photo left, text right)
+- [ ] Process steps fade in one by one, line draws to each
 - [ ] About paragraphs cascade with visible 0.25s stagger gaps
-- [ ] About decrypt: hovering revealed paragraphs scrambles text, preserves {alqode} green spans
-- [ ] Process wheel-hijack: one scroll = one step revealed, steps accumulate, scroll back moves highlight
 - [ ] Portfolio tech pills show colored brand icons
 - [ ] Contact typing animation cycles
 - [ ] Cursor glow follows mouse
@@ -1146,15 +995,8 @@ Complete rewrite from Vite/React/Three.js to Next.js 14 + Tailwind.
 - [x] Add 4 required images to `public/images/` (done: founder.jpg, masjid-notify.png, faida-automation.png, bochi-cafe.png)
 - [x] Add JSON to FAIDA tech stack in constants.ts
 - [x] Expand tech stacks across all projects to showcase breadth
-- [x] Desktop interactive dot-grid glow (hero)
-- [x] Text decrypt/scramble on hover (hero + about)
-- [x] Services horizontal 2-column layout (desktop)
-- [x] Process discrete wheel-hijack (desktop)
-- [x] Nav hover color to terminal green
-- [ ] Fix OG image (currently looks bad)
 - [ ] Lighthouse audit + fixes
 - [ ] Cross-browser testing
-- [ ] Minor visual polish (user noted small issues remaining)
 
 ### Post-launch
 - [ ] Wire contact form to Resend API (replace mailto)
@@ -1173,7 +1015,7 @@ Complete rewrite from Vite/React/Three.js to Next.js 14 + Tailwind.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  ALQODE WEBSITE v2.3 - QUICK REFERENCE                     │
+│  ALQODE WEBSITE v2.0 - QUICK REFERENCE                     │
 ├─────────────────────────────────────────────────────────────┤
 │  Dev:            npm run dev                                │
 │  Build:          npm run build                              │
@@ -1183,7 +1025,6 @@ Complete rewrite from Vite/React/Three.js to Next.js 14 + Tailwind.
 │  Components:     src/components/*.tsx                       │
 │  Styling:        Tailwind classes (no separate CSS files)   │
 │  Animations:     src/lib/animations.ts (useScrollReveal*)   │
-│  Decrypt hook:   src/lib/decrypt.ts (useDecryptOnHover)     │
 │  Tech icons:     src/components/tech-icons.tsx              │
 ├─────────────────────────────────────────────────────────────┤
 │  Colors:         void=#0a0a0a  terminal=#10b981             │
@@ -1198,5 +1039,5 @@ Complete rewrite from Vite/React/Three.js to Next.js 14 + Tailwind.
 
 ---
 
-*Last Updated: February 11, 2026*
-*Version: 2.3 (Visual Adjustments & Desktop Interactions)*
+*Last Updated: February 10, 2026*
+*Version: 2.1 (User Feedback Iteration)*
