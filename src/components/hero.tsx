@@ -218,10 +218,33 @@ export function Hero() {
           </a>
         </div>
 
+        {/* Mockup offer microline */}
+        <div
+          className={`mt-6 transition-all duration-700 delay-100 ${
+            ctaReady ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+          }`}
+        >
+          <a
+            href={HERO.mockupOffer.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm md:text-[15px] text-white/85 hover:text-white transition-colors group"
+          >
+            <span className="relative flex h-2 w-2 flex-shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-terminal opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-terminal" />
+            </span>
+            <span className="font-medium">{HERO.mockupOffer.label}</span>
+            <span className="text-terminal font-bold group-hover:translate-x-0.5 transition-transform">
+              {HERO.mockupOffer.cta} →
+            </span>
+          </a>
+        </div>
+
         {/* Founder tag */}
         <p
           data-decrypt
-          className={`text-xs text-muted mt-8 tracking-wide transition-all duration-700 delay-300 ${
+          className={`text-xs text-muted mt-4 tracking-wide transition-all duration-700 delay-300 ${
             ctaReady ? "opacity-100" : "opacity-0"
           }`}
         >

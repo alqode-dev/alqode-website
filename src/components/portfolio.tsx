@@ -47,6 +47,11 @@ function ProjectCard({ project }: { project: (typeof PORTFOLIO.projects)[number]
       {/* Content */}
       <div className="p-5">
         <h3 className="text-base font-bold mb-1.5">{project.name}</h3>
+        {project.result && (
+          <p className="text-[13px] text-terminal font-semibold leading-snug mb-2">
+            {project.result}
+          </p>
+        )}
         <p className="text-xs text-muted leading-relaxed mb-3">
           {project.description}
         </p>

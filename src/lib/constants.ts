@@ -29,7 +29,36 @@ export const HERO = {
     "{alqode} builds custom web apps, automation, and smart systems that cut your costs, multiply your output, and never clock out.",
   primaryCta: "Get a system built",
   secondaryCta: "See our work",
-  founderTag: "Founded by Mohammed Hamdaan Dhaler. Cape Town.",
+  mockupOffer: {
+    label: "Free mockup in 24h. No obligation.",
+    cta: "Request a mockup",
+    href: "https://wa.me/27685394482?text=Hi%2C%20I%27d%20like%20to%20request%20a%20free%20mockup",
+  },
+  founderTag: "Founded by Mohammed Hamdaan Dhaler in Cape Town. Building for SA + UAE.",
+};
+
+export const CLIENTS = {
+  label: "Trusted by businesses building real momentum",
+  logos: [
+    {
+      key: "faida" as const,
+      name: "Faida",
+      url: "https://www.faida.ae",
+      brandColor: "#7B5BE5",
+    },
+    {
+      key: "bochi" as const,
+      name: "Bochi Croffle",
+      url: "https://bochinsh.com",
+      brandColor: "#7B1818",
+    },
+    {
+      key: "trophy" as const,
+      name: "Trophy SA",
+      url: "https://trophysa.co.za",
+      brandColor: "#B8895A",
+    },
+  ],
 };
 
 export const SERVICES = {
@@ -54,6 +83,31 @@ export const SERVICES = {
   ],
 };
 
+export const QUICKSTART = {
+  tag: "Start fast",
+  heading: "Proof. Not promises.",
+  subline:
+    "Pick your entry point. Free, fast, no commitment. You see exactly what you're getting before you pay a cent.",
+  options: [
+    {
+      title: "Get a mockup",
+      description:
+        "See the design before you commit. We build a visual prototype of your idea — same look, same feel as the final product. Free.",
+      cta: "Request a mockup",
+      href: "https://wa.me/27685394482?text=Hi%2C%20I%27d%20like%20to%20request%20a%20free%20mockup",
+      eta: "24h",
+    },
+    {
+      title: "Get a quote",
+      description:
+        "Clear pricing within the hour. Tell us what you need and we'll tell you exactly what it costs — no hidden fees, no surprises.",
+      cta: "Request a quote",
+      href: "https://wa.me/27685394482?text=Hi%2C%20I%27d%20like%20to%20request%20a%20quote",
+      eta: "1h",
+    },
+  ],
+};
+
 export const PORTFOLIO = {
   heading: "Built by",
   headingAccent: "{alqode}",
@@ -61,9 +115,10 @@ export const PORTFOLIO = {
   projects: [
     {
       name: "Masjid Notify",
+      result: "A 24/7 community hub — scheduling, archives, and access for everyone.",
       description:
-        "WhatsApp notification system serving a mosque community. Prayer reminders, announcements, and daily hadith, all automated.",
-      tags: ["WhatsApp API", "Automation", "Community"],
+        "The digital backbone for a Masjid: prayer times, event scheduling, and a permanent archive of every recorded lecture. Open access, always live.",
+      tags: ["WhatsApp API", "Community", "Database"],
       tech: ["Next.js", "TypeScript", "Supabase", "Tailwind", "React", "Meta"],
       image: "/images/masjid-notify.png",
       fallbackImage: null,
@@ -71,19 +126,21 @@ export const PORTFOLIO = {
     },
     {
       name: "FAIDA",
+      result: "Lead-to-calendar automation. No manual step, no missed booking.",
       description:
-        "Automated bank form processing for a UAE real estate finance company. Cutting hours of manual paperwork to minutes.",
+        "Brand site plus the automation pipeline that captures every form submission and books qualified leads straight into the calendar — built for a UAE finance brand.",
       tags: ["Automation", "Finance", "UAE"],
       tech: ["Python", "n8n", "JSON", "Airtable"],
       image: "/images/faida-automation.png",
       fallbackImage: "/images/faida.webp",
-      url: null,
+      url: "https://www.faida.ae",
     },
     {
-      name: "Bochi Cafe",
+      name: "Bochi Croffle",
+      result: "An in-browser game that turns every play into a customer record.",
       description:
-        "Modern website for a Cape Town cafe. Mobile-first, fast, and deployed in a single day. Great work doesn't need a big budget.",
-      tags: ["Web Design", "Mobile-first", "F&B"],
+        "Full brand, site, and a custom game built into the experience. Every play feeds a loyalty database — driving revenue and the community that keeps it growing.",
+      tags: ["Brand", "Game", "F&B"],
       tech: ["Next.js", "React", "Tailwind", "Vercel"],
       image: "/images/bochi-cafe.png",
       fallbackImage: "/images/bochi.webp",
@@ -153,6 +210,36 @@ export const PROCESS = {
         "Launch is the beginning, not the end. We stay on retainer, keep improving your systems, and scale what's working. Your tech grows with your business.",
     },
   ],
+};
+
+export const RETAINER = {
+  tag: "The retainer",
+  heading: "We build. We stay. We compound.",
+  subline:
+    "Launch is day one. Month three is when the system starts paying for itself. Stay on retainer and we keep your business climbing — campaigns, fixes, refreshes, scaling — every month, on autopilot.",
+  pillars: [
+    {
+      title: "Always live",
+      body: "Uptime monitoring, fast error response, security patches. Your system never sleeps and neither do we.",
+    },
+    {
+      title: "Always growing",
+      body: "Google campaigns, seasonal promotions, content drops. We keep your business in front of the right eyes.",
+    },
+    {
+      title: "Always refreshed",
+      body: "New features, fresh content, items added and updated. Your site evolves with your business — never stale.",
+    },
+    {
+      title: "Always ahead",
+      body: "Quarterly performance reviews, A/B tests, fresh strategy. What works stays. What doesn't gets replaced — fast.",
+    },
+  ],
+  closer: {
+    line1: "Our job isn't to ship a site and disappear.",
+    line2: "Our job is to make you so successful, your competitors run out of business.",
+  },
+  cta: "Start the conversation",
 };
 
 export const CONTACT = {

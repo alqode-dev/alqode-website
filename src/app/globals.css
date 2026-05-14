@@ -91,3 +91,12 @@
   display: flex;
   flex-shrink: 0;
 }
+
+/* Client logo: monochrome by default, brand color on hover via CSS variable */
+.client-logo-link {
+  display: inline-block;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+.client-logo-link:hover {
+  color: var(--brand-color);
+}

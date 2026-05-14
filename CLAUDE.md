@@ -154,39 +154,41 @@ alqode-website/
 │   └── images/
 │       ├── founder.jpg                # Founder photo (About section)
 │       ├── masjid-notify.png          # Masjid Notify screenshot (Portfolio)
-│       ├── faida-automation.png       # FAIDA n8n workflow screenshot (Portfolio)
-│       ├── bochi-cafe.png             # Bochi Cafe website screenshot (Portfolio)
-│       ├── bochi.webp                 # Bochi Cafe fallback image
-│       ├── faida.webp                 # FAIDA fallback image
-│       └── *.webp                     # Legacy tech stack images (unused, safe to delete)
+│       ├── faida-automation.png       # FAIDA screenshot (Portfolio)
+│       ├── bochi-cafe.png             # Bochi Croffle screenshot (Portfolio)
+│       ├── bochi.webp                 # Bochi Croffle fallback image
+│       └── faida.webp                 # FAIDA fallback image
 │
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx                 # Root: Space Grotesk font, metadata, JSON-LD, LenisProvider, Analytics
-│   │   ├── page.tsx                   # Home: assembles CursorGlow + Nav + TechMarquee + 7 sections + Footer + ScrollToTop
-│   │   ├── globals.css                # Tailwind directives + dot-grid + glow + cursor-blink + section-padding + container-width + gradient-divider + marquee
+│   │   ├── page.tsx                   # Home: assembles CursorGlow + Nav + 8 sections (Hero, ClientLogos, Services, Portfolio, About, Process, Retainer, Contact) + Footer + ScrollToTop
+│   │   ├── globals.css                # Tailwind directives + dot-grid + glow + cursor-blink + section-padding + container-width + gradient-divider + client-logo hover
 │   │   ├── not-found.tsx              # 404 page with "Back to home" CTA
 │   │   ├── sitemap.ts                 # Dynamic XML sitemap for alqode.com
 │   │   └── opengraph-image.tsx        # Edge runtime OG image (1200x630)
 │   │
 │   ├── components/
 │   │   ├── nav.tsx                    # Sticky nav + mobile hamburger (Framer Motion slide-in)
-│   │   ├── hero.tsx                   # Typewriter tag + word-by-word headline stagger + CTAs
-│   │   ├── services.tsx               # Scroll-driven 2-col layout with sticky icon morphing (desktop), stacked cards (mobile)
-│   │   ├── portfolio.tsx              # 3 project cards with screenshots + SVG tech logos
-│   │   ├── about.tsx                  # Light bg section: founder photo left, story right
-│   │   ├── process.tsx                # 4-step timeline with individual scroll reveals per step
+│   │   ├── hero.tsx                   # Typewriter tag + word-by-word headline stagger + CTAs + decrypt-on-hover
+│   │   ├── client-logos.tsx           # NEW v2.4: "Trusted by" strip with 3 hand-traced SVG client logos, monochrome → brand color on hover, click-through to live site
+│   │   ├── client-logos-svg.tsx       # NEW v2.4: Hand-traced SVG icons + wordmarks for Bochi, Faida, Trophy SA. Uses currentColor for monochrome/hover recolor
+│   │   ├── services.tsx               # Wheel-hijack 2-col slideshow (desktop), stacked cards (mobile)
+│   │   ├── portfolio.tsx              # 3 project cards with screenshot + green-accent `result` line + description + tags + tech pills
+│   │   ├── about.tsx                  # Light bg section: founder photo left, story right, dramatic reveal
+│   │   ├── process.tsx                # 4-step timeline: wheel-hijack accumulating steps (desktop), continuous scroll-driven (mobile)
+│   │   ├── retainer.tsx               # NEW v2.4: "We build. We stay. We compound." — tag + heading + subline + 4 pillars + closer + CTA. Sits between Process and Contact
 │   │   ├── contact.tsx                # WhatsApp CTA + signature typing animation form
 │   │   ├── footer.tsx                 # 3-column grid: logo, navigate links, social icons
 │   │   ├── tech-icons.tsx             # 14 inline SVG brand logos + TECH_COLORS brand color map + style prop support
-│   │   ├── tech-marquee.tsx           # CSS-only infinite horizontal scroll of all 14 tech logos with brand colors
 │   │   ├── cursor-glow.tsx            # Desktop-only (lg+, no touch) 400px radial gradient follows mouse
 │   │   ├── scroll-to-top.tsx          # Fixed button, appears after 600px scroll
 │   │   └── lenis-provider.tsx         # Wraps app in Lenis smooth scroll
 │   │
 │   └── lib/
-│       ├── constants.ts               # ALL site copy - SINGLE SOURCE OF TRUTH
-│       └── animations.ts              # useScrollReveal + useScrollRevealDramatic hooks (IntersectionObserver)
+│       ├── constants.ts               # ALL site copy - SINGLE SOURCE OF TRUTH (SITE, NAV_LINKS, HERO, CLIENTS, SERVICES, PORTFOLIO, ABOUT, PROCESS, RETAINER, CONTACT, FOOTER)
+│       ├── animations.ts              # useScrollReveal + useScrollRevealDramatic hooks (IntersectionObserver)
+│       └── decrypt.ts                 # useDecryptOnHover hook — desktop-only text scramble/resolve effect
 │
 ├── CLAUDE.md                          # THIS FILE - complete rebuild blueprint
 ├── package.json                       # Dependencies and scripts
@@ -239,7 +241,7 @@ Font loaded via `next/font/google` in `layout.tsx` with `display: "swap"` for ze
 
 ## 8. SINGLE-PAGE ARCHITECTURE
 
-The site is one page (`src/app/page.tsx`) with 7 scroll sections in this exact order:
+The site is one page (`src/app/page.tsx`) with 8 scroll sections in this exact order:
 
 ```
 ┌─────────────── Nav (sticky, z-50) ───────────────┐
@@ -251,21 +253,22 @@ The site is one page (`src/app/page.tsx`) with 7 scroll sections in this exact o
 │ Background: dot-grid + terminal glow               │
 └──────────────────────────────────────────────────┘
                    gradient-divider
-┌─────────────── Tech Marquee ─────────────────────┐
-│ Infinite CSS scroll of 14 tech logos + brand colors│
-│ Pauses on hover                                    │
+┌─────────────── ClientLogos ──────────────────────┐
+│ "Trusted by businesses building real momentum"     │
+│ 3 hand-traced SVG logos: Faida, Bochi, Trophy SA   │
+│ Monochrome → brand color on hover, click → site    │
 └──────────────────────────────────────────────────┘
                    gradient-divider
 ┌─────────────── Services (#services) ─────────────┐
 │ "What we do" heading                               │
-│ Desktop: 2-col sticky icon morphing + stacked cards│
+│ Desktop: 2-col wheel-hijack slideshow              │
 │ Mobile: stacked cards with inline icons            │
 └──────────────────────────────────────────────────┘
                    gradient-divider
 ┌─────────────── Portfolio (#work) ────────────────┐
 │ "Built by {alqode}" heading                        │
-│ 3 project cards: screenshot + tags + SVG tech logos│
-│ Projects: Masjid Notify, FAIDA, Bochi Cafe         │
+│ 3 cards: screenshot + green `result` line + descr  │
+│ Projects: Masjid Notify, FAIDA (UAE), Bochi Croffle│
 └──────────────────────────────────────────────────┘
 ┌─────────────── About (#about) ───────────────────┐
 │ ** LIGHT BACKGROUND (#f5f5f0) **                   │
@@ -276,9 +279,18 @@ The site is one page (`src/app/page.tsx`) with 7 scroll sections in this exact o
 └──────────────────────────────────────────────────┘
 ┌─────────────── Process (#process) ────────────────┐
 │ "How it works" heading                              │
-│ Desktop: horizontal 4-step timeline with line draw  │
-│ Mobile: vertical timeline with connecting line      │
+│ Desktop: wheel-hijack accumulating steps            │
+│ Mobile: vertical timeline, continuous scroll        │
 │ Steps: Discovery → Design → Build → Support         │
+└──────────────────────────────────────────────────┘
+                   gradient-divider
+┌─────────────── Retainer (#retainer) ──────────────┐
+│ Tag: "THE RETAINER" (terminal green)                │
+│ Heading: "We build. We stay. We compound."          │
+│ 4 pillars: Always live / growing / refreshed / ahead│
+│ Closer: "Make you so successful, competitors come   │
+│   asking who built it." → CTA → WhatsApp            │
+│ Background: soft terminal glow blur                 │
 └──────────────────────────────────────────────────┘
                    gradient-divider
 ┌─────────────── Contact (#contact) ────────────────┐
@@ -295,7 +307,7 @@ The site is one page (`src/app/page.tsx`) with 7 scroll sections in this exact o
 ```
 
 ### Gradient dividers
-Between Hero→Marquee, Marquee→Services, Services→Portfolio, and Process→Contact. Code:
+Between Hero→ClientLogos, ClientLogos→Services, Services→Portfolio, Process→Retainer, and Retainer→Contact. Code:
 ```html
 <div className="gradient-divider mx-5" />
 ```
@@ -565,6 +577,59 @@ Paragraphs have 3 styles based on `bold` and `highlight` flags:
 
 **Bottom:** Divider (`border-t border-border`) + centered copyright: "© 2026 {alqode}. All rights reserved."
 
+### 9.9 ClientLogos (`src/components/client-logos.tsx`) — v2.4
+
+**Position:** Between Hero and Services. Acts as the social proof trust anchor immediately below the headline.
+
+**Layout:**
+- Section padding: `py-14 md:py-20` (lighter than `section-padding` — this is a trust strip, not a content section)
+- Small uppercase label above: "Trusted by businesses building real momentum" (10px-xs, muted, letter-spacing 2.5px)
+- 3 logos in `flex flex-wrap items-center justify-center gap-x-10 md:gap-x-16 lg:gap-x-20 gap-y-8`
+- Centered on all viewports, wraps to 2+1 on tight mobile if needed
+
+**Logos** (from `CLIENT_LOGO_MAP` in `client-logos-svg.tsx`):
+1. **FaidaLogo** — 8-petal asterisk icon (4 rotated capsules + house cutout mask) + "faida" wordmark. URL: faida.ae. Brand color: `#7B5BE5` (purple).
+2. **BochiLogo** — circle with 3x3 lattice cutout (croffle pattern) + "bochi" wordmark. URL: bochinsh.com. Brand color: `#7B1818` (burgundy).
+3. **TrophyLogo** — trophy cup with handles + star above + base + "Trophy SA" uppercase wordmark. URL: trophysa.co.za. Brand color: `#B8895A` (gold).
+
+**SVG approach:**
+- Icons use `currentColor` for fill/stroke (allows recolor via CSS without touching SVG)
+- Wordmarks rendered as HTML text (Space Grotesk Bold) in a flex container next to icon — keeps file size tiny and crisp at any size
+- Each logo component is `inline-flex items-center gap-2` wrapping `<Icon className="h-9 w-9" />` + wordmark span
+
+**Hover behavior:**
+- Default: `text-white/50` (50% white opacity — muted but visible)
+- Hover: color changes to brand color via CSS variable, plus `scale-105` transform
+- Implementation: `style={{"--brand-color": client.brandColor}}` on the `<a>`, paired with CSS rule `.client-logo-link:hover { color: var(--brand-color); }`
+- Transitions: 0.3s ease for color, transform, and opacity
+
+**Click:** Opens client's live site in new tab (`target="_blank" rel="noopener noreferrer"`).
+
+**Scroll reveal:** Uses standard `useScrollReveal`. Label and logo row each get `reveal-item`.
+
+### 9.10 Retainer (`src/components/retainer.tsx`) — v2.4
+
+**Position:** Between Process and Contact. The "what does month 3 look like" pitch — converts one-shot project leads into recurring engagements.
+
+**Layout:** `section-padding relative overflow-hidden`. Inside: centered terminal-tinted radial glow (600x600px, `bg-terminal/[0.04] blur-[120px]`) for visual differentiation from neighboring sections.
+
+**Elements (top to bottom):**
+1. **Tag** — "THE RETAINER" — `text-terminal text-xs font-semibold tracking-[2.5px] uppercase`
+2. **Heading** — "We build. We stay. We compound." — `text-[clamp(1.5rem,3.5vw,2.5rem)] font-extrabold leading-[1.1] tracking-tight`, `max-w-3xl`
+3. **Subline** — paragraph explaining the model — `text-sm md:text-base text-muted`, `max-w-2xl`
+4. **Pillars grid** — `grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8 md:gap-y-12`. Each pillar:
+   - 1px terminal-green left accent bar (`absolute left-0 top-1 bottom-1 w-px bg-terminal`)
+   - Pillar title (base/lg, white, bold) + body (sm, muted)
+   - 4 pillars: Always live / Always growing / Always refreshed / Always ahead
+5. **Closer** — bordered top, 2 lines, second line is the punch (`text-lg md:text-2xl font-bold text-white leading-tight`):
+   - "Our job isn't to ship a site and disappear."
+   - "Our job is to make you so successful, your competitors come asking who built it."
+6. **CTA** — terminal-green button "Start the conversation" + ArrowRight → `SITE.whatsapp`
+
+**Scroll reveal:** Uses standard `useScrollReveal`. Each major block (`reveal-item`): tag, heading, subline, pillars grid, closer, CTA.
+
+**Why this section exists:** Cold leads evaluating an agency want to know "what happens after launch?" — most agency sites don't answer. This section answers explicitly and reframes the retainer as a compounding-success engine rather than a maintenance fee.
+
 ---
 
 ## 10. CONTENT SOURCE OF TRUTH
@@ -575,10 +640,12 @@ Exports:
 - `SITE` - name, domain, title, description, url, founder, location, email, whatsapp, github, instagram
 - `NAV_LINKS` - array of {label, href} for nav sections
 - `HERO` - tag, headline, headlineAccent, subline, primaryCta, secondaryCta, founderTag
+- `CLIENTS` - label + logos[] (key, name, url, brandColor) for the trust strip
 - `SERVICES` - heading, subline, cards[] with icon/title/body
 - `PORTFOLIO` - heading, headingAccent, subline, projects[] with name/description/tags/tech/image/fallbackImage/url
 - `ABOUT` - heading, paragraphs[] with text/bold/highlight flags, founderImage path
 - `PROCESS` - heading, subline, steps[] with num/title/description
+- `RETAINER` - tag, heading, subline, pillars[], closer (line1/line2), cta
 - `CONTACT` - heading, subline, whatsappCta, separator, formFields, details, typingCycles[]
 - `FOOTER` - tagline, copyright, navigate[], connect[] with label/href
 
@@ -895,6 +962,32 @@ Modify `CONTACT.typingCycles` array in constants.ts.
 
 ## 20. VERSION HISTORY
 
+### v2.5 - Faithful Logos & Quickstart Conversion Layer (May 14 2026)
+Two improvements driven by user feedback after first live review.
+
+**What changed:**
+- **Client logos** — switched from hand-traced abstract SVGs to faithful brand renders. Bochi + Trophy SA now use the actual brand image files (PNG/JPG) via Next.js Image, rendered inside warm-cream tiles (`#FAF2E3`) with `mix-blend-mode: multiply` so the light image backgrounds blend with the tile. Faida keeps its SVG (user-approved) but rendered consistently in the same tile style. Hover lifts the tile + adds a brand-color outline ring.
+- **NEW: Quickstart section** between Services and Portfolio. 2 cards reflecting the founder's actual sales process: "Get a mockup" (24h) and "Get a quote" (1h). Each card links to WhatsApp with a pre-filled message. Heading: "Proof. Not promises." Tag: "Start fast".
+- **Retainer closer line 2** updated to "Our job is to make you so successful, your competitors run out of business." (was "...competitors come asking who built it"). Sharper, more aggressive.
+- **Hero mockup microline** added (green pulsing dot + "Free mockup in 24h. No obligation. Request a mockup →") under hero CTAs. Clicks to WhatsApp pre-filled.
+- **public/images/clients/** — new subfolder holding `bochi-logo.png` and `trophy-sa-logo.jpg`.
+
+**Build stats:** 151KB first load JS (was 150KB, +1KB for Quickstart + mockup microline).
+
+### v2.4 - Social Proof & Retainer Model (May 14 2026)
+After a stretch of cold outreach + 3 new client wins, refocused the site on conversion: surface the proof, sell the retainer.
+
+**What changed:**
+- **NEW: ClientLogos section** between Hero and Services. 3 hand-traced SVG logos (Faida, Bochi, Trophy SA) with monochrome default → brand color on hover, click-through to live sites.
+- **NEW: Retainer section** between Process and Contact. Tag/heading/subline/4 pillars/closer/CTA. Articulates the compounding-success retainer model — "We build. We stay. We compound." Background: soft terminal-green radial glow.
+- **Removed: TechMarquee** (replaced by ClientLogos on the page; file deleted). Generic tech-stack flex was lower-conversion than named-client social proof.
+- **Portfolio** — added green-accent `result` line per project (the outcome punch above the description). Sharper descriptions. Bochi renamed to "Bochi Croffle" with game-database narrative. FAIDA url now live (faida.ae) with UAE geographic flex.
+- **Hero founderTag** — "Founded by Mohammed Hamdaan Dhaler in Cape Town. Building for SA + UAE." (geographic credibility flex)
+- **Cleanup:** removed gsap dependency (was unused), deleted 13 legacy webp images from public/images/, deleted FULL_SPEC.md and wireframe.jsx from root.
+- **constants.ts** — new `CLIENTS` and `RETAINER` exports. Updated PORTFOLIO with `result` field per project.
+
+**Build stats:** 150KB first load JS (was 148KB, +2KB for two new sections, still well under 200KB target).
+
 ### v2.1 - User Feedback Iteration (Feb 10 2026)
 Addressed naked-eye audit feedback across 6 areas:
 
@@ -1039,5 +1132,5 @@ Complete rewrite from Vite/React/Three.js to Next.js 14 + Tailwind.
 
 ---
 
-*Last Updated: February 10, 2026*
-*Version: 2.1 (User Feedback Iteration)*
+*Last Updated: May 14, 2026*
+*Version: 2.5 (Faithful Logos & Quickstart Conversion Layer)*
