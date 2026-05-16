@@ -46,7 +46,7 @@ export function About() {
       aria-label="About"
     >
       <div className="container-width">
-        <h2 className="reveal-item text-[clamp(1.375rem,3vw,2rem)] font-bold mb-6 text-void">
+        <h2 className="reveal-item font-display text-[clamp(2rem,5vw,3.5rem)] font-normal italic leading-[1.05] tracking-tight mb-6 text-void">
           {ABOUT.heading}
         </h2>
 

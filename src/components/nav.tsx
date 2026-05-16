@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { NAV_LINKS, SITE } from "@/lib/constants";
+import { NAV_LINKS, waUrl } from "@/lib/constants";
 
 export function Nav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,7 +72,7 @@ export function Nav() {
               </a>
             ))}
             <a
-              href={SITE.whatsapp}
+              href={waUrl("nav_desktop")}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-terminal text-void px-4 py-2 rounded-md text-sm font-bold hover:bg-terminal/90 transition-colors"
@@ -84,7 +84,7 @@ export function Nav() {
           {/* Mobile: CTA + Hamburger */}
           <div className="flex lg:hidden items-center gap-3">
             <a
-              href={SITE.whatsapp}
+              href={waUrl("nav_mobile")}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-terminal text-void px-3 py-1.5 rounded-md text-xs font-bold"
@@ -136,7 +136,7 @@ export function Nav() {
                 </motion.a>
               ))}
               <motion.a
-                href={SITE.whatsapp}
+                href={waUrl("nav_mobile_menu")}
                 target="_blank"
                 rel="noopener noreferrer"
                 initial={{ opacity: 0, y: 20 }}

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { ArrowRight } from "lucide-react";
-import { HERO, SITE } from "@/lib/constants";
+import { HERO, waUrl } from "@/lib/constants";
 import { useDecryptOnHover } from "@/lib/decrypt";
 
 export function Hero() {
@@ -114,7 +114,7 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen flex items-center dot-grid"
+      className="relative min-h-[85vh] md:min-h-screen flex items-center dot-grid"
       aria-label="Hero"
       onMouseMove={handleMouseMove}
     >
@@ -201,7 +201,7 @@ export function Hero() {
           }`}
         >
           <a
-            href={SITE.whatsapp}
+            href={waUrl("hero_primary")}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-terminal text-void px-6 py-3 rounded-lg text-sm font-bold hover:bg-terminal/90 transition-colors"

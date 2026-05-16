@@ -1,9 +1,10 @@
 export const SITE = {
   name: "{alqode}",
   domain: "alqode.com",
-  title: "{alqode} | Digital Systems Agency, Cape Town",
+  title:
+    "{alqode} — Web Apps, Automation & WhatsApp Systems · Cape Town + UAE",
   description:
-    "Custom web apps, automation, and smart systems that cut your costs, multiply your output, and never clock out. Founded by Mohammed Hamdaan Dhaler.",
+    "Cape Town agency building custom web apps, n8n automation, and WhatsApp systems for SMBs in South Africa and the UAE. Free mockup in 24h. Projects from R8,000.",
   url: "https://alqode.com",
   founder: "Mohammed Hamdaan Dhaler",
   location: "Cape Town, South Africa",
@@ -12,6 +13,17 @@ export const SITE = {
   github: "https://github.com/alqode-dev",
   instagram: "https://www.instagram.com/alqode.dev/",
 };
+
+/**
+ * Generate a WhatsApp URL with UTM tracking + optional pre-filled message.
+ * Use everywhere instead of raw SITE.whatsapp so we can track which CTAs convert.
+ */
+export function waUrl(source: string, text?: string): string {
+  const params = new URLSearchParams();
+  params.set("utm_source", source);
+  if (text) params.set("text", text);
+  return `https://wa.me/27685394482?${params.toString()}`;
+}
 
 export const NAV_LINKS = [
   { label: "Work", href: "#work" },
@@ -31,13 +43,13 @@ export const HERO = {
   mockupOffer: {
     label: "Free mockup in 24h. No obligation.",
     cta: "Request a mockup",
-    href: "https://wa.me/27685394482?text=Hi%2C%20I%27d%20like%20to%20request%20a%20free%20mockup",
+    href: waUrl("hero_mockup", "Hi, I'd like to request a free mockup"),
   },
   founderTag: "Founded by Mohammed Hamdaan Dhaler in Cape Town. Building for SA + UAE.",
 };
 
 export const CLIENTS = {
-  label: "Trusted by businesses building real momentum",
+  label: "Building for businesses across SA + UAE",
   logos: [
     {
       key: "faida" as const,
@@ -64,14 +76,14 @@ export const QUICKSTART = {
   tag: "Start fast",
   heading: "Proof. Not promises.",
   subline:
-    "Pick your entry point. Free, fast, no commitment. You see exactly what you're getting before you pay a cent.",
+    "Pick your entry point. Free, fast, no commitment. Projects start from R8,000 — you see what you're getting before you pay a cent.",
   options: [
     {
       title: "Get a mockup",
       description:
         "See the design before you commit. We build a visual prototype of your idea — same look, same feel as the final product. Free.",
       cta: "Request a mockup",
-      href: "https://wa.me/27685394482?text=Hi%2C%20I%27d%20like%20to%20request%20a%20free%20mockup",
+      href: waUrl("quickstart_mockup", "Hi, I'd like to request a free mockup"),
       eta: "24h",
     },
     {
@@ -79,7 +91,7 @@ export const QUICKSTART = {
       description:
         "Clear pricing within the hour. Tell us what you need and we'll tell you exactly what it costs — no hidden fees, no surprises.",
       cta: "Request a quote",
-      href: "https://wa.me/27685394482?text=Hi%2C%20I%27d%20like%20to%20request%20a%20quote",
+      href: waUrl("quickstart_quote", "Hi, I'd like to request a quote"),
       eta: "1h",
     },
   ],
@@ -97,7 +109,7 @@ export const PORTFOLIO = {
         "The digital backbone for a Masjid: prayer times, event scheduling, and a permanent archive of every recorded lecture. Open access, always live.",
       tags: ["WhatsApp API", "Community", "Database"],
       tech: ["Next.js", "TypeScript", "Supabase", "Tailwind", "React", "Meta"],
-      image: "/images/masjid-notify.png",
+      image: "/images/masjid-notify.webp",
       fallbackImage: null,
       url: "https://masjid-notify.vercel.app",
     },
@@ -108,7 +120,7 @@ export const PORTFOLIO = {
         "Brand site plus the automation pipeline that captures every form submission and books qualified leads straight into the calendar — built for a UAE finance brand.",
       tags: ["Automation", "Finance", "UAE"],
       tech: ["Python", "n8n", "JSON", "Airtable"],
-      image: "/images/faida-automation.png",
+      image: "/images/faida-automation.webp",
       fallbackImage: "/images/faida.webp",
       url: "https://www.faida.ae",
     },
@@ -119,9 +131,21 @@ export const PORTFOLIO = {
         "Full brand, site, and a custom game built into the experience. Every play feeds a loyalty database — driving revenue and the community that keeps it growing.",
       tags: ["Brand", "Game", "F&B"],
       tech: ["Next.js", "React", "Tailwind", "Vercel"],
-      image: "/images/bochi-cafe.png",
+      image: "/images/bochi-cafe.webp",
       fallbackImage: "/images/bochi.webp",
       url: "https://bochinsh.com",
+    },
+    {
+      name: "Trophy SA",
+      result:
+        "Premium e-commerce experience on a free-tier WordPress budget.",
+      description:
+        "Full WooCommerce store for South Africa's leading online awards shop. Built to feel premium, engineered to convert — without the premium plugin price tag.",
+      tags: ["E-commerce", "WordPress", "Retail"],
+      tech: ["WordPress", "WooCommerce"],
+      image: null,
+      fallbackImage: null,
+      url: "https://trophysa.co.za",
     },
   ],
 };
@@ -174,14 +198,9 @@ export const ABOUT = {
   heading: "The person behind the code",
   paragraphs: [
     {
-      text: 'I\'m Mohammed Hamdaan Dhaler, founder of {alqode}, based in Cape Town.',
+      text: "I'm Mohammed Hamdaan Dhaler, founder of {alqode}. I build systems for businesses bleeding time and money on things that should run themselves — receptionists who can't answer at lunch, sales teams filling forms software could handle in seconds.",
       bold: true,
       highlight: true,
-    },
-    {
-      text: "I started building because I saw businesses bleeding time and money on things that should run themselves. A receptionist who can't answer calls during lunch. A sales team manually filling forms that software could handle in seconds. Five people doing the work of one good system.",
-      bold: false,
-      highlight: false,
     },
     {
       text: "So I built the systems.",
@@ -189,12 +208,7 @@ export const ABOUT = {
       highlight: false,
     },
     {
-      text: "{alqode} exists to give businesses the tools that actually move the needle. Not a pretty website that sits there, but a machine that generates leads, automates workflows, and works at 2am when nobody else does.",
-      bold: false,
-      highlight: false,
-    },
-    {
-      text: "Every project I take on gets the same treatment: built fast, built right, built to last. Speed doesn't mean cutting corners. It means I've done this enough to know exactly what works.",
+      text: "{alqode} exists to give businesses the tools that actually move the needle — machines that generate leads, automate workflows, and work at 2am when nobody else does. Every project gets the same treatment: built fast, built right, built to last.",
       bold: false,
       highlight: false,
     },
@@ -262,7 +276,34 @@ export const RETAINER = {
     line1: "Our job isn't to ship a site and disappear.",
     line2: "Our job is to make you so successful, your competitors run out of business.",
   },
-  cta: "Start the conversation",
+  cta: "Get me on retainer",
+};
+
+export const FAQ = {
+  tag: "Common questions",
+  heading: "Before you message.",
+  items: [
+    {
+      q: "How fast can you actually deliver?",
+      a: "A clean mockup is in your hands within 24 hours of your message. Quotes inside 1 hour. Simple sites can go live in 3-5 days; full systems (with automation + e-commerce) usually 2-4 weeks. We move faster than agencies four times our size because we don't burn weeks on slide decks.",
+    },
+    {
+      q: "What does a project cost?",
+      a: "Projects start from R8,000. Most fall between R12,000 and R45,000 depending on scope. We send a clear quote within an hour of understanding what you need — no hidden fees, no padding, no surprises. Retainers are priced separately based on what we're keeping live.",
+    },
+    {
+      q: "Do you work with businesses outside South Africa?",
+      a: "Yes. We're based in Cape Town but actively build for clients in the UAE (Faida is one) and remotely across timezones. WhatsApp + email keeps communication simple regardless of where you are.",
+    },
+    {
+      q: "What happens after launch?",
+      a: "Launch is day one. We stay on retainer to keep your systems sharp — uptime monitoring, fast fixes, monthly content/feature updates, Google campaigns, and quarterly performance reviews. The retainer is built so your business compounds, not stagnates.",
+    },
+    {
+      q: "Can I see what you'd build before I commit?",
+      a: "Absolutely — that's the whole point of the free mockup offer. Message us, tell us what you need, and within 24 hours you'll see a visual prototype of your idea. If it lands, we build it. If not, no obligation.",
+    },
+  ],
 };
 
 export const CONTACT = {
@@ -282,19 +323,19 @@ export const CONTACT = {
     email: "alqodez@gmail.com",
   },
   typingCycles: [
-    { name: "Airbnb", project: "Automate our guest bookings" },
-    { name: "Tesla", project: "Build a 3D product showcase" },
-    { name: "Nike", project: "Scale our e-commerce system" },
-    { name: "Your company", project: "Your next big idea" },
+    { name: "Cape Town cafe", project: "Loyalty system + WhatsApp orders" },
+    { name: "Joburg plumber", project: "Lead capture + booking automation" },
+    { name: "Durban boutique", project: "E-commerce store + Instagram sync" },
+    { name: "Your business", project: "What needs to run itself?" },
   ],
 };
 
 export const FOOTER = {
-  tagline: "Digital systems agency. Cape Town.",
+  tagline: "Digital systems agency. Cape Town + UAE.",
   copyright: `\u00A9 ${new Date().getFullYear()} {alqode}. All rights reserved.`,
-  navigate: ["Services", "Work", "About", "Process", "Contact"],
+  navigate: ["Work", "About", "Process", "Contact"],
   connect: [
-    { label: "WhatsApp", href: "https://wa.me/27685394482" },
+    { label: "WhatsApp", href: waUrl("footer") },
     { label: "GitHub", href: "https://github.com/alqode-dev" },
     { label: "Instagram", href: "https://www.instagram.com/alqode.dev/" },
     { label: "Email", href: "mailto:alqodez@gmail.com" },

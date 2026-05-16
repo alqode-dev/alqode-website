@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { MessageCircle, MapPin, Mail } from "lucide-react";
 import { useScrollReveal } from "@/lib/animations";
-import { CONTACT, SITE } from "@/lib/constants";
+import { CONTACT, SITE, waUrl } from "@/lib/constants";
 
 export function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -128,7 +128,7 @@ export function Contact() {
       aria-label="Contact"
     >
       <div className="container-width max-w-xl">
-        <h2 className="reveal-item text-[clamp(1.375rem,3vw,2rem)] font-bold mb-1">
+        <h2 className="reveal-item font-display text-[clamp(2rem,5vw,3.5rem)] font-normal italic leading-[1.05] tracking-tight mb-3">
           {CONTACT.heading}
         </h2>
         <p className="reveal-item text-sm text-muted mb-8">
@@ -137,7 +137,7 @@ export function Contact() {
 
         {/* WhatsApp CTA */}
         <a
-          href={SITE.whatsapp}
+          href={waUrl("contact_cta")}
           target="_blank"
           rel="noopener noreferrer"
           className="reveal-item flex items-center justify-center gap-2 w-full bg-terminal text-void py-3.5 rounded-xl text-[15px] font-bold hover:bg-terminal/90 transition-colors mb-6"

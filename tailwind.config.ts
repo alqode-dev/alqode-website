@@ -19,6 +19,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
+        display: ["var(--font-instrument-serif)", "Georgia", "serif"],
       },
       screens: {
         xs: "375px",

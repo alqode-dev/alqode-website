@@ -8,14 +8,15 @@ import { PORTFOLIO } from "@/lib/constants";
 import { TECH_ICON_MAP, TECH_COLORS } from "@/components/tech-icons";
 
 function ProjectCard({ project }: { project: (typeof PORTFOLIO.projects)[number] }) {
-  const [imgSrc, setImgSrc] = useState(project.image);
-  const [imgError, setImgError] = useState(false);
+  const initial = project.image ?? project.fallbackImage ?? null;
+  const [imgSrc, setImgSrc] = useState<string | null>(initial);
+  const [imgError, setImgError] = useState(!initial);
 
   return (
     <article className="reveal-item bg-card-bg rounded-xl overflow-hidden border border-border hover:border-terminal/30 transition-all duration-300 group">
-      {/* Screenshot */}
+      {/* Screenshot or branded placeholder */}
       <div className="relative h-[160px] md:h-[180px] bg-dim-bg overflow-hidden">
-        {!imgError && (
+        {!imgError && imgSrc ? (
           <Image
             src={imgSrc}
             alt={`${project.name} screenshot`}
@@ -30,6 +31,18 @@ function ProjectCard({ project }: { project: (typeof PORTFOLIO.projects)[number]
               }
             }}
           />
+        ) : (
+          // Branded placeholder when no screenshot available
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-card-bg via-dim-bg to-void">
+            <div className="text-center px-4">
+              <div className="font-display text-2xl md:text-3xl italic text-white/70 leading-tight">
+                {project.name}
+              </div>
+              <div className="text-[9px] tracking-[2px] uppercase text-terminal/60 mt-2">
+                Live site
+              </div>
+            </div>
+          </div>
         )}
         {project.url && (
           <a
@@ -102,11 +115,11 @@ export function Portfolio() {
       aria-label="Portfolio"
     >
       <div className="container-width">
-        <h2 className="reveal-item text-[clamp(1.375rem,3vw,2rem)] font-bold mb-1">
+        <h2 className="reveal-item font-display text-[clamp(2rem,5vw,3.5rem)] font-normal italic leading-[1.05] tracking-tight mb-3">
           {PORTFOLIO.heading}{" "}
           <span className="text-terminal">{PORTFOLIO.headingAccent}</span>
         </h2>
-        <p className="reveal-item text-sm text-muted mb-8">
+        <p className="reveal-item text-sm md:text-base text-muted leading-relaxed mb-10 md:mb-12">
           {PORTFOLIO.subline}
         </p>
 

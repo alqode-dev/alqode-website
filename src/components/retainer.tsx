@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { useScrollReveal } from "@/lib/animations";
-import { RETAINER, SITE } from "@/lib/constants";
+import { RETAINER, waUrl } from "@/lib/constants";
 
 export function Retainer() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -28,7 +28,7 @@ export function Retainer() {
         </p>
 
         {/* Heading */}
-        <h2 className="reveal-item text-[clamp(1.5rem,3.5vw,2.5rem)] font-extrabold leading-[1.1] tracking-tight mb-4 md:mb-5 max-w-3xl">
+        <h2 className="reveal-item font-display text-[clamp(2rem,5.5vw,4rem)] font-normal italic leading-[1.02] tracking-tight mb-4 md:mb-5 max-w-3xl">
           {RETAINER.heading}
         </h2>
 
@@ -65,7 +65,7 @@ export function Retainer() {
         {/* CTA */}
         <div className="reveal-item">
           <a
-            href={SITE.whatsapp}
+            href={waUrl("retainer")}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-terminal text-void px-6 py-3 rounded-lg text-sm font-bold hover:bg-terminal/90 transition-colors"

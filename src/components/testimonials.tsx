@@ -21,7 +21,7 @@ export function Testimonials() {
         <p className="reveal-item text-terminal text-xs font-semibold tracking-[2.5px] uppercase mb-3 md:mb-4">
           {TESTIMONIALS.tag}
         </p>
-        <h2 className="reveal-item text-[clamp(1.375rem,3vw,2rem)] font-extrabold leading-tight tracking-tight mb-3">
+        <h2 className="reveal-item font-display text-[clamp(2rem,5vw,3.5rem)] font-normal italic leading-[1.05] tracking-tight mb-3">
           {TESTIMONIALS.heading}
         </h2>
         <p className="reveal-item text-sm md:text-base text-muted leading-relaxed mb-10 md:mb-14 max-w-2xl">
