@@ -238,16 +238,25 @@ export function ClientMiniLogo({
   clientKey: ClientLogoKey;
 }) {
   if (clientKey === "bochi") {
+    // Real auto-traced SVG via CSS mask: currentColor controls fill,
+    // letting the same asset render in brand color (here) or monochrome elsewhere.
     return (
-      <div
-        className="inline-flex items-center gap-1.5"
-        style={{ color: "#7B1818" }}
-      >
-        <BochiIcon className="h-7 w-7" />
-        <span className="text-sm font-extrabold tracking-tight lowercase leading-none">
-          bochi
-        </span>
-      </div>
+      <span
+        className="block w-[110px] h-8"
+        role="img"
+        aria-label="Bochi Croffle"
+        style={{
+          backgroundColor: "#7B1818",
+          WebkitMaskImage: "url(/images/clients/bochi.svg)",
+          maskImage: "url(/images/clients/bochi.svg)",
+          WebkitMaskRepeat: "no-repeat",
+          maskRepeat: "no-repeat",
+          WebkitMaskSize: "contain",
+          maskSize: "contain",
+          WebkitMaskPosition: "center",
+          maskPosition: "center",
+        }}
+      />
     );
   }
   if (clientKey === "faida") {
