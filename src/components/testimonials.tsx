@@ -2,9 +2,10 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { Quote } from "lucide-react";
+import { Quote, ExternalLink } from "lucide-react";
 import { useScrollReveal } from "@/lib/animations";
 import { TESTIMONIALS } from "@/lib/constants";
+import { ClientMiniLogo } from "@/components/client-logos-svg";
 
 export function Testimonials() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -36,6 +37,8 @@ export function Testimonials() {
               <p className="text-sm md:text-[15px] leading-relaxed text-white/85 mb-6 flex-1">
                 &ldquo;{t.quote}&rdquo;
               </p>
+
+              {/* Author */}
               <div className="flex items-center gap-3 pt-4 border-t border-border">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-dim-bg">
                   <Image
@@ -51,6 +54,21 @@ export function Testimonials() {
                   <div className="text-xs text-muted mt-0.5">{t.role}</div>
                 </div>
               </div>
+
+              {/* Visit client */}
+              <a
+                href={t.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Visit ${t.client}`}
+                className="mt-4 pt-4 border-t border-border/60 flex items-center justify-between gap-2 group/visit"
+              >
+                <ClientMiniLogo clientKey={t.clientKey} />
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-terminal group-hover/visit:gap-2 transition-all">
+                  Visit
+                  <ExternalLink size={11} />
+                </span>
+              </a>
             </article>
           ))}
         </div>

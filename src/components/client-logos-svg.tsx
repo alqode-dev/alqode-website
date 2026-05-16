@@ -214,3 +214,50 @@ export const CLIENT_LOGO_MAP = {
 } as const;
 
 export type ClientLogoKey = keyof typeof CLIENT_LOGO_MAP;
+
+/**
+ * Compact brand logo for testimonial cards and inline contexts.
+ * Bochi uses the real auto-traced SVG. Faida + Trophy use hand-traced icons.
+ */
+export function ClientMiniLogo({
+  clientKey,
+}: {
+  clientKey: ClientLogoKey;
+}) {
+  if (clientKey === "bochi") {
+    return (
+      // Plain img tag: Next/Image blocks SVG by default for security.
+      // This SVG is a local trusted asset we own.
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src="/images/clients/bochi-logo.svg"
+        alt="Bochi Croffle"
+        className="h-7 w-auto"
+      />
+    );
+  }
+  if (clientKey === "faida") {
+    return (
+      <div
+        className="inline-flex items-center gap-1.5"
+        style={{ color: "#7B5BE5" }}
+      >
+        <FaidaIcon className="h-6 w-6" />
+        <span className="text-sm font-bold tracking-tight lowercase leading-none">
+          faida
+        </span>
+      </div>
+    );
+  }
+  return (
+    <div
+      className="inline-flex items-center gap-1.5"
+      style={{ color: "#B8895A" }}
+    >
+      <TrophyBadgeIcon className="h-6 w-6" />
+      <span className="text-xs font-extrabold tracking-tight uppercase leading-none">
+        Trophy SA
+      </span>
+    </div>
+  );
+}

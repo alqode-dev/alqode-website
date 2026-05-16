@@ -162,6 +162,8 @@ export const TESTIMONIALS = {
   items: [
     {
       client: "Faida",
+      clientKey: "faida" as const,
+      url: "https://www.faida.ae",
       name: "Founder",
       role: "Faida · UAE",
       quote:
@@ -170,6 +172,8 @@ export const TESTIMONIALS = {
     },
     {
       client: "Bochi Croffle",
+      clientKey: "bochi" as const,
+      url: "https://bochinsh.com",
       name: "Founder",
       role: "Bochi Croffle · Cape Town",
       quote:
@@ -178,6 +182,8 @@ export const TESTIMONIALS = {
     },
     {
       client: "Trophy SA",
+      clientKey: "trophy" as const,
+      url: "https://trophysa.co.za",
       name: "Founder",
       role: "Trophy SA · South Africa",
       quote:
