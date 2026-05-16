@@ -14,7 +14,6 @@ export const SITE = {
 };
 
 export const NAV_LINKS = [
-  { label: "Services", href: "#services" },
   { label: "Work", href: "#work" },
   { label: "About", href: "#about" },
   { label: "Process", href: "#process" },
@@ -57,28 +56,6 @@ export const CLIENTS = {
       name: "Trophy SA",
       url: "https://trophysa.co.za",
       brandColor: "#B8895A",
-    },
-  ],
-};
-
-export const SERVICES = {
-  heading: "What we do",
-  subline: "Three things. We do them extremely well.",
-  cards: [
-    {
-      icon: "braces" as const,
-      title: "Build",
-      body: "Custom web apps, e-commerce stores, websites, and digital experiences. Modern frameworks, clean code, built to scale. Not to break.",
-    },
-    {
-      icon: "zap" as const,
-      title: "Automate",
-      body: "Your receptionist or admin goes home at 5. Your machine doesn't. Lead generation, WhatsApp automation, workflow systems that run while you sleep.",
-    },
-    {
-      icon: "shield" as const,
-      title: "Support",
-      body: "We don't disappear after launch. As technology evolves, so do your systems. Ongoing improvements, performance upgrades, and scaling support to keep you ahead.",
     },
   ],
 };
@@ -226,8 +203,10 @@ export const ABOUT = {
 };
 
 export const PROCESS = {
-  heading: "How it works",
-  subline: "From first message to live system. No fluff, no delays.",
+  tag: "Process",
+  heading: "How we work",
+  subline:
+    "From first message to live system — and the years after. No fluff, no delays.",
   steps: [
     {
       num: "01",
@@ -239,19 +218,19 @@ export const PROCESS = {
       num: "02",
       title: "Design",
       description:
-        "We map it out before we code. Architecture, user flow, and visual direction. All approved before a single line ships.",
+        "We map out architecture, user flow, and visual direction before a single line of code ships. You approve every direction.",
     },
     {
       num: "03",
       title: "Build",
       description:
-        "Fast execution, clean code. You see progress in days, not months. Regular check-ins so nothing surprises you.",
+        "Custom web apps, automation, smart systems, e-commerce. Modern frameworks, clean code, built to scale — not to break. You see progress in days, not months.",
     },
     {
       num: "04",
       title: "Support",
       description:
-        "Launch is the beginning, not the end. We stay on retainer, keep improving your systems, and scale what's working. Your tech grows with your business.",
+        "Launch is day one. We stay on retainer — keeping your systems sharp, fixing fast, scaling what works. Your tech grows with your business.",
     },
   ],
 };

@@ -1,7 +1,6 @@
 import { Nav } from "@/components/nav";
 import { Hero } from "@/components/hero";
 import { ClientLogos } from "@/components/client-logos";
-import { Services } from "@/components/services";
 import { Quickstart } from "@/components/quickstart";
 import { Portfolio } from "@/components/portfolio";
 import { Testimonials } from "@/components/testimonials";
@@ -22,8 +21,6 @@ export default function Home() {
         <Hero />
         <div className="gradient-divider mx-5" />
         <ClientLogos />
-        <div className="gradient-divider mx-5" />
-        <Services />
         <div className="gradient-divider mx-5" />
         <Quickstart />
         <div className="gradient-divider mx-5" />

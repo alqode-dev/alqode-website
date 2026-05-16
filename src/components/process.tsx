@@ -216,10 +216,13 @@ export function Process() {
       aria-label="Process"
     >
       <div className="container-width">
-        <h2 className="reveal-item text-[clamp(1.375rem,3vw,2rem)] font-bold mb-1">
+        <p className="reveal-item text-terminal text-xs font-semibold tracking-[2.5px] uppercase mb-3 md:mb-4">
+          {PROCESS.tag}
+        </p>
+        <h2 className="reveal-item text-[clamp(1.375rem,3vw,2rem)] font-extrabold leading-tight tracking-tight mb-3">
           {PROCESS.heading}
         </h2>
-        <p className="reveal-item text-sm text-muted mb-8 lg:mb-12">
+        <p className="reveal-item text-sm md:text-base text-muted leading-relaxed mb-8 lg:mb-12 max-w-2xl">
           {PROCESS.subline}
         </p>
 
