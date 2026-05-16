@@ -149,6 +149,44 @@ export const PORTFOLIO = {
   ],
 };
 
+/**
+ * TESTIMONIALS — DRAFT COPY pending client signoff.
+ * Quotes are based on what was actually built for each client.
+ * Get verified quotes from each owner before sharing widely.
+ */
+export const TESTIMONIALS = {
+  tag: "Client voices",
+  heading: "In their words.",
+  subline:
+    "Three businesses across two countries. Same outcome — systems that pay for themselves.",
+  items: [
+    {
+      client: "Faida",
+      name: "Founder",
+      role: "Faida · UAE",
+      quote:
+        "Hamdaan thinks like a business operator, not just a developer. The automation he built turned hours of manual form processing into minutes — and the website now books qualified leads straight into my calendar.",
+      photo: "/images/clients/faida-owner.png",
+    },
+    {
+      client: "Bochi Croffle",
+      name: "Founder",
+      role: "Bochi Croffle · Cape Town",
+      quote:
+        "He didn't just build us a website. He built the engine. Every customer who plays the game becomes part of our community, and the data fuels everything from promotions to new launches.",
+      photo: "/images/clients/bochi-owner.png",
+    },
+    {
+      client: "Trophy SA",
+      name: "Founder",
+      role: "Trophy SA · South Africa",
+      quote:
+        "Premium look on a budget I could afford. I'm running a full e-commerce store that looks like I paid ten times what I did. Hamdaan made every rand work twice.",
+      photo: "/images/clients/trophy-owner.png",
+    },
+  ],
+};
+
 export const ABOUT = {
   heading: "The person behind the code",
   paragraphs: [

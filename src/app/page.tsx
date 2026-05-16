@@ -4,6 +4,7 @@ import { ClientLogos } from "@/components/client-logos";
 import { Services } from "@/components/services";
 import { Quickstart } from "@/components/quickstart";
 import { Portfolio } from "@/components/portfolio";
+import { Testimonials } from "@/components/testimonials";
 import { About } from "@/components/about";
 import { Process } from "@/components/process";
 import { Retainer } from "@/components/retainer";
@@ -27,6 +28,8 @@ export default function Home() {
         <Quickstart />
         <div className="gradient-divider mx-5" />
         <Portfolio />
+        <div className="gradient-divider mx-5" />
+        <Testimonials />
         <About />
         <Process />
         <div className="gradient-divider mx-5" />
