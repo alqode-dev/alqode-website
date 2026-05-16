@@ -62,36 +62,49 @@ function BochiIcon({ className = "" }: LogoProps) {
   return (
     <svg viewBox="0 0 60 60" className={className} aria-hidden="true">
       <defs>
-        <mask id="bochi-waffle-mask">
+        <mask id="bochi-weave-mask">
           <rect width="60" height="60" fill="white" />
-          {/* Vertical grooves */}
-          <rect x="14.5" y="0" width="1.5" height="60" fill="black" />
-          <rect x="20" y="0" width="1.5" height="60" fill="black" />
-          <rect x="25.5" y="0" width="1.5" height="60" fill="black" />
-          <rect x="31" y="0" width="1.5" height="60" fill="black" />
-          <rect x="36.5" y="0" width="1.5" height="60" fill="black" />
-          <rect x="42" y="0" width="1.5" height="60" fill="black" />
-          {/* Horizontal grooves */}
-          <rect x="0" y="14.5" width="60" height="1.5" fill="black" />
-          <rect x="0" y="20" width="60" height="1.5" fill="black" />
-          <rect x="0" y="25.5" width="60" height="1.5" fill="black" />
-          <rect x="0" y="31" width="60" height="1.5" fill="black" />
-          <rect x="0" y="36.5" width="60" height="1.5" fill="black" />
-          <rect x="0" y="42" width="60" height="1.5" fill="black" />
+          {/* Diagonal lattice — basket weave: / direction */}
+          <g stroke="black" strokeWidth="1.4" fill="none">
+            <line x1="-5" y1="20" x2="40" y2="-25" />
+            <line x1="-5" y1="28" x2="48" y2="-25" />
+            <line x1="-5" y1="36" x2="56" y2="-25" />
+            <line x1="-5" y1="44" x2="64" y2="-25" />
+            <line x1="-5" y1="52" x2="72" y2="-25" />
+            <line x1="-5" y1="60" x2="80" y2="-25" />
+            <line x1="3" y1="60" x2="80" y2="-17" />
+            <line x1="11" y1="60" x2="80" y2="-9" />
+            <line x1="19" y1="60" x2="80" y2="-1" />
+            <line x1="27" y1="60" x2="80" y2="7" />
+          </g>
+          {/* Diagonal lattice — basket weave: \ direction */}
+          <g stroke="black" strokeWidth="1.4" fill="none">
+            <line x1="-5" y1="-20" x2="40" y2="25" />
+            <line x1="-5" y1="-12" x2="48" y2="41" />
+            <line x1="-5" y1="-4" x2="56" y2="57" />
+            <line x1="-5" y1="4" x2="64" y2="73" />
+            <line x1="-5" y1="12" x2="72" y2="89" />
+            <line x1="3" y1="-25" x2="80" y2="52" />
+            <line x1="11" y1="-25" x2="80" y2="44" />
+            <line x1="19" y1="-25" x2="80" y2="36" />
+            <line x1="27" y1="-25" x2="80" y2="28" />
+            <line x1="35" y1="-25" x2="80" y2="20" />
+          </g>
         </mask>
       </defs>
-      {/* Waffle circle */}
-      <circle
+      {/* Croissant: slightly oval shape with basket-weave texture */}
+      <ellipse
         cx="28"
-        cy="29"
-        r="20"
+        cy="30"
+        rx="20"
+        ry="21"
         fill="currentColor"
-        mask="url(#bochi-waffle-mask)"
+        mask="url(#bochi-weave-mask)"
       />
       {/* 3 decorative pearls above-left */}
-      <circle cx="7" cy="10" r="1.4" fill="currentColor" />
-      <circle cx="13" cy="7" r="1.4" fill="currentColor" />
-      <circle cx="11" cy="15" r="1.4" fill="currentColor" />
+      <circle cx="6" cy="11" r="1.5" fill="currentColor" />
+      <circle cx="12" cy="7" r="1.5" fill="currentColor" />
+      <circle cx="10" cy="15" r="1.5" fill="currentColor" />
     </svg>
   );
 }
@@ -226,14 +239,15 @@ export function ClientMiniLogo({
 }) {
   if (clientKey === "bochi") {
     return (
-      // Plain img tag: Next/Image blocks SVG by default for security.
-      // This SVG is a local trusted asset we own.
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src="/images/clients/bochi-logo.svg"
-        alt="Bochi Croffle"
-        className="h-7 w-auto"
-      />
+      <div
+        className="inline-flex items-center gap-1.5"
+        style={{ color: "#7B1818" }}
+      >
+        <BochiIcon className="h-7 w-7" />
+        <span className="text-sm font-extrabold tracking-tight lowercase leading-none">
+          bochi
+        </span>
+      </div>
     );
   }
   if (clientKey === "faida") {
