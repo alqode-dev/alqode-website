@@ -2,9 +2,10 @@
 
 import { useRef, useState, useCallback } from "react";
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import { useScrollRevealDramatic } from "@/lib/animations";
 import { useDecryptOnHover } from "@/lib/decrypt";
-import { ABOUT } from "@/lib/constants";
+import { ABOUT, waUrl } from "@/lib/constants";
 
 function renderText(text: string) {
   const parts = text.split(/(\{alqode\})/g);
@@ -68,30 +69,50 @@ export function About() {
           </div>
 
           {/* Text - 60% on desktop, staggers paragraph by paragraph */}
-          <div className="flex-1 space-y-4">
-            {ABOUT.paragraphs.map((p, i) => {
-              // "So I built the systems." = standalone bold, slightly LARGER
-              const isBoldStandalone = p.bold && !p.highlight;
-              const isIntro = p.bold && p.highlight;
-              // Offset by 2 because heading (0) and photo (1) are reveal-items before paragraphs
-              const isRevealed = revealedSet.has(i + 2);
+          <div className="flex-1 flex flex-col">
+            <div className="space-y-4 flex-1">
+              {ABOUT.paragraphs.map((p, i) => {
+                const isBoldStandalone = p.bold && !p.highlight;
+                const isIntro = p.bold && p.highlight;
+                const isRevealed = revealedSet.has(i + 2);
 
-              return (
-                <p
-                  key={i}
-                  {...(isRevealed ? { "data-revealed": true } : {})}
-                  className={`reveal-item leading-relaxed ${
-                    isBoldStandalone
-                      ? "text-void font-bold text-xl md:text-[22px]"
-                      : isIntro
-                      ? "text-void font-semibold text-[15px] md:text-base"
-                      : "text-light-muted text-sm md:text-[15px]"
-                  }`}
-                >
-                  {renderText(p.text)}
-                </p>
-              );
-            })}
+                return (
+                  <p
+                    key={i}
+                    {...(isRevealed ? { "data-revealed": true } : {})}
+                    className={`reveal-item leading-relaxed ${
+                      isBoldStandalone
+                        ? "text-void font-bold text-xl md:text-[22px]"
+                        : isIntro
+                        ? "text-void font-semibold text-[15px] md:text-base"
+                        : "text-light-muted text-sm md:text-[15px]"
+                    }`}
+                  >
+                    {renderText(p.text)}
+                  </p>
+                );
+              })}
+            </div>
+
+            {/* Credentials strip + CTA fills bottom of column */}
+            <div className="reveal-item mt-8 lg:mt-10 pt-6 border-t border-void/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] md:text-xs text-light-muted font-medium tracking-wide uppercase">
+                <span>Cape Town</span>
+                <span className="text-terminal">·</span>
+                <span>SA + UAE</span>
+                <span className="text-terminal">·</span>
+                <span>Booking now</span>
+              </div>
+              <a
+                href={waUrl("about_cta")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-void text-light-bg px-5 py-3 rounded-lg text-sm font-bold hover:bg-void/85 transition-colors group/cta"
+              >
+                Work with us
+                <ArrowRight size={14} className="group-hover/cta:translate-x-0.5 transition-transform" />
+              </a>
+            </div>
           </div>
         </div>
       </div>

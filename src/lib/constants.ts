@@ -142,7 +142,7 @@ export const PORTFOLIO = {
       description:
         "Full WooCommerce store for South Africa's leading online awards shop. Built to feel premium, engineered to convert — without the premium plugin price tag.",
       tags: ["E-commerce", "WordPress", "Retail"],
-      tech: ["WordPress", "WooCommerce"],
+      tech: ["WordPress", "WooCommerce", "PayFast"],
       image: null,
       fallbackImage: null,
       url: "https://trophysa.co.za",

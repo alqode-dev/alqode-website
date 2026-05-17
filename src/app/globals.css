@@ -62,7 +62,7 @@
 
 /* Smooth section transitions */
 .section-padding {
-  @apply px-5 py-16 md:px-8 md:py-24 lg:px-12 lg:py-32;
+  @apply px-5 py-12 md:px-8 md:py-20 lg:px-12 lg:py-28;
 }
 
 .container-width {
