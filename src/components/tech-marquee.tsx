@@ -33,16 +33,19 @@ export function TechMarquee() {
             {TECHS.map((tech) => {
               const Icon = TECH_ICON_MAP[tech];
               const color = TECH_COLORS[tech];
+              // When no icon but we know the brand color, tint the text
+              const textTint = !Icon && color ? color : undefined;
               return (
                 <span
                   key={tech}
-                  className="inline-flex items-center gap-2 mx-5 md:mx-7 text-xs md:text-sm text-muted whitespace-nowrap"
+                  className="inline-flex items-center gap-2 mx-5 md:mx-7 text-xs md:text-sm whitespace-nowrap"
+                  style={{ color: textTint || "#666" }}
                 >
                   {Icon && (
                     <Icon
                       size={15}
                       style={{ color: color || undefined }}
-                      className={color ? "" : "text-muted opacity-70"}
+                      className={color ? "" : "opacity-70"}
                     />
                   )}
                   {tech}

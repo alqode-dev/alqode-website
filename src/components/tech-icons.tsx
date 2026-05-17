@@ -22,15 +22,6 @@ export function WooCommerceIcon({ className, size = 16, style }: IconProps) {
   );
 }
 
-export function PayFastIcon({ className, size = 16, style }: IconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className} style={style}>
-      {/* Stylized P with lightning bolt indicating fast payment */}
-      <path d="M4 3h7.5c2.76 0 5 2.24 5 5s-2.24 5-5 5H7v8H4V3zm3 3v4h4.5c1.1 0 2-.9 2-2s-.9-2-2-2H7z" />
-      <path d="M17.5 11l3.5-4-2 5h2.5l-3.5 6 1-4.5h-2l.5-2.5z" />
-    </svg>
-  );
-}
 
 export function MetaIcon({ className, size = 16, style }: IconProps) {
   return (
@@ -168,7 +159,6 @@ export const TECH_ICON_MAP: Record<string, React.ComponentType<IconProps>> = {
   Airtable: AirtableIcon,
   WordPress: WordPressIcon,
   WooCommerce: WooCommerceIcon,
-  PayFast: PayFastIcon,
 };
 
 // Brand colors for each tech (used in portfolio pills and marquee)

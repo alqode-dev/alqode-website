@@ -16,30 +16,30 @@ function findTestimonial(projectName: string): Testimonial | undefined {
   const projectKey = norm(projectName);
   return TESTIMONIALS.items.find((t) => {
     const clientKey = norm(t.client);
-    return projectKey === clientKey || projectKey.includes(clientKey) || clientKey.includes(projectKey);
+    return (
+      projectKey === clientKey ||
+      projectKey.includes(clientKey) ||
+      clientKey.includes(projectKey)
+    );
   });
 }
 
-function ProjectCard({ project, hasTestimonial }: { project: Project; hasTestimonial: boolean }) {
+function ProjectCard({ project }: { project: Project }) {
   const initial = project.image ?? project.fallbackImage ?? null;
   const [imgSrc, setImgSrc] = useState<string | null>(initial);
   const [imgError, setImgError] = useState(!initial);
 
   return (
-    <article
-      className={`bg-card-bg rounded-xl overflow-hidden border border-border hover:border-terminal/30 transition-all duration-300 group flex flex-col ${
-        hasTestimonial ? "" : "h-full"
-      }`}
-    >
+    <article className="bg-card-bg rounded-xl overflow-hidden border border-border hover:border-terminal/30 transition-all duration-300 group flex flex-col h-full">
       {/* Screenshot or branded placeholder */}
-      <div className="relative h-[180px] md:h-[220px] bg-dim-bg overflow-hidden flex-shrink-0">
+      <div className="relative h-[180px] md:h-[200px] bg-dim-bg overflow-hidden flex-shrink-0">
         {!imgError && imgSrc ? (
           <Image
             src={imgSrc}
             alt={`${project.name} screenshot`}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-500"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 720px"
+            sizes="(max-width: 1024px) 100vw, 50vw"
             onError={() => {
               if (project.fallbackImage && imgSrc !== project.fallbackImage) {
                 setImgSrc(project.fallbackImage);
@@ -73,7 +73,6 @@ function ProjectCard({ project, hasTestimonial }: { project: Project; hasTestimo
         )}
       </div>
 
-      {/* Content */}
       <div className="p-5 md:p-6 flex-1 flex flex-col">
         <h3 className="text-base md:text-lg font-bold mb-1.5">{project.name}</h3>
         {project.result && (
@@ -85,7 +84,6 @@ function ProjectCard({ project, hasTestimonial }: { project: Project; hasTestimo
           {project.description}
         </p>
 
-        {/* Category tags */}
         <div className="flex flex-wrap gap-1.5 mb-3">
           {project.tags.map((tag) => (
             <span
@@ -97,20 +95,26 @@ function ProjectCard({ project, hasTestimonial }: { project: Project; hasTestimo
           ))}
         </div>
 
-        {/* Tech pills with brand logos */}
         <div className="flex flex-wrap gap-2">
           {project.tech.map((t) => {
             const Icon = TECH_ICON_MAP[t];
+            const color = TECH_COLORS[t];
+            const colorPill = !Icon && !!color;
             return (
               <span
                 key={t}
-                className="inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded border border-border text-muted font-medium"
+                className="inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded border font-medium"
+                style={
+                  colorPill
+                    ? { color, borderColor: `${color}55` }
+                    : { color: "#666", borderColor: "#2a2a2a" }
+                }
               >
                 {Icon && (
                   <Icon
                     size={12}
-                    style={{ color: TECH_COLORS[t] || undefined }}
-                    className={TECH_COLORS[t] ? "" : "text-muted opacity-70"}
+                    style={{ color: color || undefined }}
+                    className={color ? "" : "opacity-70"}
                   />
                 )}
                 {t}
@@ -125,41 +129,46 @@ function ProjectCard({ project, hasTestimonial }: { project: Project; hasTestimo
 
 function TestimonialCard({ t }: { t: Testimonial }) {
   return (
-    <article className="bg-card-bg border border-border rounded-xl p-5 md:p-6 flex flex-col hover:border-terminal/30 transition-all duration-300 h-full">
-      <Quote size={20} className="text-terminal mb-3" aria-hidden="true" />
-      <p className="text-sm md:text-[15px] leading-relaxed text-white/85 mb-5 flex-1">
+    <article className="bg-gradient-to-br from-card-bg via-card-bg to-dim-bg border border-border hover:border-terminal/30 rounded-xl p-6 md:p-7 flex flex-col h-full transition-all duration-300 relative overflow-hidden">
+      {/* Big background quote glyph */}
+      <Quote
+        size={120}
+        className="absolute -top-4 -right-4 text-terminal/[0.06] rotate-180"
+        aria-hidden="true"
+      />
+
+      <Quote size={24} className="text-terminal mb-4 relative z-10" aria-hidden="true" />
+      <p className="text-base md:text-[17px] leading-relaxed text-white/90 mb-6 flex-1 relative z-10 font-medium">
         &ldquo;{t.quote}&rdquo;
       </p>
 
-      {/* Author */}
-      <div className="flex items-center gap-3 pt-4 border-t border-border">
-        <div className="relative w-11 h-11 rounded-full overflow-hidden flex-shrink-0 bg-dim-bg">
+      <div className="flex items-center gap-3 pt-5 border-t border-border relative z-10">
+        <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-dim-bg ring-2 ring-terminal/20">
           <Image
             src={t.photo}
             alt={`${t.name} at ${t.client}`}
             fill
             className="object-cover"
-            sizes="44px"
+            sizes="48px"
           />
         </div>
-        <div className="leading-tight">
+        <div className="leading-tight flex-1">
           <div className="text-sm font-semibold">{t.name}</div>
           <div className="text-xs text-muted mt-0.5">{t.role}</div>
         </div>
       </div>
 
-      {/* Visit client */}
       <a
         href={t.url}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={`Visit ${t.client}`}
-        className="mt-4 pt-4 border-t border-border/60 flex items-center justify-between gap-2 group/visit"
+        className="mt-4 pt-4 border-t border-border/60 flex items-center justify-between gap-2 group/visit relative z-10"
       >
         <ClientMiniLogo clientKey={t.clientKey} />
         <span className="inline-flex items-center gap-1 text-xs font-bold text-terminal group-hover/visit:gap-2 transition-all">
-          Visit
-          <ExternalLink size={11} />
+          Visit live site
+          <ExternalLink size={12} />
         </span>
       </a>
     </article>
@@ -185,26 +194,18 @@ export function Work() {
           Real systems. Real businesses. Real voices.
         </p>
 
-        <div className="space-y-5 md:space-y-7">
+        <div className="space-y-6 md:space-y-8">
           {PORTFOLIO.projects.map((project) => {
             const testimonial = findTestimonial(project.name);
             return (
               <div
                 key={project.name}
-                className={`reveal-item grid gap-4 md:gap-5 ${
-                  testimonial
-                    ? "grid-cols-1 lg:grid-cols-5"
-                    : "grid-cols-1"
+                className={`reveal-item grid gap-5 md:gap-6 ${
+                  testimonial ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"
                 }`}
               >
-                <div className={testimonial ? "lg:col-span-3" : ""}>
-                  <ProjectCard project={project} hasTestimonial={!!testimonial} />
-                </div>
-                {testimonial && (
-                  <div className="lg:col-span-2">
-                    <TestimonialCard t={testimonial} />
-                  </div>
-                )}
+                <ProjectCard project={project} />
+                {testimonial && <TestimonialCard t={testimonial} />}
               </div>
             );
           })}
