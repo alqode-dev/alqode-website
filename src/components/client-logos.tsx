@@ -17,10 +17,11 @@ export function ClientLogos() {
       aria-label="Clients"
     >
       <div className="container-width px-5 md:px-8">
-        <p className="reveal-item text-center text-[10px] md:text-xs uppercase tracking-[2.5px] text-muted mb-8 md:mb-12">
+        <p className="reveal-item text-center text-[10px] md:text-xs uppercase tracking-[2.5px] text-muted mb-6 md:mb-10">
           {CLIENTS.label}
         </p>
-        <div className="reveal-item flex flex-wrap items-center justify-center gap-x-12 md:gap-x-20 lg:gap-x-24 gap-y-10">
+        {/* Mobile: single row, smaller. Desktop: comfortable spacing. */}
+        <div className="reveal-item flex flex-nowrap items-center justify-center gap-x-5 sm:gap-x-10 md:gap-x-20 lg:gap-x-24">
           {CLIENTS.logos.map((client) => {
             const Logo = CLIENT_LOGO_MAP[client.key];
             return (

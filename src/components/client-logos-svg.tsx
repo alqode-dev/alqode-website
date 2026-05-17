@@ -184,9 +184,9 @@ function TrophyBadgeIcon({ className = "" }: LogoProps) {
 
 export function FaidaLogo({ className = "" }: LogoProps) {
   return (
-    <div className={`inline-flex items-center gap-2 ${className}`}>
-      <FaidaIcon className="h-10 w-10 md:h-11 md:w-11 flex-shrink-0" />
-      <span className="text-[26px] md:text-3xl font-bold tracking-tight lowercase leading-none">
+    <div className={`inline-flex items-center gap-1.5 sm:gap-2 ${className}`}>
+      <FaidaIcon className="h-6 w-6 sm:h-9 sm:w-9 md:h-11 md:w-11 flex-shrink-0" />
+      <span className="text-base sm:text-2xl md:text-3xl font-bold tracking-tight lowercase leading-none">
         faida
       </span>
     </div>
@@ -195,13 +195,13 @@ export function FaidaLogo({ className = "" }: LogoProps) {
 
 export function BochiLogo({ className = "" }: LogoProps) {
   return (
-    <div className={`inline-flex items-center gap-2 ${className}`}>
-      <BochiIcon className="h-11 w-11 md:h-12 md:w-12 flex-shrink-0" />
+    <div className={`inline-flex items-center gap-1.5 sm:gap-2 ${className}`}>
+      <BochiIcon className="h-7 w-7 sm:h-10 sm:w-10 md:h-12 md:w-12 flex-shrink-0" />
       <div className="flex flex-col leading-none">
-        <span className="text-[26px] md:text-3xl font-extrabold tracking-tight lowercase">
+        <span className="text-base sm:text-2xl md:text-3xl font-extrabold tracking-tight lowercase">
           bochi
         </span>
-        <span className="text-[8px] md:text-[9px] tracking-[3px] uppercase font-semibold mt-1">
+        <span className="text-[6px] sm:text-[8px] md:text-[9px] tracking-[2.5px] sm:tracking-[3px] uppercase font-semibold mt-0.5 sm:mt-1">
           croffle
         </span>
       </div>
@@ -211,9 +211,9 @@ export function BochiLogo({ className = "" }: LogoProps) {
 
 export function TrophyLogo({ className = "" }: LogoProps) {
   return (
-    <div className={`inline-flex items-center gap-2 ${className}`}>
-      <TrophyBadgeIcon className="h-11 w-11 md:h-12 md:w-12 flex-shrink-0" />
-      <span className="text-xl md:text-2xl font-extrabold tracking-tight uppercase leading-none">
+    <div className={`inline-flex items-center gap-1.5 sm:gap-2 ${className}`}>
+      <TrophyBadgeIcon className="h-7 w-7 sm:h-10 sm:w-10 md:h-12 md:w-12 flex-shrink-0" />
+      <span className="text-xs sm:text-xl md:text-2xl font-extrabold tracking-tight uppercase leading-none">
         Trophy SA
       </span>
     </div>
