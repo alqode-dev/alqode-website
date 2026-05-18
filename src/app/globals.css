@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --ease-snap: cubic-bezier(.16, 1, .3, 1);
+  --ease-out-quart: cubic-bezier(.25, 1, .5, 1);
+  --ease-spring-soft: cubic-bezier(.34, 1.56, .64, 1);
+}
+
 @layer base {
   html {
     scroll-behavior: auto;
@@ -14,11 +20,44 @@
   ::selection {
     @apply bg-terminal/30 text-white;
   }
+
+  /* Custom cursor: hide native cursor on desktop pointer devices, replaced by CursorFrame */
+  @media (hover: hover) and (pointer: fine) {
+    html.cursor-frame-active,
+    html.cursor-frame-active body,
+    html.cursor-frame-active a,
+    html.cursor-frame-active button {
+      cursor: none;
+    }
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* CRT-style scanline overlay (apply to relative-positioned containers) */
+  .scanline-overlay::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 49%,
+      rgba(16, 185, 129, 0.04) 50%,
+      transparent 51%,
+      transparent 100%
+    );
+    background-size: 100% 4px;
+    z-index: 1;
+  }
+
+  /* Snappy ease shortcut */
+  .ease-snap {
+    transition-timing-function: var(--ease-snap);
   }
 }
 

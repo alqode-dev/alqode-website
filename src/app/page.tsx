@@ -12,12 +12,14 @@ import { Contact } from "@/components/contact";
 import { Footer } from "@/components/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { CursorGlow } from "@/components/cursor-glow";
+import { CursorFrame } from "@/components/cursor-frame";
 import { WhatsappFab } from "@/components/whatsapp-fab";
 
 export default function Home() {
   return (
     <>
       <CursorGlow />
+      <CursorFrame />
       <Nav />
       <main>
         <Hero />
