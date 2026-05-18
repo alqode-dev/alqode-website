@@ -105,17 +105,22 @@ export function System() {
           {/* 2x2 dashboard tiles — each gets its own visual treatment, no dots */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
             {RETAINER.pillars.map((pillar, i) => {
-              // Each tile gets a different left-border accent for visual variety
               const accentClasses = [
                 "border-l-2 border-l-terminal",
                 "border-l-2 border-l-live-amber",
                 "border-l-2 border-l-terminal/70",
                 "border-l-2 border-l-live-amber/70",
               ];
+              const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                e.currentTarget.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+                e.currentTarget.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+              };
               return (
                 <div
                   key={pillar.title}
-                  className={`relative rounded-xl border border-white/[0.06] bg-void/40 p-5 md:p-6 hover:border-terminal/30 transition-colors duration-300 ease-snap ${accentClasses[i]}`}
+                  onMouseMove={handleMouseMove}
+                  className={`spotlight-card relative rounded-xl border border-white/[0.06] bg-void/40 p-5 md:p-6 hover:border-terminal/30 transition-colors duration-300 ease-snap ${accentClasses[i]}`}
                 >
                   <div className="flex items-center justify-between mb-4">
                     <MonoTag variant="terminal">

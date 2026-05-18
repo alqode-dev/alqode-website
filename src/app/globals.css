@@ -58,6 +58,62 @@
   .ease-snap {
     transition-timing-function: var(--ease-snap);
   }
+
+  /* Cursor-following spotlight on hover.
+     Apply .spotlight-card and update --mouse-x / --mouse-y from JS on mousemove.
+     Adds a soft terminal-green halo where the cursor sits. */
+  .spotlight-card {
+    position: relative;
+  }
+  .spotlight-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      450px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(16, 185, 129, 0.09),
+      transparent 55%
+    );
+    pointer-events: none;
+    z-index: 4;
+    opacity: 0;
+    transition: opacity 0.3s var(--ease-snap);
+    border-radius: inherit;
+  }
+  .spotlight-card:hover::before {
+    opacity: 1;
+  }
+}
+
+/* Reduce-motion: respect user preference, disable non-essential animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-live-pulse,
+  .animate-cursor-blink,
+  .animate-ping,
+  .marquee-track {
+    animation: none !important;
+  }
+}
+
+/* Accessibility: clear focus ring for keyboard users (modern browsers only show on keyboard nav) */
+@layer base {
+  :focus-visible {
+    outline: 2px solid rgb(16, 185, 129);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  /* Suppress default outline only when focus-visible isn't matched (mouse) */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
 }
 
 /* Dot grid background pattern */

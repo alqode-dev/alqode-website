@@ -42,8 +42,18 @@ function DeploymentCard({
 
   const isCommunity = project.category === "community";
 
+  // Cursor-following spotlight on hover (desktop)
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+  };
+
   return (
-    <article className="reveal-item bg-card-bg rounded-xl overflow-hidden border border-border hover:border-terminal/30 transition-all duration-500 ease-snap group relative flex flex-col h-full">
+    <article
+      onMouseMove={handleMouseMove}
+      className="reveal-item spotlight-card bg-card-bg rounded-xl overflow-hidden border border-border hover:border-terminal/40 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-12px_rgba(16,185,129,0.18)] transition-all duration-500 ease-snap group relative flex flex-col h-full"
+    >
       {/* Image with scanline overlay + status overlay */}
       <div className="relative h-[200px] md:h-[220px] bg-dim-bg overflow-hidden flex-shrink-0 scanline-overlay">
         {!imgError && imgSrc ? (
