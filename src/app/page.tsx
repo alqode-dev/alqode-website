@@ -7,8 +7,7 @@ import { Work } from "@/components/work";
 import { About } from "@/components/about";
 import { System } from "@/components/system";
 import { Quickstart } from "@/components/quickstart";
-import { Faq } from "@/components/faq";
-import { Contact } from "@/components/contact";
+import { Talk } from "@/components/talk";
 import { Footer } from "@/components/footer";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { CursorGlow } from "@/components/cursor-glow";
@@ -33,9 +32,7 @@ export default function Home() {
         <div className="gradient-divider mx-5" />
         <Quickstart />
         <div className="gradient-divider mx-5" />
-        <Faq />
-        <div className="gradient-divider mx-5" />
-        <Contact />
+        <Talk />
       </main>
       <Footer />
       <ScrollToTop />
