@@ -33,11 +33,19 @@ export const NAV_LINKS = [
 ];
 
 export const HERO = {
-  tag: "{alqode}",
+  boot: {
+    command: "> alqode.init",
+    lines: [
+      "✓ business scanned",
+      "✓ friction mapped",
+      "✓ system online · accepting projects",
+    ],
+  },
+  preHeadlineLabel: "deploying",
   headline: "We don't build websites.",
   headlineAccent: "We build machines that make you money.",
   subline:
-    "{alqode} builds custom web apps, automation, and smart systems that cut your costs, multiply your output, and never clock out.",
+    "Web apps, automation, WhatsApp systems, e-commerce. Built fast. Built right. Built for businesses that need to compound.",
   primaryCta: "Get a system built",
   secondaryCta: "See our work",
   mockupOffer: {
@@ -45,6 +53,7 @@ export const HERO = {
     cta: "Request a mockup",
     href: waUrl("hero_mockup", "Hi, I'd like to request a free mockup"),
   },
+  metadata: ["Cape Town", "UAE", "booking · may 2026"],
   founderTag: "Founded by Mohammed Hamdaan Dhaler in Cape Town. Building for SA + UAE.",
 };
 
