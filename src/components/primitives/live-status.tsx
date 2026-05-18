@@ -34,8 +34,13 @@ export function LiveStatus({
     <span
       className={`inline-flex items-center gap-2 font-mono ${sizeText} ${styles.text} ${className}`}
     >
-      <span className={`relative flex flex-shrink-0 ${dotSize}`} aria-hidden="true">
-        <span className={`absolute inset-0 rounded-full ${styles.dot} opacity-40 animate-live-pulse`} />
+      <span className={`relative inline-flex items-center justify-center flex-shrink-0 ${dotSize}`} aria-hidden="true">
+        {/* Big halo pulse — origin-center scale */}
+        <span
+          className={`absolute inset-0 rounded-full ${styles.dot} animate-live-pulse`}
+          style={{ transformOrigin: "center" }}
+        />
+        {/* Solid center dot */}
         <span className={`relative inline-block rounded-full ${styles.dot} ${dotSize}`} />
       </span>
       <span className="leading-none">{children}</span>

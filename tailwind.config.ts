@@ -37,8 +37,8 @@ const config: Config = {
       },
       keyframes: {
         "live-pulse": {
-          "0%, 100%": { opacity: "1", transform: "scale(1)" },
-          "50%": { opacity: "0.6", transform: "scale(1.15)" },
+          "0%, 100%": { opacity: "0.35", transform: "scale(1)" },
+          "50%": { opacity: "1", transform: "scale(2.2)" },
         },
         scanline: {
           "0%": { transform: "translateY(-100%)" },

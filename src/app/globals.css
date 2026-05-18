@@ -43,16 +43,15 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      transparent 49%,
-      rgba(16, 185, 129, 0.04) 50%,
-      transparent 51%,
-      transparent 100%
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0) 0px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0.18) 2px,
+      rgba(0, 0, 0, 0.18) 3px
     );
-    background-size: 100% 4px;
-    z-index: 1;
+    mix-blend-mode: multiply;
+    z-index: 2;
   }
 
   /* Snappy ease shortcut */

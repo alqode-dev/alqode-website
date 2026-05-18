@@ -5,9 +5,8 @@ import { TechMarquee } from "@/components/tech-marquee";
 import { TheBuild } from "@/components/the-build";
 import { Work } from "@/components/work";
 import { About } from "@/components/about";
-import { Process } from "@/components/process";
+import { System } from "@/components/system";
 import { Quickstart } from "@/components/quickstart";
-import { Retainer } from "@/components/retainer";
 import { Faq } from "@/components/faq";
 import { Contact } from "@/components/contact";
 import { Footer } from "@/components/footer";
@@ -30,11 +29,9 @@ export default function Home() {
         <TheBuild />
         <Work />
         <About />
-        <Process />
+        <System />
         <div className="gradient-divider mx-5" />
         <Quickstart />
-        <div className="gradient-divider mx-5" />
-        <Retainer />
         <div className="gradient-divider mx-5" />
         <Faq />
         <div className="gradient-divider mx-5" />
