@@ -10,21 +10,23 @@ const VARIANT_STYLES: Record<Variant, { dot: string; text: string }> = {
 };
 
 /**
- * LiveStatus — pulsing dot + small mono label.
- * Used to indicate state on cards, sections, hero.
- *
- *   <LiveStatus variant="live">accepting projects</LiveStatus>
+ * LiveStatus — small dot + mono label.
+ * `pulse={true}` shows a radar-style halo. Default is static (no animation)
+ * because pulses lose meaning when used everywhere — only the truly LIVE
+ * primary signals (hero offer, mobile FAB) should pulse.
  */
 export function LiveStatus({
   variant = "live",
   children,
   className = "",
   size = "sm",
+  pulse = false,
 }: {
   variant?: Variant;
   children: ReactNode;
   className?: string;
   size?: "xs" | "sm" | "md";
+  pulse?: boolean;
 }) {
   const styles = VARIANT_STYLES[variant];
   const sizeText = size === "xs" ? "text-[10px]" : size === "md" ? "text-sm" : "text-xs";
@@ -34,13 +36,16 @@ export function LiveStatus({
     <span
       className={`inline-flex items-center gap-2 font-mono ${sizeText} ${styles.text} ${className}`}
     >
-      <span className={`relative inline-flex items-center justify-center flex-shrink-0 ${dotSize}`} aria-hidden="true">
-        {/* Big halo pulse — origin-center scale */}
-        <span
-          className={`absolute inset-0 rounded-full ${styles.dot} animate-live-pulse`}
-          style={{ transformOrigin: "center" }}
-        />
-        {/* Solid center dot */}
+      <span
+        className={`relative inline-flex items-center justify-center flex-shrink-0 ${dotSize}`}
+        aria-hidden="true"
+      >
+        {pulse && (
+          <span
+            className={`absolute inset-0 rounded-full ${styles.dot} animate-live-pulse`}
+            style={{ transformOrigin: "center" }}
+          />
+        )}
         <span className={`relative inline-block rounded-full ${styles.dot} ${dotSize}`} />
       </span>
       <span className="leading-none">{children}</span>

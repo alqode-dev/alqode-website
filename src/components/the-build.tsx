@@ -263,11 +263,9 @@ export function TheBuild() {
                         }`}
                         aria-hidden="true"
                       >
+                        {/* Pulse only during ACTIVE (briefly, scroll-driven). Done = solid, no pulse. */}
                         {isActive && (
-                          <span className="absolute inset-0 rounded-full bg-live-amber opacity-40 animate-live-pulse" />
-                        )}
-                        {isDone && (
-                          <span className="absolute inset-0 rounded-full bg-terminal opacity-40 animate-live-pulse" />
+                          <span className="absolute inset-0 rounded-full bg-live-amber animate-live-pulse" />
                         )}
                         <span
                           className={`relative inline-block h-2 w-2 rounded-full ${

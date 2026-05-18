@@ -54,17 +54,11 @@ export function System() {
 
           {PROCESS.steps.map((step, i) => (
             <div key={step.num} className="relative">
-              {/* Node circle */}
+              {/* Node circle — numbered, no pulse */}
               <div className="relative inline-flex items-center justify-center w-10 h-10 rounded-full border-2 border-terminal bg-void mb-5">
                 <span className="text-xs font-mono font-bold text-terminal">
                   {step.num}
                 </span>
-                {i === 0 && (
-                  <span
-                    className="absolute inset-0 rounded-full bg-terminal/30 animate-live-pulse"
-                    aria-hidden="true"
-                  />
-                )}
               </div>
 
               {/* Step content */}
@@ -98,38 +92,46 @@ export function System() {
 
         {/* Subscription dashboard panel */}
         <div className="reveal-item relative rounded-2xl border border-border bg-card-bg/60 backdrop-blur-sm p-6 md:p-8 mb-14 md:mb-20 overflow-hidden">
-          {/* Dashboard top bar */}
+          {/* Dashboard top bar — one pulse for the primary status, nothing else */}
           <div className="flex items-center justify-between gap-3 pb-5 mb-6 border-b border-white/[0.06] flex-wrap">
             <div className="flex items-center gap-3">
-              <LiveStatus variant="live" size="md">
+              <LiveStatus variant="live" size="md" pulse>
                 subscription · active
               </LiveStatus>
             </div>
             <MonoTag variant="muted">monthly · ongoing</MonoTag>
           </div>
 
-          {/* 2x2 dashboard tiles */}
+          {/* 2x2 dashboard tiles — each gets its own visual treatment, no dots */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
-            {RETAINER.pillars.map((pillar) => (
-              <div
-                key={pillar.title}
-                className="relative rounded-xl border border-white/[0.06] bg-void/40 p-5 md:p-6 hover:border-terminal/30 transition-colors duration-300 ease-snap"
-              >
-                {/* Pulse dot top-left */}
-                <div className="flex items-center justify-between mb-4">
-                  <LiveStatus variant="live" size="xs">
-                    live
-                  </LiveStatus>
-                  <MonoTag variant="muted">/system</MonoTag>
+            {RETAINER.pillars.map((pillar, i) => {
+              // Each tile gets a different left-border accent for visual variety
+              const accentClasses = [
+                "border-l-2 border-l-terminal",
+                "border-l-2 border-l-live-amber",
+                "border-l-2 border-l-terminal/70",
+                "border-l-2 border-l-live-amber/70",
+              ];
+              return (
+                <div
+                  key={pillar.title}
+                  className={`relative rounded-xl border border-white/[0.06] bg-void/40 p-5 md:p-6 hover:border-terminal/30 transition-colors duration-300 ease-snap ${accentClasses[i]}`}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <MonoTag variant="terminal">
+                      /sys.{String(i + 1).padStart(2, "0")}
+                    </MonoTag>
+                    <MonoTag variant="muted">ongoing</MonoTag>
+                  </div>
+                  <h3 className="font-display text-xl md:text-2xl italic font-normal leading-tight mb-2">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-xs md:text-sm text-muted leading-relaxed">
+                    {pillar.body}
+                  </p>
                 </div>
-                <h3 className="font-display text-xl md:text-2xl italic font-normal leading-tight mb-2">
-                  {pillar.title}
-                </h3>
-                <p className="text-xs md:text-sm text-muted leading-relaxed">
-                  {pillar.body}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

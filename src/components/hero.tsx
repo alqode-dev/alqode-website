@@ -255,7 +255,7 @@ export function Hero() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 group"
           >
-            <LiveStatus variant="live" size="sm">
+            <LiveStatus variant="live" size="sm" pulse>
               {HERO.mockupOffer.label}
             </LiveStatus>
             <span className="text-terminal text-xs md:text-sm font-bold font-mono group-hover:translate-x-0.5 transition-transform duration-200 ease-snap">
