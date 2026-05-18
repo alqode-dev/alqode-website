@@ -81,6 +81,46 @@ export const CLIENTS = {
   ],
 };
 
+export const THE_BUILD = {
+  tag: "The Build",
+  heading: "Watch a system being deployed.",
+  subline:
+    "What we ship for businesses — visualized, in 30 seconds. Scroll to watch a real automation pipeline run end-to-end.",
+  nodes: [
+    {
+      id: "form",
+      label: "Customer Form",
+      caption: "Lead submits through your site",
+      states: { idle: "pending", active: "receiving", done: "received" },
+    },
+    {
+      id: "automation",
+      label: "Automation Engine",
+      caption: "n8n workflow fires the pipeline",
+      states: { idle: "pending", active: "executing", done: "executed" },
+    },
+    {
+      id: "notify",
+      label: "WhatsApp Notify",
+      caption: "You're alerted in real time",
+      states: { idle: "pending", active: "sending", done: "delivered" },
+    },
+    {
+      id: "booking",
+      label: "Calendar Booked",
+      caption: "Qualified lead lands in your day",
+      states: { idle: "pending", active: "scheduling", done: "confirmed" },
+    },
+    {
+      id: "revenue",
+      label: "Revenue +1",
+      caption: "Your machine just compounded",
+      states: { idle: "pending", active: "compounding", done: "shipped" },
+    },
+  ],
+  closer: "Multiply this across every customer. While you sleep.",
+};
+
 export const QUICKSTART = {
   tag: "Start fast",
   heading: "Proof. Not promises.",

@@ -2,6 +2,7 @@ import { Nav } from "@/components/nav";
 import { Hero } from "@/components/hero";
 import { ClientLogos } from "@/components/client-logos";
 import { TechMarquee } from "@/components/tech-marquee";
+import { TheBuild } from "@/components/the-build";
 import { Work } from "@/components/work";
 import { About } from "@/components/about";
 import { Process } from "@/components/process";
@@ -26,6 +27,7 @@ export default function Home() {
         <div className="gradient-divider mx-5" />
         <ClientLogos />
         <TechMarquee />
+        <TheBuild />
         <Work />
         <About />
         <Process />
