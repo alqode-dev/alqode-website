@@ -144,7 +144,7 @@ Every push to `main` triggers a Vercel deployment. PRs get preview URLs.
 
 ---
 
-## 6. FILE STRUCTURE (COMPLETE)
+## 6. FILE STRUCTURE (COMPLETE) — v3.0
 
 ```
 alqode-website/
@@ -152,52 +152,69 @@ alqode-website/
 │   ├── favicon.svg                    # {A} icon, green brackets on void bg
 │   ├── robots.txt                     # Allow all, links sitemap
 │   └── images/
-│       ├── founder.jpg                # Founder photo (About section)
-│       ├── masjid-notify.png          # Masjid Notify screenshot (Portfolio)
-│       ├── faida-automation.png       # FAIDA screenshot (Portfolio)
-│       ├── bochi-cafe.png             # Bochi Croffle screenshot (Portfolio)
-│       ├── bochi.webp                 # Bochi Croffle fallback image
-│       └── faida.webp                 # FAIDA fallback image
+│       ├── founder.jpg                # Founder photo (About)
+│       ├── masjid-notify.webp         # Masjid Notify screenshot (Work)
+│       ├── faida-automation.webp      # FAIDA screenshot (Work)
+│       ├── bochi-cafe.webp            # Bochi Croffle screenshot (Work)
+│       ├── bochi.webp                 # Bochi fallback
+│       ├── faida.webp                 # FAIDA fallback
+│       └── clients/                   # Owner photos for testimonials
+│           ├── bochi-owner.png
+│           ├── faida-owner.png
+│           └── trophy-owner.png
+│
+├── scripts/
+│   └── compress-images.js             # Sharp-based one-shot PNG → WebP conversion
 │
 ├── src/
 │   ├── app/
-│   │   ├── layout.tsx                 # Root: Space Grotesk font, metadata, JSON-LD, LenisProvider, Analytics
-│   │   ├── page.tsx                   # Home: assembles CursorGlow + Nav + 8 sections (Hero, ClientLogos, Services, Portfolio, About, Process, Retainer, Contact) + Footer + ScrollToTop
-│   │   ├── globals.css                # Tailwind directives + dot-grid + glow + cursor-blink + section-padding + container-width + gradient-divider + client-logo hover
-│   │   ├── not-found.tsx              # 404 page with "Back to home" CTA
-│   │   ├── sitemap.ts                 # Dynamic XML sitemap for alqode.com
-│   │   └── opengraph-image.tsx        # Edge runtime OG image (1200x630)
+│   │   ├── layout.tsx                 # Root: 3 fonts (Space Grotesk, Instrument Serif, JetBrains Mono), metadata, Service+FAQ+Org JSON-LD, LenisProvider, Analytics
+│   │   ├── page.tsx                   # Home assembly. ScrollProgress + CursorGlow + CursorFrame + Nav + 7 sections + Footer + ScrollToTop + WhatsappFab. TheBuild is dynamically imported (code-split).
+│   │   ├── globals.css                # Tailwind + CSS easing variables + scanline overlay + spotlight-card + cursor-frame-active hide + prefers-reduced-motion + focus-visible
+│   │   ├── not-found.tsx              # 404
+│   │   ├── sitemap.ts                 # Dynamic XML sitemap
+│   │   └── opengraph-image.tsx        # Edge runtime 1200x630 OG with terminal-green accents
 │   │
 │   ├── components/
-│   │   ├── nav.tsx                    # Sticky nav + mobile hamburger (Framer Motion slide-in)
-│   │   ├── hero.tsx                   # Typewriter tag + word-by-word headline stagger + CTAs + decrypt-on-hover
-│   │   ├── client-logos.tsx           # NEW v2.4: "Trusted by" strip with 3 hand-traced SVG client logos, monochrome → brand color on hover, click-through to live site
-│   │   ├── client-logos-svg.tsx       # NEW v2.4: Hand-traced SVG icons + wordmarks for Bochi, Faida, Trophy SA. Uses currentColor for monochrome/hover recolor
-│   │   ├── services.tsx               # Wheel-hijack 2-col slideshow (desktop), stacked cards (mobile)
-│   │   ├── portfolio.tsx              # 3 project cards with screenshot + green-accent `result` line + description + tags + tech pills
-│   │   ├── about.tsx                  # Light bg section: founder photo left, story right, dramatic reveal
-│   │   ├── process.tsx                # 4-step timeline: wheel-hijack accumulating steps (desktop), continuous scroll-driven (mobile)
-│   │   ├── retainer.tsx               # NEW v2.4: "We build. We stay. We compound." — tag + heading + subline + 4 pillars + closer + CTA. Sits between Process and Contact
-│   │   ├── contact.tsx                # WhatsApp CTA + signature typing animation form
-│   │   ├── footer.tsx                 # 3-column grid: logo, navigate links, social icons
-│   │   ├── tech-icons.tsx             # 14 inline SVG brand logos + TECH_COLORS brand color map + style prop support
-│   │   ├── cursor-glow.tsx            # Desktop-only (lg+, no touch) 400px radial gradient follows mouse
-│   │   ├── scroll-to-top.tsx          # Fixed button, appears after 600px scroll
-│   │   └── lenis-provider.tsx         # Wraps app in Lenis smooth scroll
+│   │   │   --- Section components (7) ---
+│   │   ├── nav.tsx                    # Sticky nav (Work / About / Process / Contact + WhatsApp CTA), mobile hamburger
+│   │   ├── hero.tsx                   # Terminal "boot" sequence + italic-serif headline with { } bracketed line 2 + CTAs + LiveStatus mockup offer + Bracketed metadata footer
+│   │   ├── client-logos.tsx           # "Building for businesses across SA + UAE" — 3 hand-traced SVG logos (Faida, Bochi, Trophy SA) single-row mobile, brand-color on hover
+│   │   ├── tech-marquee.tsx           # CSS-only infinite scroll of all 16 tech logos w/ brand colors (Next.js, React, TS, Python, Tailwind, Supabase, n8n, Airtable, Vercel, Node, Meta, GitHub, JSON, WordPress, WooCommerce, PayFast text-tint)
+│   │   ├── the-build.tsx              # NEW v3.0 — THE SIGNATURE: pinned GSAP ScrollTrigger section. 5 nodes (Form → Automation → WhatsApp → Calendar → Revenue) activate as you scroll. Mobile fallback: auto-play on entry, no pin.
+│   │   ├── work.tsx                   # 4 deployment cards (Masjid Notify, FAIDA, Bochi Croffle, Trophy SA) in 2-col grid. Each card: scanline-overlay screenshot + live-status badge + deploy ID overlay + integrated user-feedback footer (testimonial) OR community-deployment footer (Masjid Notify). Cursor-following spotlight on hover.
+│   │   ├── about.tsx                  # Light-bg break section. `> founder.profile` tag + italic-serif heading + founder photo + 3 paragraphs + credentials strip + "Work with us" CTA. useScrollRevealDramatic.
+│   │   ├── system.tsx                 # NEW v3.0 — merged Process + Retainer. Header → Beat A: "first weeks" 4-step pipeline → transition marker → Beat B: "every month after" subscription dashboard panel (4 pillar tiles with accent borders) → closer + CTA.
+│   │   ├── quickstart.tsx             # "Start fast" — "Get a mockup (24h)" + "Get a quote (1h)" dual-CTA cards. Big italic-serif timing badges.
+│   │   ├── talk.tsx                   # NEW v3.0 — merged FAQ + Contact. Header + 2-col layout: FAQ accordion (left, 5/12) + WhatsApp primary CTA + terminal-styled form with typing animation (right, 7/12) + location + email footer.
+│   │   ├── footer.tsx                 # 3-col: logo + nav + connect (social icons)
+│   │   │   --- Primitives (v3.0) ---
+│   │   ├── primitives/bracketed.tsx   # <Bracketed> wraps content in {alqode}-style { } terminal-green brackets
+│   │   ├── primitives/live-status.tsx # <LiveStatus variant="live|active|alert|ok" pulse?> — dot + mono label; pulse is opt-in
+│   │   ├── primitives/mono-tag.tsx    # <MonoTag variant="terminal|amber|white|muted"> — small uppercase mono label
+│   │   │   --- Atmosphere + utility ---
+│   │   ├── client-logos-svg.tsx       # Hand-traced FaidaIcon + BochiIcon (basket-weave) + TrophyBadgeIcon + ClientMiniLogo composite for testimonials
+│   │   ├── tech-icons.tsx             # 16 inline SVG brand logos + TECH_COLORS map (PayFast = text-tint, no icon)
+│   │   ├── cursor-glow.tsx            # Desktop ambient radial green glow following mouse
+│   │   ├── cursor-frame.tsx           # NEW v3.0 — custom desktop cursor: { · } bracket pair tracking pointer. Expands on hover over interactive elements. Hides native cursor via html.cursor-frame-active.
+│   │   ├── scroll-progress.tsx        # NEW v3.0 — 2px terminal-green fixed top bar tracking document scroll progress
+│   │   ├── scroll-to-top.tsx          # Fixed button after 600px scroll
+│   │   ├── whatsapp-fab.tsx           # Sticky floating green WhatsApp circle (mobile only, appears after 200px scroll). Tailwind animate-ping halo.
+│   │   └── lenis-provider.tsx         # Lenis smooth scroll wrapped in GSAP × ScrollTrigger sync (gsap.ticker drives Lenis.raf, lenis.on('scroll', ScrollTrigger.update))
 │   │
 │   └── lib/
-│       ├── constants.ts               # ALL site copy - SINGLE SOURCE OF TRUTH (SITE, NAV_LINKS, HERO, CLIENTS, SERVICES, PORTFOLIO, ABOUT, PROCESS, RETAINER, CONTACT, FOOTER)
-│       ├── animations.ts              # useScrollReveal + useScrollRevealDramatic hooks (IntersectionObserver)
-│       └── decrypt.ts                 # useDecryptOnHover hook — desktop-only text scramble/resolve effect
+│       ├── constants.ts               # ALL copy — SITE, NAV_LINKS, HERO (boot/headline/CTAs/mockup/metadata), CLIENTS, QUICKSTART, PORTFOLIO (with deployedSince + category per project), TESTIMONIALS, ABOUT, PROCESS, RETAINER, THE_BUILD, FAQ, CONTACT, FOOTER. Exports waUrl(source, text?) helper for tracked WhatsApp links.
+│       ├── animations.ts              # useScrollReveal + useScrollRevealDramatic (IntersectionObserver-based stagger reveals)
+│       └── decrypt.ts                 # useDecryptOnHover (legacy — only used in About v2.x; new Hero dropped it)
 │
-├── CLAUDE.md                          # THIS FILE - complete rebuild blueprint
-├── package.json                       # Dependencies and scripts
-├── tsconfig.json                      # TypeScript strict config, @/* alias
-├── tailwind.config.ts                 # Brand colors, fonts, breakpoints
+├── CLAUDE.md                          # THIS FILE
+├── package.json                       # Deps: next 14, react 18, tailwind 3.4, framer-motion, lenis, gsap, lucide-react, @vercel/analytics
+├── tsconfig.json                      # TypeScript strict, @/* alias
+├── tailwind.config.ts                 # Brand palette (void/terminal/live-amber/signal-red/bone/muted/...), 3 font families (sans/display/mono), snap/out-quart/spring-soft easings, live-pulse/scanline/fade-up animations
 ├── postcss.config.mjs                 # Tailwind + autoprefixer
 ├── next.config.mjs                    # Image formats: avif + webp
-├── .eslintrc.json                     # extends next/core-web-vitals
-└── .gitignore                         # Next.js patterns, excludes CLAUDE.md/specs/wireframe
+├── .eslintrc.json                     # next/core-web-vitals
+└── .gitignore                         # Next.js patterns
 ```
 
 ---
@@ -962,6 +979,56 @@ Modify `CONTACT.typingCycles` array in constants.ts.
 
 ## 20. VERSION HISTORY
 
+### v3.0 — Builder × Scene Redesign (May 17 2026)
+
+Comprehensive 7-phase redesign. The site previously read as a "modern dark agency template" (Linear-clone). v3.0 commits to a distinctive **Builder × Scene** direction: terminal/automation builder authenticity (Direction A) + cinematic scroll-driven craft moments (Direction C).
+
+**New design system foundation:**
+- 3rd typeface added: JetBrains Mono (system/terminal voice). Trinity is now Instrument Serif (italic headlines) + Space Grotesk (body) + JetBrains Mono (mono).
+- Extended color palette: live-amber `#FFB81C` (active/in-progress), signal-red `#FF4D4D` (alert, used sparingly), bone `#F5F1EA` (editorial), alongside existing void + terminal.
+- New transition tokens: `ease-snap` (`cubic-bezier(.16, 1, .3, 1)`), `ease-out-quart`, `ease-spring-soft`. CSS variables + Tailwind classes.
+- New animations: `live-pulse` (dot halo), `scanline`, `fade-up`.
+- Reusable primitives folder:
+  - `<Bracketed>` — wraps content in `{ }` mono brackets
+  - `<LiveStatus variant pulse?>` — dot + mono label; pulse opt-in (reserved for genuinely live signals)
+  - `<MonoTag variant>` — small uppercase mono metadata label
+- New `<CursorFrame>` — custom desktop cursor: `{ · }` bracket pair tracking pointer
+- New `<ScrollProgress>` — 2px terminal-green fixed top bar
+
+**Page composition shift: 10 sections → 7**
+- Hero (rebuilt as terminal "boot" sequence)
+- ClientLogos + TechMarquee (trust strip beat)
+- TheBuild (NEW signature pinned scroll moment with GSAP)
+- Work (rebuilt as "deployed services" with integrated testimonials)
+- About (light-bg break, refreshed with mono framing)
+- System (NEW — merged Process + Retainer)
+- Quickstart (mockup/quote dual-CTA)
+- Talk (NEW — merged FAQ + Contact)
+
+**Key new components:**
+- `the-build.tsx` — pinned GSAP ScrollTrigger section. 5-node automation pipeline (Form → Automation → WhatsApp → Calendar → Revenue). Each node has idle/active/done states. Scroll progress = node activation. Mobile fallback auto-plays on entry.
+- `system.tsx` — merged Process + Retainer into one beat. "▸ first weeks · how we build" pipeline → ongoing marker → "▸ every month after · how we stay" subscription dashboard with accent-bordered pillar tiles.
+- `talk.tsx` — merged FAQ + Contact into 2-col layout. FAQ left, WhatsApp CTA + terminal-styled form right. Form inputs use mono font, bracketed labels, terminal focus rings. Typing animation preserved.
+- `work.tsx` — full rewrite as deployment cards. Each card: scanline-overlay screenshot, live-status badge `{ live · since 2024 }`, deploy ID `[deploy:faida-02]`, integrated testimonial-as-user-feedback log entry OR community-deployment footer for Masjid Notify. Cursor-following spotlight on hover.
+
+**Removed components (folded into new sections):**
+- `services.tsx`, `process.tsx`, `retainer.tsx`, `faq.tsx`, `contact.tsx`, `portfolio.tsx`, `testimonials.tsx`
+
+**Motion polish:**
+- Snap easing across new components
+- Cursor-following spotlight on Work cards + System dashboard tiles (radial green gradient that tracks mouse position)
+- Hover physics: -translate-y-0.5 + soft green shadow on Work cards
+- `prefers-reduced-motion` support: disables non-essential animations for accessibility
+- `focus-visible` 2px terminal-green ring for keyboard navigation
+- Lenis × GSAP ScrollTrigger synced via gsap.ticker (LenisProvider updated)
+
+**Performance:**
+- TheBuild code-split via `next/dynamic` (SSR preserved, GSAP-dependent client JS deferred)
+- Initial first-load: ~204KB (slight increase from GSAP integration with Lenis ticker)
+
+**Pulse discipline (mid-phase correction):**
+- The pulsing dot was overused — became wallpaper. Pulled back to ONLY: hero mockup offer, mobile WhatsApp FAB, The Build active-state nodes (briefly during scroll), System dashboard "subscription · active" status. Everywhere else: static dots or alternative treatments (bracketed mono badges, accent borders).
+
 ### v2.5 - Faithful Logos & Quickstart Conversion Layer (May 14 2026)
 Two improvements driven by user feedback after first live review.
 
@@ -1132,5 +1199,5 @@ Complete rewrite from Vite/React/Three.js to Next.js 14 + Tailwind.
 
 ---
 
-*Last Updated: May 14, 2026*
-*Version: 2.5 (Faithful Logos & Quickstart Conversion Layer)*
+*Last Updated: May 17, 2026*
+*Version: 3.0 (Builder × Scene Redesign)*

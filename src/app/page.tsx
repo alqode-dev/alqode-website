@@ -1,9 +1,20 @@
+import dynamic from "next/dynamic";
 import { Nav } from "@/components/nav";
 import { Hero } from "@/components/hero";
 import { ClientLogos } from "@/components/client-logos";
 import { TechMarquee } from "@/components/tech-marquee";
-import { TheBuild } from "@/components/the-build";
 import { Work } from "@/components/work";
+
+// Code-split TheBuild — it pulls in GSAP + ScrollTrigger (~40KB).
+// SSR stays on so the section markup is in initial HTML for SEO; only the JS is deferred.
+const TheBuild = dynamic(
+  () => import("@/components/the-build").then((m) => ({ default: m.TheBuild })),
+  {
+    loading: () => (
+      <section className="min-h-[88vh] lg:min-h-screen" aria-hidden="true" />
+    ),
+  }
+);
 import { About } from "@/components/about";
 import { System } from "@/components/system";
 import { Quickstart } from "@/components/quickstart";
