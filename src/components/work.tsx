@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ArrowRight, ArrowLeft } from "lucide-react";
 import { useScrollReveal } from "@/lib/animations";
 import { PORTFOLIO, TESTIMONIALS } from "@/lib/constants";
 import { TECH_ICON_MAP, TECH_COLORS } from "@/components/tech-icons";
@@ -42,7 +42,6 @@ function DeploymentCard({
 
   const isCommunity = project.category === "community";
 
-  // Cursor-following spotlight on hover (desktop)
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     e.currentTarget.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
@@ -52,17 +51,17 @@ function DeploymentCard({
   return (
     <article
       onMouseMove={handleMouseMove}
-      className="reveal-item spotlight-card bg-card-bg rounded-xl overflow-hidden border border-border hover:border-terminal/40 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-12px_rgba(16,185,129,0.18)] transition-all duration-500 ease-snap group relative flex flex-col h-full"
+      className="spotlight-card snap-start flex-shrink-0 w-[86vw] sm:w-[440px] md:w-[500px] lg:w-[540px] bg-card-bg rounded-xl overflow-hidden border border-border hover:border-terminal/40 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_-12px_rgba(16,185,129,0.18)] transition-all duration-500 ease-snap group relative flex flex-col"
     >
-      {/* Image with scanline overlay + status overlay */}
-      <div className="relative h-[200px] md:h-[220px] bg-dim-bg overflow-hidden flex-shrink-0 scanline-overlay">
+      {/* Screenshot */}
+      <div className="relative h-[200px] md:h-[230px] bg-dim-bg overflow-hidden flex-shrink-0 scanline-overlay">
         {!imgError && imgSrc ? (
           <Image
             src={imgSrc}
             alt={`${project.name} screenshot`}
             fill
             className="object-cover transition-transform duration-700 ease-snap group-hover:scale-[1.03]"
-            sizes="(max-width: 1024px) 100vw, 50vw"
+            sizes="(max-width: 768px) 86vw, 540px"
             onError={() => {
               if (project.fallbackImage && imgSrc !== project.fallbackImage) {
                 setImgSrc(project.fallbackImage);
@@ -87,10 +86,7 @@ function DeploymentCard({
         {/* Top overlay: status badge + deploy ID */}
         <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2 z-10">
           <div className="bg-void/75 backdrop-blur-sm rounded-md px-2.5 py-1.5">
-            <LiveStatus
-              variant={isCommunity ? "active" : "live"}
-              size="xs"
-            >
+            <LiveStatus variant={isCommunity ? "active" : "live"} size="xs">
               {isCommunity
                 ? `community · since ${project.deployedSince}`
                 : `live · since ${project.deployedSince}`}
@@ -130,7 +126,6 @@ function DeploymentCard({
           {project.description}
         </p>
 
-        {/* Tags */}
         <div className="flex flex-wrap gap-1.5 mb-3">
           {project.tags.map((tag) => (
             <span
@@ -142,7 +137,6 @@ function DeploymentCard({
           ))}
         </div>
 
-        {/* Tech pills */}
         <div className="flex flex-wrap gap-2 mb-5">
           {project.tech.map((t) => {
             const Icon = TECH_ICON_MAP[t];
@@ -171,19 +165,16 @@ function DeploymentCard({
           })}
         </div>
 
-        {/* Spacer pushes the footer down */}
         <div className="flex-1" />
 
-        {/* Footer: testimonial log OR community note */}
+        {/* Footer */}
         {testimonial ? (
           <div className="mt-4 pt-4 border-t border-white/[0.06]">
             <div className="flex items-center justify-between gap-2 mb-3">
-              <MonoTag variant="terminal">
-                ▸ user feedback
-              </MonoTag>
+              <MonoTag variant="terminal">▸ user feedback</MonoTag>
               <MonoTag variant="muted">verified</MonoTag>
             </div>
-            <p className="text-[13px] md:text-sm leading-relaxed text-white/85 mb-4 font-medium">
+            <p className="text-[13px] md:text-sm leading-relaxed text-white/85 mb-4 font-medium line-clamp-4">
               &ldquo;{testimonial.quote}&rdquo;
             </p>
             <div className="flex items-center gap-3">
@@ -231,7 +222,13 @@ function DeploymentCard({
 
 export function Work() {
   const sectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   useScrollReveal(sectionRef);
+
+  const scrollBy = (delta: number) => {
+    if (!trackRef.current) return;
+    trackRef.current.scrollBy({ left: delta, behavior: "smooth" });
+  };
 
   return (
     <section
@@ -241,37 +238,70 @@ export function Work() {
       aria-label="Our work"
     >
       <div className="container-width">
-        {/* Mono tag header */}
+        {/* Header */}
         <p className="reveal-item text-terminal text-xs md:text-sm font-mono font-semibold tracking-[1px] mb-3 md:mb-4">
-          {PORTFOLIO.tag}
+          &gt; deployed.services
         </p>
-        <div className="reveal-item flex items-baseline gap-3 md:gap-4 mb-3 flex-wrap">
-          <h2 className="font-display text-[clamp(2rem,5.5vw,4rem)] italic font-normal leading-[1.02] tracking-tight">
-            {PORTFOLIO.heading}{" "}
-            <span className="text-terminal">{PORTFOLIO.headingAccent}</span>
-          </h2>
-          <MonoTag variant="muted">
-            <Bracketed tight>{PORTFOLIO.projects.length} active</Bracketed>
-          </MonoTag>
+        <div className="reveal-item flex items-end justify-between gap-4 flex-wrap mb-3">
+          <div className="flex items-baseline gap-3 md:gap-4 flex-wrap">
+            <h2 className="font-display text-[clamp(2rem,5.5vw,4rem)] italic font-normal leading-[1.02] tracking-tight">
+              Built by <span className="text-terminal">{PORTFOLIO.headingAccent}</span>
+            </h2>
+            <MonoTag variant="muted">
+              <Bracketed tight>{PORTFOLIO.projects.length} active</Bracketed>
+            </MonoTag>
+          </div>
+          {/* Desktop scroll arrows */}
+          <div className="hidden md:flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => scrollBy(-560)}
+              aria-label="Previous project"
+              className="w-10 h-10 rounded-full border border-border hover:border-terminal/40 text-muted hover:text-terminal flex items-center justify-center transition-all duration-200 ease-snap"
+            >
+              <ArrowLeft size={16} />
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollBy(560)}
+              aria-label="Next project"
+              className="w-10 h-10 rounded-full border border-border hover:border-terminal/40 text-muted hover:text-terminal flex items-center justify-center transition-all duration-200 ease-snap"
+            >
+              <ArrowRight size={16} />
+            </button>
+          </div>
         </div>
         <p className="reveal-item text-sm md:text-base text-muted leading-relaxed mb-10 md:mb-14 max-w-2xl">
-          {PORTFOLIO.subline}
+          {PORTFOLIO.subline}{" "}
+          <span className="font-mono text-xs text-terminal/70 hidden md:inline ml-1">
+            ← swipe →
+          </span>
         </p>
 
-        {/* 2-col grid of deployment cards (1-col mobile) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-6">
-          {PORTFOLIO.projects.map((project, i) => {
-            const testimonial = findTestimonial(project.name);
-            const deployId = `[deploy:${project.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")}-${String(i + 1).padStart(2, "0")}]`;
-            return (
-              <DeploymentCard
-                key={project.name}
-                project={project}
-                testimonial={testimonial}
-                deployId={deployId}
-              />
-            );
-          })}
+        {/* Horizontal scroll carousel — handles N projects gracefully */}
+        <div
+          ref={trackRef}
+          className="reveal-item -mx-5 md:-mx-8 lg:-mx-12 px-5 md:px-8 lg:px-12 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-6"
+        >
+          <div className="flex gap-4 md:gap-5 lg:gap-6">
+            {PORTFOLIO.projects.map((project, i) => {
+              const testimonial = findTestimonial(project.name);
+              const deployId = `[deploy:${project.name
+                .toLowerCase()
+                .replace(/\s+/g, "-")
+                .replace(/[^a-z0-9-]/g, "")}-${String(i + 1).padStart(2, "0")}]`;
+              return (
+                <DeploymentCard
+                  key={project.name}
+                  project={project}
+                  testimonial={testimonial}
+                  deployId={deployId}
+                />
+              );
+            })}
+            {/* trailing spacer so last card snap-aligns cleanly */}
+            <div className="flex-shrink-0 w-1" aria-hidden="true" />
+          </div>
         </div>
       </div>
     </section>

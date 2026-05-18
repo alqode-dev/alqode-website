@@ -118,6 +118,30 @@ export function About() {
             </div>
           </div>
         </div>
+
+        {/* ── FOUNDER MOTTO — diagonal stamp ───────────────────────────
+            The aggressive line was buried in System where nobody saw it.
+            Lives here now, in the personal section, stamped slightly off-axis. */}
+        <div className="reveal-item mt-16 md:mt-24 lg:mt-28 relative overflow-hidden">
+          <div className="font-mono text-[10px] md:text-[11px] tracking-[2.5px] uppercase text-void/40 mb-3 md:mb-4">
+            [ founder.motto ]
+          </div>
+          <p
+            className="font-display text-[clamp(1.75rem,5vw,3.5rem)] italic text-void leading-[1.05] max-w-5xl"
+            style={{ transform: "rotate(-1deg)", transformOrigin: "left center" }}
+          >
+            Our job is to make you so successful,{" "}
+            <span className="not-italic font-bold text-terminal">
+              your competitors run out of business.
+            </span>
+          </p>
+          {/* Subtle terminal-green slash to "underline" the motto, slightly skewed */}
+          <div
+            className="mt-4 md:mt-6 h-[3px] w-24 md:w-36 bg-terminal/70"
+            style={{ transform: "rotate(-1deg)" }}
+            aria-hidden="true"
+          />
+        </div>
       </div>
     </section>
   );

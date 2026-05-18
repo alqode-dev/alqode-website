@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { MessageCircle, MapPin, Mail, Plus, Minus, Send } from "lucide-react";
 import { useScrollReveal } from "@/lib/animations";
-import { CONTACT, FAQ, SITE, waUrl } from "@/lib/constants";
+import { CONTACT, FAQ, waUrl } from "@/lib/constants";
 import { Bracketed } from "@/components/primitives/bracketed";
 import { MonoTag } from "@/components/primitives/mono-tag";
 
@@ -120,9 +120,14 @@ export function Talk() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Project inquiry from ${name}`);
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nProject: ${project}`);
-    window.open(`mailto:${SITE.email}?subject=${subject}&body=${body}`);
+    // Route the form straight to WhatsApp with the typed message pre-filled.
+    // The form is intentionally a low-friction WhatsApp builder — not a real form.
+    const messageParts: string[] = [];
+    if (name) messageParts.push(`Hi! I'm ${name}.`);
+    if (email) messageParts.push(`Email: ${email}`);
+    if (project) messageParts.push(`\n${project}`);
+    const message = messageParts.join("\n") || "Hi! I'd like to talk about a project.";
+    window.open(waUrl("talk_form", message), "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -148,9 +153,8 @@ export function Talk() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10 lg:gap-12">
           {/* ── LEFT: FAQ ───────────────────────────── */}
           <div className="lg:col-span-5">
-            <div className="reveal-item mb-5 md:mb-6 flex items-center gap-3">
+            <div className="reveal-item mb-5 md:mb-6">
               <MonoTag variant="terminal">▸ common questions</MonoTag>
-              <div className="flex-1 h-px bg-gradient-to-r from-terminal/40 to-transparent" />
             </div>
 
             <div className="reveal-item divide-y divide-border/60 border-y border-border/60">
@@ -307,12 +311,12 @@ export function Talk() {
                   </div>
                 </div>
 
-                {/* Submit */}
+                {/* Submit — opens WhatsApp with the typed message pre-filled */}
                 <button
                   type="submit"
                   className="group w-full py-3.5 rounded-lg border border-terminal/40 text-terminal bg-terminal/[0.04] hover:bg-terminal/10 hover:border-terminal/60 transition-all duration-200 ease-snap text-sm font-mono font-bold tracking-wide inline-flex items-center justify-center gap-2"
                 >
-                  ▸ deploy message
+                  ▸ deploy to WhatsApp
                   <Send size={14} className="group-hover:translate-x-0.5 transition-transform duration-200 ease-snap" />
                 </button>
               </form>

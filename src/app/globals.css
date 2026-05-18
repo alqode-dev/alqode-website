@@ -59,6 +59,15 @@
     transition-timing-function: var(--ease-snap);
   }
 
+  /* Hide native scrollbar on horizontal-scroll containers (Work carousel) */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Cursor-following spotlight on hover.
      Apply .spotlight-card and update --mouse-x / --mouse-y from JS on mousemove.
      Adds a soft terminal-green halo where the cursor sits. */

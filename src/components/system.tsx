@@ -37,12 +37,8 @@ export function System() {
         </p>
 
         {/* ── BEAT A: PIPELINE (first weeks) ─────────────── */}
-        <div className="reveal-item mb-6 md:mb-8 flex items-center gap-3">
-          <MonoTag variant="terminal">▸ first weeks</MonoTag>
-          <span className="text-muted font-mono text-[10px] md:text-xs tracking-wide">
-            how we build
-          </span>
-          <div className="flex-1 h-px bg-gradient-to-r from-terminal/40 to-transparent ml-2" />
+        <div className="reveal-item mb-6 md:mb-8 inline-flex items-center gap-3">
+          <MonoTag variant="terminal">▸ first weeks · how we build</MonoTag>
         </div>
 
         <div className="reveal-item relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-5 mb-20 md:mb-28">
@@ -72,22 +68,9 @@ export function System() {
           ))}
         </div>
 
-        {/* Transition marker between beats */}
-        <div className="reveal-item flex items-center justify-center gap-3 mb-12 md:mb-16">
-          <div className="h-px w-12 md:w-24 bg-gradient-to-l from-terminal/40 to-transparent" />
-          <MonoTag variant="terminal">
-            <Bracketed tight>ongoing · every month</Bracketed>
-          </MonoTag>
-          <div className="h-px w-12 md:w-24 bg-gradient-to-r from-terminal/40 to-transparent" />
-        </div>
-
         {/* ── BEAT B: DASHBOARD (every month after) ──────── */}
-        <div className="reveal-item mb-6 md:mb-8 flex items-center gap-3">
-          <MonoTag variant="terminal">▸ every month after</MonoTag>
-          <span className="text-muted font-mono text-[10px] md:text-xs tracking-wide">
-            how we stay
-          </span>
-          <div className="flex-1 h-px bg-gradient-to-r from-terminal/40 to-transparent ml-2" />
+        <div className="reveal-item mb-6 md:mb-8 inline-flex items-center gap-3">
+          <MonoTag variant="terminal">▸ every month after · how we stay</MonoTag>
         </div>
 
         {/* Subscription dashboard panel */}
@@ -140,14 +123,10 @@ export function System() {
           </div>
         </div>
 
-        {/* Closer punch + CTA */}
+        {/* Closer + CTA — the heavy motto moved to About so people actually see it */}
         <div className="reveal-item max-w-3xl">
-          <p className="text-base md:text-xl text-muted leading-relaxed mb-2">
+          <p className="text-base md:text-lg text-muted leading-relaxed mb-8 md:mb-10">
             {RETAINER.closer.line1}
-          </p>
-          <p className="font-display text-2xl md:text-4xl italic leading-tight mb-8 md:mb-10">
-            Our job is to make you so successful,{" "}
-            <span className="text-terminal">your competitors run out of business.</span>
           </p>
           <a
             href={waUrl("retainer")}

@@ -176,7 +176,7 @@ export function TheBuild() {
     <section
       ref={sectionRef}
       id="the-build"
-      className="relative bg-void"
+      className="hidden lg:block relative bg-void"
       aria-label="The Build — system pipeline visualization"
     >
       <div
