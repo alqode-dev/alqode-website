@@ -147,12 +147,15 @@ export const QUICKSTART = {
 };
 
 export const PORTFOLIO = {
+  tag: "> deployed.services",
   heading: "Built by",
   headingAccent: "{alqode}",
-  subline: "Real systems. Real businesses. Real results.",
+  subline: "Live in production. Real businesses. Real voices.",
   projects: [
     {
       name: "Masjid Notify",
+      deployedSince: "2025",
+      category: "community" as const,
       result: "A 24/7 community hub — scheduling, archives, and access for everyone.",
       description:
         "The digital backbone for a Masjid: prayer times, event scheduling, and a permanent archive of every recorded lecture. Open access, always live.",
@@ -164,6 +167,8 @@ export const PORTFOLIO = {
     },
     {
       name: "FAIDA",
+      deployedSince: "2024",
+      category: "client" as const,
       result: "Lead-to-calendar automation. No manual step, no missed booking.",
       description:
         "Brand site plus the automation pipeline that captures every form submission and books qualified leads straight into the calendar — built for a UAE finance brand.",
@@ -175,6 +180,8 @@ export const PORTFOLIO = {
     },
     {
       name: "Bochi Croffle",
+      deployedSince: "2025",
+      category: "client" as const,
       result: "An in-browser game that turns every play into a customer record.",
       description:
         "Full brand, site, and a custom game built into the experience. Every play feeds a loyalty database — driving revenue and the community that keeps it growing.",
@@ -186,6 +193,8 @@ export const PORTFOLIO = {
     },
     {
       name: "Trophy SA",
+      deployedSince: "2025",
+      category: "client" as const,
       result:
         "Premium e-commerce experience on a free-tier WordPress budget.",
       description:
