@@ -4,7 +4,10 @@
 // those become the green signature; the middle six are the white chrome letters.
 //
 // Shared by the static lab and the melt scene. SVGLoader emits shapes in SVG
-// y-down space, so the consuming scene renders with scale.y = -1 to stand upright.
+// y-down space. We stand them upright HERE in geometry (negate Y + reverse
+// winding so normals stay outward), NOT with a negative mesh scale — a mirror
+// scale inverts normals, which turns a chrome mirror material BLACK on its flat
+// faces. So scenes render this geometry with a normal POSITIVE scale.
 import { useLoader } from "@react-three/fiber";
 import { useMemo } from "react";
 import * as THREE from "three";
@@ -14,18 +17,43 @@ import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js
 const GREEN = new THREE.Color("#10b981");
 const WHITE = new THREE.Color("#ffffff");
 
+// Fat, ROUNDED bevel: thin Space-Grotesk strokes need a generous light-catching
+// rim or chrome reads as black. More bevel segments = a smooth rounded edge that
+// sweeps the strip-lights as a continuous specular highlight (the metal "gleam").
 const EXTRUDE: THREE.ExtrudeGeometryOptions = {
-  depth: 130,
+  depth: 150,
   bevelEnabled: true,
-  bevelThickness: 26,
-  bevelSize: 16,
+  bevelThickness: 34,
+  bevelSize: 22,
   bevelOffset: 0,
-  bevelSegments: 4,
-  curveSegments: 22,
+  bevelSegments: 8,
+  curveSegments: 26,
 };
 
 function toNonIndexed(geo: THREE.BufferGeometry) {
   return geo.index ? geo.toNonIndexed() : geo;
+}
+
+// Stand the y-down SVG geometry upright without mirroring: negate Y on every
+// vertex, then reverse each triangle's winding (swap v1/v2) so faces stay
+// front-facing. Recompute normals afterwards so the chrome reflects correctly.
+function flipYUpright(geo: THREE.BufferGeometry) {
+  const pos = geo.getAttribute("position") as THREE.BufferAttribute;
+  const arr = pos.array as Float32Array;
+  for (let i = 1; i < arr.length; i += 3) arr[i] = -arr[i];
+  // reverse winding on the non-indexed buffer (every 3 verts = 1 triangle)
+  for (let t = 0; t < arr.length; t += 9) {
+    for (let k = 0; k < 3; k++) {
+      const a = t + 3 + k; // vertex 1, component k
+      const b = t + 6 + k; // vertex 2, component k
+      const tmp = arr[a];
+      arr[a] = arr[b];
+      arr[b] = tmp;
+    }
+  }
+  pos.needsUpdate = true;
+  geo.computeVertexNormals();
+  return geo;
 }
 
 function setVertexColor(geo: THREE.BufferGeometry, color: THREE.Color) {
@@ -56,7 +84,7 @@ function buildRaw(data: { paths: { color: THREE.Color }[] }): RawGroups {
     const isBracket = i === 0 || i === lastIndex;
     const shapes = SVGLoader.createShapes(path as never);
     shapes.forEach((shape: THREE.Shape) => {
-      const geo = toNonIndexed(new THREE.ExtrudeGeometry(shape, EXTRUDE));
+      const geo = flipYUpright(toNonIndexed(new THREE.ExtrudeGeometry(shape, EXTRUDE)));
       (isBracket ? bracketGeos : letterGeos).push(geo);
     });
   });

@@ -7,11 +7,10 @@ import { StudioEnv } from "./studio-env";
 import { useWordmarkGeometry } from "./wordmark-geometry";
 import {
   EffectComposer,
-  SelectiveBloom,
+  Bloom,
   ToneMapping,
 } from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
-import * as THREE from "three";
 import type { RefObject } from "react";
 import type { Group, Mesh } from "three";
 
@@ -39,27 +38,31 @@ function Wordmark({ bracketRef }: { bracketRef: RefObject<Mesh> }) {
   return (
     <group ref={group}>
       <Center>
-        {/* flip y: SVGLoader is y-down */}
-        <group scale={[s, -s, s]}>
+        {/* geometry is already upright (flipped in wordmark-geometry) */}
+        <group scale={[s, s, s]}>
+          {/* faint green halo behind the brackets — brand tie, kept subtle */}
+          <mesh geometry={brackets} position={[0, 0, -0.05]} scale={1.03}>
+            <meshBasicMaterial color="#0a8f63" toneMapped={false} />
+          </mesh>
+
           <mesh geometry={letters}>
             <meshStandardMaterial
-              color="#fdfdff"
+              color="#eef2f8"
               metalness={1}
-              roughness={0.04}
-              envMapIntensity={1.6}
-              side={THREE.DoubleSide}
+              roughness={0.022}
+              envMapIntensity={1.55}
             />
           </mesh>
+
+          {/* brackets = green-TINTED chrome (metal), not flat neon paint */}
           <mesh ref={bracketRef} geometry={brackets}>
             <meshStandardMaterial
-              color="#10b981"
-              emissive="#10b981"
-              emissiveIntensity={1.0}
+              color="#19c98d"
+              emissive="#0c5f43"
+              emissiveIntensity={0.35}
               metalness={1}
-              roughness={0.15}
-              envMapIntensity={1.3}
-              side={THREE.DoubleSide}
-              toneMapped={false}
+              roughness={0.12}
+              envMapIntensity={1.7}
             />
           </mesh>
         </group>
@@ -85,14 +88,14 @@ export default function HeroLab() {
         <StudioEnv />
       </Suspense>
       <directionalLight position={[4, 6, 5]} intensity={0.4} />
-      {composerReady && bracketRef.current && (
+      {composerReady && (
         <EffectComposer disableNormalPass>
-          <SelectiveBloom
-            selection={[bracketRef.current]}
-            lights={[]}
-            intensity={1.6}
-            luminanceThreshold={0.1}
-            luminanceSmoothing={0.3}
+          {/* bloom on the bright chrome specular + the green glow = wet-metal
+              gleam. Threshold high enough that only the hot highlights bloom. */}
+          <Bloom
+            intensity={0.55}
+            luminanceThreshold={0.85}
+            luminanceSmoothing={0.2}
             radius={0.6}
             mipmapBlur
           />

@@ -4,17 +4,14 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Center } from "@react-three/drei";
 import {
   EffectComposer,
-  SelectiveBloom,
+  Bloom,
   ToneMapping,
-  Selection,
-  Select,
 } from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
 import { useRef, useState, useEffect, useMemo, Suspense } from "react";
 import * as THREE from "three";
 import { StudioEnv } from "./studio-env";
 import { useMeltGeometry } from "./wordmark-geometry";
-import type { DirectionalLight } from "three";
 
 const TARGET_WIDTH = 5.6;
 
@@ -125,14 +122,13 @@ function MeltMesh({ frozen }: { frozen: number | null }) {
 
   return (
     <Center>
-      <group scale={[s, -s, s]}>
+      <group scale={[s, s, s]}>
         <mesh geometry={geometry}>
           <meshStandardMaterial
             vertexColors
             metalness={1}
-            roughness={0.05}
-            envMapIntensity={1.6}
-            side={THREE.DoubleSide}
+            roughness={0.022}
+            envMapIntensity={1.55}
             onBeforeCompile={(shader) => {
               Object.assign(shader.uniforms, uniforms.current);
               shader.uniforms.uIgnite = uniforms.current.uIgnite;
@@ -181,34 +177,30 @@ function MeltMesh({ frozen }: { frozen: number | null }) {
 }
 
 function Scene({ frozen }: { frozen: number | null }) {
-  const lightRef = useRef<DirectionalLight>(null);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
   return (
     <>
       <color attach="background" args={["#070708"]} />
-      <directionalLight ref={lightRef} position={[4, 6, 5]} intensity={0.4} />
+      <directionalLight position={[4, 6, 5]} intensity={0.4} />
       <Suspense fallback={null}>
-        <Selection>
-          <Select enabled>
-            <MeltMesh frozen={frozen} />
-          </Select>
-          <StudioEnv />
-          {mounted && (
-            <EffectComposer disableNormalPass>
-              <SelectiveBloom
-                lightRef={lightRef}
-                intensity={1.5}
-                luminanceThreshold={0.5}
-                luminanceSmoothing={0.3}
-                radius={0.6}
-                mipmapBlur
-              />
-              <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
-            </EffectComposer>
-          )}
-        </Selection>
+        <MeltMesh frozen={frozen} />
+        <StudioEnv />
+        {mounted && (
+          <EffectComposer disableNormalPass>
+            {/* same recipe as the lab: bloom only the hottest chrome specular +
+                the green ignite, so liquid chrome reads identically to the solid */}
+            <Bloom
+              intensity={0.55}
+              luminanceThreshold={0.85}
+              luminanceSmoothing={0.2}
+              radius={0.6}
+              mipmapBlur
+            />
+            <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
+          </EffectComposer>
+        )}
       </Suspense>
     </>
   );
