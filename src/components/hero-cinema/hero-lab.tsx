@@ -1,43 +1,34 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Center, Text3D } from "@react-three/drei";
+import { Center } from "@react-three/drei";
 import { StudioEnv } from "./studio-env";
+import { useWordmarkGeometry } from "./wordmark-geometry";
 import {
   EffectComposer,
   SelectiveBloom,
   ToneMapping,
 } from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
+import * as THREE from "three";
 import type { RefObject } from "react";
 import type { Group, Mesh } from "three";
 
-const FONT = "/fonts/helvetiker_bold.typeface.json";
-const TEXT3D_PROPS = {
-  font: FONT,
-  size: 1.0,
-  height: 0.26,
-  curveSegments: 24,
-  bevelEnabled: true,
-  bevelThickness: 0.03,
-  bevelSize: 0.02,
-  bevelOffset: 0,
-  bevelSegments: 10,
-  letterSpacing: -0.02,
-} as const;
+const TARGET_WIDTH = 5.6; // world units across the camera frame
 
 /**
- * Phase 0 quality spike: a live, real-time chrome {alqode} wordmark.
- * Goal: prove the chrome MATERIAL + studio LIGHTING look premium and razor sharp
- * before any morph / scroll / mobile work. Letterforms here are a placeholder
- * bold typeface; the exact brand vector shapes come in a later phase.
+ * Phase 0/1: a live, real-time chrome {alqode} wordmark built from the REAL
+ * brand vector (SVGLoader -> ExtrudeGeometry). White chrome letters, green
+ * bracket signature that blooms. Proves material + lighting + the true letter
+ * shapes before the melt.
  */
-
-function Wordmark({ greenRef }: { greenRef: RefObject<Mesh> }) {
+function Wordmark({ bracketRef }: { bracketRef: RefObject<Mesh> }) {
   const group = useRef<Group>(null);
+  const { letters, brackets, size } = useWordmarkGeometry();
+  const s = useMemo(() => TARGET_WIDTH / size.x, [size]);
 
-  // Very gentle idle sway so reflections shift — life, not motion for its own sake.
+  // gentle idle sway so reflections shift — life, not motion for its own sake
   useFrame((state) => {
     if (!group.current) return;
     const t = state.clock.elapsedTime;
@@ -47,66 +38,62 @@ function Wordmark({ greenRef }: { greenRef: RefObject<Mesh> }) {
 
   return (
     <group ref={group}>
-      {/* terminal-green glow shell, concentric + slightly larger + behind,
-          read as a clean neon rim once bloomed (the end-frame look) */}
-      <group position={[0, 0, -0.12]} scale={1.022}>
-        <Center>
-          <Text3D ref={greenRef} {...TEXT3D_PROPS}>
-            {"{alqode}"}
+      <Center>
+        {/* flip y: SVGLoader is y-down */}
+        <group scale={[s, -s, s]}>
+          <mesh geometry={letters}>
             <meshStandardMaterial
-              color="#000000"
+              color="#fdfdff"
+              metalness={1}
+              roughness={0.04}
+              envMapIntensity={1.6}
+              side={THREE.DoubleSide}
+            />
+          </mesh>
+          <mesh ref={bracketRef} geometry={brackets}>
+            <meshStandardMaterial
+              color="#10b981"
               emissive="#10b981"
-              emissiveIntensity={3.2}
+              emissiveIntensity={1.0}
+              metalness={1}
+              roughness={0.15}
+              envMapIntensity={1.3}
+              side={THREE.DoubleSide}
               toneMapped={false}
             />
-          </Text3D>
-        </Center>
-      </group>
-
-      {/* chrome front */}
-      <Center>
-        <Text3D {...TEXT3D_PROPS}>
-          {"{alqode}"}
-          <meshStandardMaterial
-            color="#fdfdff"
-            metalness={1}
-            roughness={0.03}
-            envMapIntensity={1.6}
-          />
-        </Text3D>
+          </mesh>
+        </group>
       </Center>
     </group>
   );
 }
 
 export default function HeroLab() {
-  const greenRef = useRef<Mesh>(null);
-  // Mount the composer only after the green mesh ref is populated, so
-  // SelectiveBloom's selection is never null on init.
+  const bracketRef = useRef<Mesh>(null);
   const [composerReady, setComposerReady] = useState(false);
   useEffect(() => setComposerReady(true), []);
 
   return (
     <Canvas
       camera={{ position: [0, 0, 8.2], fov: 30 }}
-      gl={{ antialias: true }}
+      gl={{ antialias: true, preserveDrawingBuffer: true }}
       dpr={[1, 2]}
     >
       <color attach="background" args={["#070708"]} />
       <Suspense fallback={null}>
-        <Wordmark greenRef={greenRef} />
+        <Wordmark bracketRef={bracketRef} />
         <StudioEnv />
       </Suspense>
       <directionalLight position={[4, 6, 5]} intensity={0.4} />
-      {composerReady && greenRef.current && (
+      {composerReady && bracketRef.current && (
         <EffectComposer disableNormalPass>
           <SelectiveBloom
-            selection={[greenRef.current]}
+            selection={[bracketRef.current]}
             lights={[]}
-            intensity={1.8}
-            luminanceThreshold={0.15}
+            intensity={1.6}
+            luminanceThreshold={0.1}
             luminanceSmoothing={0.3}
-            radius={0.55}
+            radius={0.6}
             mipmapBlur
           />
           <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
