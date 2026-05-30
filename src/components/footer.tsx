@@ -36,7 +36,7 @@ export function Footer() {
           </div>
 
           {/* Center: Navigate */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-0.5">
             <span className="text-[10px] text-muted font-semibold tracking-wider uppercase mb-1">
               Navigate
             </span>
@@ -45,7 +45,7 @@ export function Footer() {
                 key={link}
                 href={`#${link.toLowerCase()}`}
                 onClick={(e) => handleNavClick(e, link)}
-                className="text-xs text-white hover:text-terminal transition-colors"
+                className="inline-flex items-center min-h-[24px] py-1 text-xs text-white hover:text-terminal transition-colors"
               >
                 {link}
               </a>
@@ -53,7 +53,7 @@ export function Footer() {
           </div>
 
           {/* Right: Connect with brand icons */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-0.5">
             <span className="text-[10px] text-muted font-semibold tracking-wider uppercase mb-1">
               Connect
             </span>
@@ -65,7 +65,7 @@ export function Footer() {
                   href={link.href}
                   target={link.href.startsWith("mailto:") ? undefined : "_blank"}
                   rel={link.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-                  className="inline-flex items-center gap-2 text-xs text-white hover:text-terminal transition-colors"
+                  className="inline-flex items-center gap-2 min-h-[24px] py-1 text-xs text-white hover:text-terminal transition-colors"
                 >
                   {Icon && <Icon size={13} className="opacity-70" />}
                   {link.label}

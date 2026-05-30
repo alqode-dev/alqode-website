@@ -13,7 +13,7 @@ const config: Config = {
         "live-amber": "#FFB81C",
         "signal-red": "#FF4D4D",
         bone: "#F5F1EA",
-        muted: "#666666",
+        muted: "#8a8a8a",
         "light-bg": "#f5f5f0",
         "light-muted": "#444444",
         "card-bg": "#161616",

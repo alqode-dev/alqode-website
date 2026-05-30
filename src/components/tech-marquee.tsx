@@ -39,7 +39,7 @@ export function TechMarquee() {
                 <span
                   key={tech}
                   className="inline-flex items-center gap-2 mx-5 md:mx-7 text-xs md:text-sm whitespace-nowrap"
-                  style={{ color: textTint || "#666" }}
+                  style={{ color: textTint || "#8a8a8a" }}
                 >
                   {Icon && (
                     <Icon

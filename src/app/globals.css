@@ -203,3 +203,211 @@
 .client-logo-link:hover {
   color: var(--brand-color);
 }
+
+/* ======================================================================
+   v4 "MOLTEN CAST" — scroll-locked canvas hero
+   The video IS the texture: no dot-grid, no scanline, no Instrument Serif.
+   ====================================================================== */
+.mc-root {
+  background: #000;
+  color: #fff;
+}
+
+.mc-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-snap);
+}
+.mc-canvas[data-ready="true"] {
+  opacity: 1;
+}
+
+/* Soft legibility wash — darken edges + bottom, never a visible texture. */
+.mc-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, transparent 22%,
+      transparent 60%, rgba(0, 0, 0, 0.6) 100%),
+    radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+.mc-main {
+  position: relative;
+  z-index: 2;
+}
+
+.mc-panel {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1.75rem, 6vw, 7rem);
+}
+.mc-panel--hero {
+  justify-content: flex-end;
+  gap: 1.5rem;
+}
+.mc-panel--center {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.mc-panel--climax {
+  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
+}
+
+/* --- Reveal primitive --- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.9s var(--ease-snap), transform 0.9s var(--ease-snap);
+}
+[data-reveal].is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- Typography --- */
+.mc-kicker {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.mc-h1 {
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  line-height: 0.92;
+  font-size: clamp(2.75rem, 11vw, 9rem);
+  max-width: 14ch;
+}
+.mc-accent-line {
+  color: #10b981;
+}
+
+.mc-lede {
+  max-width: 46ch;
+  font-size: clamp(0.95rem, 1.7vw, 1.25rem);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.mc-scroll {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  animation: mc-bob 2.2s var(--ease-snap) infinite;
+}
+@keyframes mc-bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.4; }
+  50% { transform: translateX(-50%) translateY(6px); opacity: 0.85; }
+}
+
+/* --- Crafts list --- */
+.mc-crafts {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.1rem, 1vw, 0.4rem);
+}
+.mc-crafts li {
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  font-size: clamp(2rem, 8vw, 6rem);
+  color: rgba(255, 255, 255, 0.92);
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.6em;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s var(--ease-snap), transform 0.7s var(--ease-snap);
+}
+.mc-crafts.is-in li {
+  opacity: 1;
+  transform: translateY(0);
+}
+.mc-craft-num {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.32em;
+  letter-spacing: 0.1em;
+  color: #10b981;
+  transform: translateY(-0.4em);
+}
+
+/* --- Statement + climax headings --- */
+.mc-h2 {
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  line-height: 0.95;
+  font-size: clamp(2.25rem, 8vw, 6.5rem);
+  max-width: 16ch;
+}
+.mc-h2--money {
+  font-size: clamp(2rem, 6.5vw, 5rem);
+  max-width: 18ch;
+  margin: 0 auto;
+}
+
+.mc-climax-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding-bottom: clamp(1rem, 4vw, 3rem);
+}
+
+.mc-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: #10b981;
+  color: #06281d;
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+  padding: 1rem 1.75rem;
+  border-radius: 999px;
+  transition: transform 0.35s var(--ease-snap), gap 0.35s var(--ease-snap),
+    box-shadow 0.35s var(--ease-snap);
+  box-shadow: 0 0 0 rgba(16, 185, 129, 0);
+}
+.mc-cta:hover {
+  transform: translateY(-2px);
+  gap: 1.1rem;
+  box-shadow: 0 14px 40px -10px rgba(16, 185, 129, 0.55);
+}
+
+@media (max-width: 767px) {
+  .mc-panel--hero {
+    padding-bottom: 5.5rem;
+  }
+  .mc-lede {
+    max-width: 36ch;
+  }
+}

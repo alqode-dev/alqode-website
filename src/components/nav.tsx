@@ -53,7 +53,7 @@ export function Nav() {
       >
         <div className="container-width flex items-center justify-between px-5 py-3 md:px-8">
           {/* Logo */}
-          <a href="#" className="text-base font-bold" aria-label="Home">
+          <a href="#" className="text-base font-bold">
             <span className="text-terminal">{"{"}</span>
             alqode
             <span className="text-terminal">{"}"}</span>

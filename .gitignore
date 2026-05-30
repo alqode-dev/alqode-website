@@ -49,3 +49,6 @@ wireframe.jsx
 _out.txt
 _pn.py
 _ul
+.playwright-mcp/
+.planning/v4-assets/devserver.log
+.planning/v4-assets/probe.mjs

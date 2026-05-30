@@ -149,7 +149,7 @@ function DeploymentCard({
                 style={
                   colorPill
                     ? { color, borderColor: `${color}55` }
-                    : { color: "#666", borderColor: "#2a2a2a" }
+                    : { color: "#8a8a8a", borderColor: "#2a2a2a" }
                 }
               >
                 {Icon && (
