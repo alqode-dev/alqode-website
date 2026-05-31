@@ -26,10 +26,12 @@ That is what the reference sites (itsoffbrand, funtech, lusion, obys) win on.
 ## PHASE 2.5 — Hamdaan's creative notes (2026-05-31, rated the site 5/10 "potential")
 - [x] Interactive "part the chrome" on cursor — pull apart, flows back (his lead idea)
 - [x] Drop "one person / studio of one" framing (limits perceived capability)
-- [ ] STUDIO section: a cursive "snake" line weaving from left, under the paragraph,
-      back up between the two text columns, out to the next section — threads the
-      eye AND carries the tech we use (Meta, Airtable, n8n, Supabase, etc.) that
-      the old site had as a horizontal logo marquee. Replaces that marquee.
+- [x] STUDIO section snake line (fd6a053): chrome-silver thread drawn on scroll
+      (ScrollTrigger scrub), weaves low under the left column + rises through the
+      gutter between columns; 9 tech logos (Next/React/TS/Python/n8n/Supabase/
+      Airtable/Meta/Woo) ignite to brand colour as the comet head passes. Replaces
+      the v3.1 marquee. Desktop overlay + mobile in-flow band (no text overlap).
+      Verified 1440 + 390, 0 errors, tsc green.
 - [ ] Differentiate section LAYOUTS: "Six layers" and "Live in production" currently
       look identical (numbered list + heading). Give each its own composition.
 - [ ] Replace the plain "Tell me what should run itself" ending with an INTERACTIVE
