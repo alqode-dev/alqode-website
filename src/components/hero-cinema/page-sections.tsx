@@ -66,17 +66,18 @@ export function PageSections() {
           data-reveal
           className="reveal mt-8 max-w-[16ch] text-balance font-sans text-[clamp(2rem,5.5vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.03em]"
         >
-          One person. The whole stack.
+          The whole stack, in house.
         </h2>
         <div className="mt-10 grid gap-8 md:grid-cols-[1fr_minmax(0,34ch)] md:gap-16">
           <p
             data-reveal
             className="reveal max-w-[42ch] text-pretty text-[clamp(1.05rem,1.6vw,1.35rem)] leading-relaxed text-white/70"
           >
-            <Mark /> is a studio of one in Cape Town, building for South Africa and the
-            UAE. Brand, web, commerce, motion, automation, software, from the first
-            sketch to the system that runs in production. No handoffs, no agency
-            overhead, no middle layer between the idea and the person building it.
+            <Mark /> is a digital studio in Cape Town, building for South Africa and
+            the UAE. Brand, web, commerce, motion, automation, software, from the
+            first sketch to the system that runs in production. Every layer under one
+            roof, no handoffs, no agency overhead, no middle layer between the idea
+            and the people building it.
           </p>
           <p
             data-reveal

@@ -33,6 +33,8 @@ const view = {
   my: 0, // cursor y, -1..1 (smoothed)
   mxT: 0, // cursor x target
   myT: 0, // cursor y target
+  active: 0, // 1 while the pointer is live over the hero (smoothed)
+  activeT: 0, // target for active
 };
 
 const smoothstep = (a: number, b: number, x: number) => {
@@ -137,9 +139,22 @@ function HeroMesh() {
     view.mx += (view.mxT - view.mx) * k;
     view.my += (view.myT - view.my) * k;
 
+    view.active += (view.activeT - view.active) * k;
+
     const p = view.p;
     u.uMelt.value = THREE.MathUtils.clamp(1 - p / 0.7, 0, 1);
     u.uIgnite.value = smoothstep(0.72, 0.92, p);
+
+    // cursor in object space → "part the metal". Full strength on the solid
+    // logo, fades out while it is still molten so it never fights the melt.
+    const cam = state.camera as THREE.PerspectiveCamera;
+    const halfH = Math.tan((cam.fov * Math.PI) / 360) * cam.position.z;
+    const aspect = state.size.width / state.size.height;
+    const wx = view.mx * halfH * aspect + cam.position.x;
+    const wy = -view.my * halfH + cam.position.y;
+    u.uCursor.value.set(wx / s, wy / s, 0);
+    const solid = 1 - smoothstep(0, 0.5, u.uMelt.value);
+    u.uPush.value = size.y * 0.12 * solid * view.active;
 
     if (group.current) {
       // subtle cursor tilt, capped small so it never looks frantic
@@ -173,14 +188,15 @@ function HeroMesh() {
                     vec3 mRef = abs(objectNormal.y) > 0.99 ? vec3(1.0,0.0,0.0) : vec3(0.0,1.0,0.0);
                     vec3 mTan = normalize(cross(objectNormal, mRef));
                     vec3 mBit = normalize(cross(objectNormal, mTan));
-                    vec3 mP0 = meltDisplace(position, objectNormal);
+                    vec3 mP0 = displace(position, objectNormal);
                     vec3 meltPos = mP0;
-                    if (uMelt > 0.0001) {
-                      vec3 mPt = meltDisplace(position + mTan*uEps, objectNormal);
-                      vec3 mPb = meltDisplace(position + mBit*uEps, objectNormal);
+                    float act = max(uMelt, uPush * 0.02);
+                    if (act > 0.0001) {
+                      vec3 mPt = displace(position + mTan*uEps, objectNormal);
+                      vec3 mPb = displace(position + mBit*uEps, objectNormal);
                       vec3 nn = normalize(cross(mPt - mP0, mPb - mP0));
                       if (dot(nn, objectNormal) < 0.0) nn = -nn;
-                      objectNormal = normalize(mix(objectNormal, nn, clamp(uMelt*1.5, 0.0, 1.0)));
+                      objectNormal = normalize(mix(objectNormal, nn, clamp(max(uMelt*1.5, uPush*0.05), 0.0, 1.0)));
                     }
                     `
                   )
@@ -258,8 +274,13 @@ export default function CinemaHero() {
     const onMove = (e: PointerEvent) => {
       view.mxT = (e.clientX / window.innerWidth) * 2 - 1;
       view.myT = (e.clientY / window.innerHeight) * 2 - 1;
+      view.activeT = 1;
+    };
+    const onLeave = () => {
+      view.activeT = 0;
     };
     window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerleave", onLeave);
 
     const tick = () => {
       const el = trackRef.current;
@@ -284,6 +305,7 @@ export default function CinemaHero() {
     raf = requestAnimationFrame(tick);
     return () => {
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerleave", onLeave);
       cancelAnimationFrame(raf);
     };
   }, []);
@@ -320,7 +342,7 @@ export default function CinemaHero() {
               <span className="text-[#10b981]">{"}"}</span>
             </div>
             <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.28em] text-white/40">
-              Studio of one
+              Digital studio
             </div>
           </div>
 
