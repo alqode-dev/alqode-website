@@ -157,8 +157,8 @@ function HeroMesh() {
             <meshStandardMaterial
               vertexColors
               metalness={1}
-              roughness={0.022}
-              envMapIntensity={1.55}
+              roughness={0.03}
+              envMapIntensity={1.05}
               onBeforeCompile={(shader) => {
                 Object.assign(shader.uniforms, uniforms.current);
                 shader.vertexShader = shader.vertexShader
@@ -221,15 +221,15 @@ function Scene() {
   useEffect(() => setMounted(true), []);
   return (
     <>
-      <color attach="background" args={["#060607"]} />
-      <directionalLight position={[4, 6, 5]} intensity={0.4} />
+      <color attach="background" args={["#040405"]} />
+      <directionalLight position={[4, 6, 5]} intensity={0.22} />
       <Suspense fallback={null}>
         <HeroMesh />
         <StudioEnv />
         <Rig />
         {mounted && (
           <EffectComposer disableNormalPass>
-            <Bloom intensity={0.6} luminanceThreshold={0.82} luminanceSmoothing={0.2} radius={0.62} mipmapBlur />
+            <Bloom intensity={0.5} luminanceThreshold={0.86} luminanceSmoothing={0.18} radius={0.6} mipmapBlur />
             <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
           </EffectComposer>
         )}
@@ -286,7 +286,7 @@ export default function CinemaHero() {
   }, []);
 
   return (
-    <div ref={trackRef} style={{ height: `${SCROLL_VH}vh`, position: "relative" }} className="bg-[#060607]">
+    <div ref={trackRef} style={{ height: `${SCROLL_VH}vh`, position: "relative" }} className="bg-[#040405]">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         <Canvas
           camera={{ position: [0, 0, 9], fov: 30 }}
@@ -296,67 +296,103 @@ export default function CinemaHero() {
           <Scene />
         </Canvas>
 
+        {/* cinematic vignette — sinks the edges into shadow */}
+        <div
+          className="pointer-events-none absolute inset-0 z-10"
+          style={{
+            background:
+              "radial-gradient(120% 90% at 50% 42%, transparent 38%, rgba(0,0,0,0.5) 78%, rgba(0,0,0,0.82) 100%)",
+          }}
+        />
         {/* film grain */}
         <div className="grain pointer-events-none absolute inset-0 z-10" />
 
-        {/* ---- copy layers (all centered, cross-fade by scroll) ---- */}
+        {/* ===== persistent editorial frame (corner furniture) ===== */}
+        <div className="pointer-events-none absolute inset-0 z-30 select-none">
+          {/* top-left: mark + descriptor */}
+          <div className="absolute left-6 top-6 md:left-10 md:top-9">
+            <div className="font-sans text-lg font-semibold tracking-tight text-white">
+              <span className="text-[#10b981]">{"{"}</span>
+              alqode
+              <span className="text-[#10b981]">{"}"}</span>
+            </div>
+            <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.28em] text-white/40">
+              Studio of one
+            </div>
+          </div>
+
+          {/* top-right: place */}
+          <div className="absolute right-6 top-6 text-right md:right-10 md:top-9">
+            <div className="font-mono text-[10px] uppercase leading-relaxed tracking-[0.28em] text-white/40">
+              Cape Town
+              <br />
+              SA &amp; UAE
+            </div>
+          </div>
+
+          {/* bottom-right: rotated edge label */}
+          <div className="absolute bottom-28 right-5 hidden md:block">
+            <span className="block origin-bottom-right rotate-90 font-mono text-[10px] uppercase tracking-[0.3em] text-white/30">
+              Real-time · WebGL
+            </span>
+          </div>
+        </div>
+
+        {/* ===== scroll-driven copy (z-20, behind the frame furniture) ===== */}
         <div className="pointer-events-none absolute inset-0 z-20">
-          {/* A — opening statement */}
+          {/* A — opening headline, anchored TOP-LEFT (asymmetric) */}
           <div
             ref={layerA}
-            className="absolute inset-x-0 top-[12%] flex flex-col items-center px-6 text-center"
+            className="absolute left-6 top-[18%] max-w-[18ch] md:left-10 lg:left-16"
           >
-            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-white/45">
-              Cape Town, South Africa and UAE
-            </span>
-            <h1 className="mt-5 font-sans text-[clamp(2.6rem,8vw,6.5rem)] font-bold leading-[0.95] tracking-tight text-white">
+            <h1 className="text-balance font-sans text-[clamp(2.4rem,6.4vw,5.25rem)] font-bold leading-[0.92] tracking-[-0.03em] text-white">
               One builder.
               <br />
               Every layer.
             </h1>
           </div>
 
-          {/* B — the crafts */}
+          {/* B — the crafts, bottom-left rail */}
           <div
             ref={layerB}
-            className="absolute inset-x-0 bottom-[12%] flex flex-wrap items-center justify-center gap-x-8 gap-y-2 px-6 text-center opacity-0"
+            className="absolute bottom-[12%] left-6 flex max-w-md flex-wrap gap-x-6 gap-y-1 opacity-0 md:left-10 lg:left-16"
           >
             {["Brand", "Web", "Commerce", "Motion", "Automation", "Software"].map((c) => (
               <span
                 key={c}
-                className="font-sans text-[clamp(1.1rem,2.4vw,2rem)] font-medium tracking-tight text-white/70"
+                className="font-sans text-[clamp(1rem,1.8vw,1.4rem)] font-medium tracking-tight text-white/65"
               >
                 {c}
               </span>
             ))}
           </div>
 
-          {/* C — payoff + CTA (appears once the metal has cast + ignited) */}
+          {/* C — payoff + CTA, bottom-left (appears once cast + ignited) */}
           <div
             ref={layerC}
-            className="pointer-events-none absolute inset-x-0 bottom-[10%] flex flex-col items-center px-6 text-center opacity-0"
+            className="absolute bottom-[11%] left-6 max-w-xl opacity-0 md:left-10 lg:left-16"
           >
-            <p className="max-w-2xl font-sans text-[clamp(1.05rem,2.6vw,1.6rem)] font-medium leading-snug text-white/90">
+            <p className="text-balance font-sans text-[clamp(1.15rem,2.6vw,1.9rem)] font-semibold leading-[1.12] tracking-[-0.02em] text-white">
               We don&apos;t build websites. We build machines that make you money.
             </p>
             <a
               href={waUrl("v4_hero")}
               target="_blank"
               rel="noopener noreferrer"
-              className="pointer-events-auto mt-7 inline-flex items-center gap-2 rounded-full bg-[#10b981] px-7 py-3.5 font-sans text-sm font-semibold text-[#060607] transition-transform duration-300 ease-out hover:scale-[1.04]"
+              className="pointer-events-auto mt-6 inline-flex items-center gap-2 rounded-full bg-[#10b981] px-7 py-3.5 font-sans text-sm font-semibold text-[#040405] transition-transform duration-300 ease-out hover:scale-[1.04]"
             >
               Start on WhatsApp
               <span aria-hidden>→</span>
             </a>
           </div>
 
-          {/* scroll hint */}
+          {/* scroll hint — bottom-right, fades on scroll */}
           <div
             ref={scrollHint}
-            className="absolute inset-x-0 bottom-7 flex flex-col items-center gap-2 text-white/40"
+            className="absolute bottom-7 right-6 flex flex-col items-center gap-2 text-white/35 md:right-10"
           >
             <span className="font-mono text-[10px] uppercase tracking-[0.3em]">Scroll</span>
-            <span className="h-8 w-px animate-pulse bg-white/30" />
+            <span className="h-8 w-px animate-pulse bg-white/25" />
           </div>
         </div>
       </div>
