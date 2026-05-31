@@ -19,6 +19,16 @@ const config: Config = {
         "card-bg": "#161616",
         border: "#2a2a2a",
         "dim-bg": "#111111",
+        // v4 cinema palette: deep cool-black canvas, off-white ink (not harsh
+        // pure white), warmer muted, emerald brand accent rationed, ember as the
+        // single rare warm note echoing the chrome rim.
+        "v4-bg": "#060708",
+        "v4-bg-2": "#0b0d10",
+        "v4-ink": "#ECEEF2",
+        "v4-muted": "#828a93",
+        "v4-faint": "#565d66",
+        "v4-accent": "#10b981",
+        "v4-ember": "#ff9742",
       },
       fontFamily: {
         sans: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
