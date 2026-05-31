@@ -50,6 +50,9 @@ uniform float uFreq;
 uniform float uFlow;
 uniform float uSag;
 uniform float uEps;
+uniform vec3 uCursor;   // pointer in object space (z ignored)
+uniform float uPush;    // part-the-metal strength (0 at rest)
+uniform float uReach;   // radius of pointer influence, object units
 
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x,289.0);}
 vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
