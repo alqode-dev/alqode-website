@@ -109,6 +109,19 @@ vec3 meltDisplace(vec3 pos, vec3 nrm){
   float d = fbm(pos * uFreq + vec3(0.0, 0.0, t));
   return pos + nrm * d * amp;
 }
+
+// Cursor "part the metal": near the pointer the chrome is pushed aside in-plane
+// and pops toward the viewer, so the wordmark separates where you touch and
+// flows back as the cursor moves on. Combined with the molten ripple.
+vec3 displace(vec3 pos, vec3 nrm){
+  vec3 p = meltDisplace(pos, nrm);
+  vec2 toC = pos.xy - uCursor.xy;
+  float dC = length(toC);
+  float infl = smoothstep(uReach, 0.0, dC) * uPush;
+  p.xy += normalize(toC + vec2(0.0001)) * infl;
+  p.z  += infl * 0.45;
+  return p;
+}
 `;
 
 function HeroMesh() {
@@ -128,6 +141,9 @@ function HeroMesh() {
     uSag: { value: 0 },
     uEps: { value: size.x * 0.01 },
     uStir: { value: 0 },
+    uCursor: { value: new THREE.Vector3(0, 0, 0) },
+    uPush: { value: 0 },
+    uReach: { value: size.x * 0.12 },
   });
 
   useFrame((state, dt) => {
