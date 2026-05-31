@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { PORTFOLIO, waUrl, SITE } from "@/lib/constants";
 import { BudgetSlider } from "./budget-slider";
+import { StudioSnakeLine } from "./studio-snake-line";
 
 /* Brand mark used inline in copy */
 function Mark() {
@@ -53,38 +54,41 @@ export function PageSections() {
 
   return (
     <main ref={ref} className="relative z-10 bg-v4-bg text-v4-ink">
-      {/* ===== MANIFESTO ===== */}
-      <section className="mx-auto max-w-[1400px] px-6 py-[18vh] md:px-10 lg:px-16">
-        <p
-          data-reveal
-          className="reveal max-w-[20ch] font-mono text-[11px] uppercase tracking-[0.3em] text-v4-faint"
-        >
-          The studio
-        </p>
-        <h2
-          data-reveal
-          className="reveal mt-8 max-w-[16ch] text-balance font-sans text-[clamp(2rem,5.5vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.03em] text-white"
-        >
-          The whole stack, in house.
-        </h2>
-        <div className="mt-10 grid gap-8 md:grid-cols-[1fr_minmax(0,34ch)] md:gap-16">
+      {/* ===== MANIFESTO + STUDIO SNAKE LINE ===== */}
+      <section className="relative overflow-hidden px-6 pb-[14vh] pt-[18vh] md:pb-[40vh] md:px-10 lg:px-16">
+        <div className="relative z-10 mx-auto max-w-[1400px]">
           <p
             data-reveal
-            className="reveal max-w-[42ch] text-pretty text-[clamp(1.05rem,1.6vw,1.35rem)] leading-relaxed text-v4-muted"
+            className="reveal max-w-[20ch] font-mono text-[11px] uppercase tracking-[0.3em] text-v4-faint"
           >
-            <Mark /> is a digital studio in Cape Town, building for South Africa and
-            the UAE. Brand, web, commerce, motion, automation, software, from the
-            first sketch to the system that runs in production. Every layer under one
-            roof, no handoffs, no agency overhead, no middle layer between the idea
-            and the people building it.
+            The studio
           </p>
-          <p
+          <h2
             data-reveal
-            className="reveal self-end text-[clamp(1.05rem,1.6vw,1.35rem)] font-semibold leading-snug tracking-[-0.01em] text-v4-ink"
+            className="reveal mt-8 max-w-[16ch] text-balance font-sans text-[clamp(2rem,5.5vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.03em] text-white"
           >
-            We don&apos;t build websites. We build machines that make you money.
-          </p>
+            The whole stack, in house.
+          </h2>
+          <div className="mt-10 grid gap-8 md:grid-cols-[1fr_minmax(0,34ch)] md:gap-16">
+            <p
+              data-reveal
+              className="reveal max-w-[42ch] text-pretty text-[clamp(1.05rem,1.6vw,1.35rem)] leading-relaxed text-v4-muted"
+            >
+              <Mark /> is a digital studio in Cape Town, building for South Africa and
+              the UAE. Brand, web, commerce, motion, automation, software, from the
+              first sketch to the system that runs in production. Every layer under one
+              roof, no handoffs, no agency overhead, no middle layer between the idea
+              and the people building it.
+            </p>
+            <p
+              data-reveal
+              className="reveal self-end text-[clamp(1.05rem,1.6vw,1.35rem)] font-semibold leading-snug tracking-[-0.01em] text-v4-ink"
+            >
+              We don&apos;t build websites. We build machines that make you money.
+            </p>
+          </div>
         </div>
+        <StudioSnakeLine />
       </section>
 
       {/* ===== CAPABILITIES — tight numbered index ===== */}

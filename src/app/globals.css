@@ -455,3 +455,47 @@
     cursor: none !important;
   }
 }
+
+/* ===== v4 cinema: studio snake line — tech nodes strung on the drawn path ===== */
+.snake-node {
+  --lit: 0;
+  --brand: #ECEEF2;
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  transform: translate(-50%, -50%) scale(calc(0.8 + 0.2 * var(--lit)));
+}
+.snake-node__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, calc(0.05 + 0.12 * var(--lit)));
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--brand) calc(26% * var(--lit)), transparent),
+    transparent 68%
+  );
+  box-shadow: 0 0 calc(16px * var(--lit)) calc(2px * var(--lit))
+    color-mix(in srgb, var(--brand) 40%, transparent);
+}
+.snake-node__icon {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  color: var(--brand);
+  opacity: calc(0.42 + 0.58 * var(--lit));
+  filter: grayscale(calc(1 - var(--lit))) brightness(calc(0.6 + 0.4 * var(--lit)));
+}
+.snake-node__label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 4px);
+  white-space: nowrap;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--v4-muted, #828a93);
+  opacity: calc(var(--lit) * var(--lit));
+}
