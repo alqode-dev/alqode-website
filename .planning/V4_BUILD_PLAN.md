@@ -23,10 +23,30 @@ That is what the reference sites (itsoffbrand, funtech, lusion, obys) win on.
 - [x] Footer
 - [ ] LATER POLISH: section copy via humanizer, maybe project thumbnails on hover
 
+## PHASE 2.5 — Hamdaan's creative notes (2026-05-31, rated the site 5/10 "potential")
+- [x] Interactive "part the chrome" on cursor — pull apart, flows back (his lead idea)
+- [x] Drop "one person / studio of one" framing (limits perceived capability)
+- [ ] STUDIO section: a cursive "snake" line weaving from left, under the paragraph,
+      back up between the two text columns, out to the next section — threads the
+      eye AND carries the tech we use (Meta, Airtable, n8n, Supabase, etc.) that
+      the old site had as a horizontal logo marquee. Replaces that marquee.
+- [ ] Differentiate section LAYOUTS: "Six layers" and "Live in production" currently
+      look identical (numbered list + heading). Give each its own composition.
+- [ ] Replace the plain "Tell me what should run itself" ending with an INTERACTIVE
+      budget slider: drag R0 upward → at thresholds show what that buys (e.g. ~R1k
+      website, ~R5k full e-commerce, ~R8-9k full software). NOT anchored at R8000.
+      Examples of "what could run itself" animate in.
+- [ ] COLOR: revisit whether black/white/terminal-green reads as AI-slop. My take:
+      green #10b981 is the AI-default accent; keep green as the brand tie but make
+      it feel earned (rationed to brackets + one warm ember accent already in the
+      studio rim). Possible: shift green hue slightly off the default emerald, or
+      lean the warm accent harder. Hamdaan's call — it's brand identity.
+
 ## PHASE 3 — Choreography (the door — first impression, done once rooms exist)
 - [ ] Intro loader 0→100 that preloads the 3D, then a designed reveal into the hero
-- [ ] Scroll-reveal entrance motion across sections (GSAP, reduced-motion safe)
 - [ ] Hero headline entrance + refined scroll hint
+- [ ] OPEN Q for Hamdaan: hero headline still says "One builder" — change for
+      consistency with the dropped one-person framing?
 
 ## PHASE 4 — Mobile + perf + ship
 - [ ] Designed mobile (not a degraded fallback)
