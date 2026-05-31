@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { PORTFOLIO, waUrl, SITE } from "@/lib/constants";
+import { BudgetSlider } from "./budget-slider";
 
 /* Brand mark used inline in copy */
 function Mark() {
@@ -190,27 +191,11 @@ export function PageSections() {
             data-reveal
             className="reveal mt-8 max-w-[46ch] text-[clamp(1.05rem,1.6vw,1.35rem)] leading-relaxed text-v4-muted"
           >
-            Free mockup in 24 hours. A quote in one. You see what you are getting
-            before you pay a cent.
+            Move the slider. See what your budget actually builds. Then send it
+            straight to me.
           </p>
-          <div data-reveal className="reveal mt-12 flex flex-wrap items-center gap-4">
-            <a
-              href={waUrl("v4_start_primary", "Hi, I'd like to start a project with alqode")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-v4-accent px-8 py-4 font-sans text-sm font-semibold text-v4-bg transition-transform duration-300 ease-out hover:scale-[1.04]"
-            >
-              Start on WhatsApp
-              <span aria-hidden>→</span>
-            </a>
-            <a
-              href={waUrl("v4_mockup", "Hi, I'd like a free 24h mockup")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 px-8 py-4 font-sans text-sm font-semibold text-v4-ink transition-colors duration-300 hover:border-white/50"
-            >
-              Get a free mockup
-            </a>
+          <div data-reveal className="reveal">
+            <BudgetSlider />
           </div>
         </div>
       </section>
