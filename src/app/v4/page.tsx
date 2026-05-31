@@ -1,13 +1,20 @@
+import dynamic from "next/dynamic";
 import type { Metadata } from "next";
-import { MoltenCast } from "@/components/v4/molten-cast";
+
+const CinemaHero = dynamic(() => import("@/components/hero-cinema/cinema-hero"), {
+  ssr: false,
+});
 
 export const metadata: Metadata = {
   title: "alqode — One builder. Every layer.",
   description:
-    "A studio of one. Brand, web, commerce, motion, automation and software — cast from a single hand. We build machines that make you money.",
-  robots: { index: false, follow: false },
+    "Cape Town studio. We don't build websites, we build machines that make you money.",
 };
 
 export default function V4Page() {
-  return <MoltenCast />;
+  return (
+    <main className="bg-[#060607]">
+      <CinemaHero />
+    </main>
+  );
 }
