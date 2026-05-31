@@ -31,10 +31,12 @@ Live at route **`/v4`**.
 
 ## 3. EXACTLY WHERE WE ARE (end of session 3)
 
-- **Branch:** `v4-cinema`. **Head commit:** `59f6742` (handoff commit on top after
-  this file is committed). Working tree clean. main untouched.
-- **Dev server:** `npm run dev`. Floats ports (3000/3001/3002 by what's stale).
-  **Read the dev log for the actual port; do not assume.** Last ran on 3000.
+- **Branch:** `v4-cinema`. **Head commit:** `30360c8` (a docs commit lands on top
+  after this). Working tree clean. main untouched (20+ commits ahead, 0 behind).
+- **Build is GREEN:** `npx tsc --noEmit` exits 0. (It was failing at session end
+  until the final cleanup; see lesson 7.) `npm run dev` floats ports
+  (3000/3001/3002 by what's stale) — **read the dev log for the actual port; do
+  not assume.** Last ran on 3000.
 - **`/v4`** = `<Cursor/>` + `<CinemaHero/>` (WebGL hero) + `<PageSections/>` (page
   body). ~9000px tall.
 
@@ -166,8 +168,10 @@ Grain + reveal + cursor CSS in `src/app/globals.css`.
 **Brand asset** `public/brand/alqode-wordmark.svg` (from Space Grotesk Medium via
 Python fonttools — opentype.js gives NaN paths, don't use it).
 
-**Dead/lab routes (reference only, NOT the product):** `/v4-lab`, `/v4-melt`,
-`/v4-liquid`, `/v4-cast`, `/v4-morph`. The live hero is `cinema-hero.tsx`.
+**Only one v4 route exists: `/v4` (the product).** The old lab routes (`/v4-lab`,
+`/v4-melt`, `/v4-liquid`, `/v4-cast`, `/v4-morph`) and their components were deleted
+at the end of session 3 (dead, stale, and breaking the build). If you want to
+prototype a 3D variant again, make a fresh throwaway route; don't resurrect those.
 
 ## 7. HARD-WON LESSONS (do not relearn)
 
@@ -181,6 +185,12 @@ Python fonttools — opentype.js gives NaN paths, don't use it).
   `browser_console_messages` to a file, grep `ERROR: 0:` / `VALIDATE_STATUS`. The
   classic failure this session: uniform DECLARATIONS missing from NOISE_GLSL →
   "undeclared identifier" → shader won't compile → blank logo.
+- **`npm run dev` does NOT typecheck; `npm run build` does.** The dev server can run
+  perfectly green on screen while `tsc` / a Vercel build fails. Before any handoff
+  or deploy, run `npx tsc --noEmit` and make it exit 0. (At session-3 end this
+  caught a dead invalid prop `disableNormalPass` in the live hero + broken dead lab
+  files; both fixed/removed.) `next.config.mjs` has NO `ignoreBuildErrors`, so a
+  type error is a real deploy blocker.
 - **Lenis owns scroll** (global LenisProvider, layout.tsx). `window.scrollTo()` and
   synthetic WheelEvents are ignored. For real scroll QC use Playwright
   `browser_press_key` End/PageUp/Home (trusted), or `?p=` to freeze. For the real
