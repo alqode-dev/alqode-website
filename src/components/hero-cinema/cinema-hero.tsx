@@ -266,7 +266,7 @@ function Scene() {
         <StudioEnv />
         <Rig />
         {mounted && (
-          <EffectComposer disableNormalPass>
+          <EffectComposer>
             <Bloom intensity={0.5} luminanceThreshold={0.86} luminanceSmoothing={0.18} radius={0.6} mipmapBlur />
             <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
           </EffectComposer>
