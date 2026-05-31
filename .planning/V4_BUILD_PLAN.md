@@ -9,18 +9,19 @@ A one-screen WebGL hero is not the product. The product is the WHOLE page, in on
 dark editorial language, with choreography that makes every beat feel designed.
 That is what the reference sites (itsoffbrand, funtech, lusion, obys) win on.
 
-## PHASE 1 — Foundation + hero lock (do first; everything reuses it)
+## PHASE 1 — Foundation + hero lock (do first; everything reuses it) ✅ DONE (55d2235)
 - [x] Dark editorial palette + type scale already in Tailwind (void/terminal/white/muted)
-- [ ] Fix: brackets too light at the cast end → saturated green, not washed white
-- [ ] Global custom cursor (used by the whole page, so build before sections)
-- [ ] Shared section shell (max-width, rhythm, heading style) so sections are consistent
+- [x] Fix: brackets too light at the cast end → deeper saturated green ignite
+- [x] Global custom cursor (cursor.tsx) — inertial dot + ring, grows green on hover
+- [x] Section rhythm established in page-sections.tsx (max-w-1400, py-[14-20vh], border-t dividers)
 
-## PHASE 2 — The rooms (the page body, dark editorial, real content from constants.ts)
-- [ ] Manifesto: one strong statement (who alqode is — studio of one)
-- [ ] Capabilities: the six layers (Brand/Web/Commerce/Motion/Automation/Software), editorial, not cards
-- [ ] Work: real deployments (Masjid Notify, FAIDA, Bochi Croffle, Trophy SA) from PORTFOLIO
-- [ ] Start: the offer (free mockup 24h / quote 1h) + WhatsApp via waUrl()
-- [ ] Footer
+## PHASE 2 — The rooms (the page body, dark editorial) ✅ DONE (55d2235)
+- [x] Manifesto: "One person. The whole stack."
+- [x] Capabilities: "Six layers, one hand." numbered editorial list, not cards
+- [x] Work: "Live in production." real PORTFOLIO rows → live sites
+- [x] Start: CTA + free mockup, waUrl()
+- [x] Footer
+- [ ] LATER POLISH: section copy via humanizer, maybe project thumbnails on hover
 
 ## PHASE 3 — Choreography (the door — first impression, done once rooms exist)
 - [ ] Intro loader 0→100 that preloads the 3D, then a designed reveal into the hero
