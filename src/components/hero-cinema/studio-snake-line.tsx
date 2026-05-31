@@ -7,12 +7,21 @@ import {
   NextjsIcon,
   ReactIcon,
   TypeScriptIcon,
+  NodeIcon,
   PythonIcon,
-  N8nIcon,
+  TailwindIcon,
   SupabaseIcon,
   AirtableIcon,
-  MetaIcon,
+  N8nIcon,
+  VercelIcon,
+  GitHubIcon,
+  WordPressIcon,
   WooCommerceIcon,
+  MetaIcon,
+  WhatsAppIcon,
+  FigmaIcon,
+  FramerIcon,
+  GsapIcon,
   TECH_COLORS,
 } from "../tech-icons";
 
@@ -21,12 +30,12 @@ gsap.registerPlugin(useGSAP);
 type IconProps = { size?: number; style?: React.CSSProperties; className?: string };
 type Tech = { name: string; Icon: (p: IconProps) => JSX.Element };
 
-/* Desktop snake — enters low-left under the paragraph, climbs through the empty
-   gutter between the two text columns, crosses high above the payoff line, exits
-   right. The brand logos flow along it continuously, like a marquee on a curve. */
+/* Desktop snake — a real S: enters left, dips DOWN deep under the paragraph,
+   sweeps back UP to a high crest level with the heading, then comes down and
+   exits low on the far right. Logos flow along it continuously, off all text. */
 const VB = { w: 1200, h: 760 };
 const PATH_D =
-  "M -80 560 C 200 560 470 556 644 540 C 726 526 766 300 826 232 C 902 180 980 250 1060 250 C 1184 250 1284 360 1400 384";
+  "M -90 476 C 90 548 232 660 384 662 C 548 664 604 286 744 222 C 884 162 1008 280 1106 350 C 1246 492 1324 568 1460 612";
 
 /* Mobile snake — vertical serpentine down its own band below the stacked text. */
 const VB_M = { w: 420, h: 1240 };
@@ -37,15 +46,24 @@ const TECHS: Tech[] = [
   { name: "Next.js", Icon: NextjsIcon },
   { name: "React", Icon: ReactIcon },
   { name: "TypeScript", Icon: TypeScriptIcon },
+  { name: "Node.js", Icon: NodeIcon },
   { name: "Python", Icon: PythonIcon },
-  { name: "n8n", Icon: N8nIcon },
+  { name: "Tailwind", Icon: TailwindIcon },
   { name: "Supabase", Icon: SupabaseIcon },
   { name: "Airtable", Icon: AirtableIcon },
-  { name: "Meta", Icon: MetaIcon },
+  { name: "n8n", Icon: N8nIcon },
+  { name: "Vercel", Icon: VercelIcon },
+  { name: "GitHub", Icon: GitHubIcon },
+  { name: "WordPress", Icon: WordPressIcon },
   { name: "WooCommerce", Icon: WooCommerceIcon },
+  { name: "Meta", Icon: MetaIcon },
+  { name: "WhatsApp", Icon: WhatsAppIcon },
+  { name: "Figma", Icon: FigmaIcon },
+  { name: "Framer", Icon: FramerIcon },
+  { name: "GSAP", Icon: GsapIcon },
 ];
 
-const DURATION = 26; // seconds for one logo to travel the whole snake
+const DURATION = 34; // seconds for one logo to travel the whole snake
 
 export function StudioSnakeLine() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -102,7 +120,7 @@ export function StudioSnakeLine() {
     <div
       ref={rootRef}
       aria-hidden
-      className="pointer-events-none relative z-0 mt-4 h-[560px] w-full select-none md:absolute md:inset-0 md:mt-0 md:h-auto"
+      className="pointer-events-none relative z-0 mt-4 h-[640px] w-full select-none md:absolute md:inset-0 md:mt-0 md:h-auto"
     >
       {/* Desktop snake path */}
       <svg
@@ -167,7 +185,8 @@ export function StudioSnakeLine() {
             style={{ left: "-100%", top: "-100%", opacity: 0, ["--brand" as string]: brand }}
           >
             <span className="snake-node__ring" />
-            <tech.Icon size={22} className="snake-node__icon" />
+            <tech.Icon size={20} className="snake-node__icon" />
+            <span className="snake-node__label">{tech.name}</span>
           </div>
         );
       })}

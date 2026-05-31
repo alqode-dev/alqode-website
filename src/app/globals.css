@@ -469,19 +469,35 @@
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  /* solid dark centre hides the line behind the bubble, brand glow halo around it */
   background: radial-gradient(
     circle,
-    color-mix(in srgb, var(--brand) 16%, transparent),
-    transparent 70%
+    #090b0e 0,
+    #090b0e 52%,
+    color-mix(in srgb, var(--brand) 22%, transparent) 66%,
+    transparent 78%
   );
+  border: 1px solid color-mix(in srgb, var(--brand) 22%, rgba(255, 255, 255, 0.06));
+  box-shadow: 0 0 14px 1px color-mix(in srgb, var(--brand) 26%, transparent);
 }
 .snake-node__icon {
   position: absolute;
   inset: 0;
   margin: auto;
   color: var(--brand);
-  filter: drop-shadow(0 0 7px color-mix(in srgb, var(--brand) 45%, transparent));
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--brand) 40%, transparent));
+}
+.snake-node__label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 5px);
+  white-space: nowrap;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #9aa3ad;
 }
 .snake-flow {
   filter: drop-shadow(0 0 2px rgba(127, 136, 147, 0.35));
