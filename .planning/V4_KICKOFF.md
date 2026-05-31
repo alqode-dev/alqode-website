@@ -31,9 +31,11 @@ Live at route **`/v4`**.
 
 ## 3. EXACTLY WHERE WE ARE (end of session 3)
 
-- **Branch:** `v4-cinema`. **Head commit:** `30360c8` (a docs commit lands on top
-  after this). Working tree clean. main untouched (20+ commits ahead, 0 behind).
-- **Build is GREEN:** `npx tsc --noEmit` exits 0. (It was failing at session end
+- **Branch:** `v4-cinema`, ~24 commits ahead of `main`, 0 behind. Working tree was
+  clean at session end. Latest feature commit was the budget slider
+  (`v4: interactive budget explorer replaces the plain ending`); commits after it
+  are the build fix + docs. Run `git log --oneline -5` to see the exact head.
+- **Build is GREEN at session end:** `npx tsc --noEmit` exits 0. (It was failing
   until the final cleanup; see lesson 7.) `npm run dev` floats ports
   (3000/3001/3002 by what's stale) — **read the dev log for the actual port; do
   not assume.** Last ran on 3000.
