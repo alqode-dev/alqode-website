@@ -33,7 +33,6 @@ const view = {
   my: 0, // cursor y, -1..1 (smoothed)
   mxT: 0, // cursor x target
   myT: 0, // cursor y target
-  stir: 0, // cursor speed -> liquid agitation
 };
 
 const smoothstep = (a: number, b: number, x: number) => {
@@ -49,7 +48,6 @@ uniform float uFreq;
 uniform float uFlow;
 uniform float uSag;
 uniform float uEps;
-uniform float uStir;
 
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x,289.0);}
 vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
@@ -100,15 +98,14 @@ float fbm(vec3 p){
   v += 0.5 * snoise(p * 2.03 + 11.0);
   return v;
 }
+// GENTLE molten skin. Small surface ripple along the normal only — never a
+// position explosion. The logo stays readable at all times; it just looks like
+// liquid chrome settling, not a mesh tearing apart.
 vec3 meltDisplace(vec3 pos, vec3 nrm){
-  float t = uTime * (uFlow + uStir * 0.9);
-  float amp = uAmp * uMelt * (1.0 + uStir * 0.5);
+  float t = uTime * uFlow;
+  float amp = uAmp * uMelt;
   float d = fbm(pos * uFreq + vec3(0.0, 0.0, t));
-  vec3 displaced = pos + nrm * d * amp;
-  displaced.x += pos.x * 0.18 * uMelt;
-  displaced.y += uSag * uMelt;
-  displaced.y = mix(displaced.y, displaced.y * 0.5, uMelt);
-  return displaced;
+  return pos + nrm * d * amp;
 }
 `;
 
@@ -121,36 +118,34 @@ function HeroMesh() {
     uTime: { value: 0 },
     uMelt: { value: 1 },
     uIgnite: { value: 0 },
-    uAmp: { value: size.y * 0.55 },
-    uFreq: { value: 3.5 / size.x },
-    uFlow: { value: 0.5 },
-    uSag: { value: size.y * 0.16 },
-    uEps: { value: size.x * 0.004 },
+    // amp is a SMALL fraction of letter height — a molten ripple, not an
+    // explosion. (was size.y*0.55 ≈ 750u which tore the mesh into strings.)
+    uAmp: { value: size.y * 0.08 },
+    uFreq: { value: 2.2 / size.x },
+    uFlow: { value: 0.35 },
+    uSag: { value: 0 },
+    uEps: { value: size.x * 0.01 },
     uStir: { value: 0 },
   });
 
   useFrame((state, dt) => {
     const u = uniforms.current;
+    const k = Math.min(1, dt * 2.5); // shared damping (slow, calm)
     u.uTime.value = state.clock.elapsedTime;
 
-    // smooth cursor toward target + decay the stir
-    view.mx += (view.mxT - view.mx) * Math.min(1, dt * 4);
-    view.my += (view.myT - view.my) * Math.min(1, dt * 4);
-    view.stir += (0 - view.stir) * Math.min(1, dt * 2.2);
+    // smoothly ease cursor toward target — heavy damping, no jitter
+    view.mx += (view.mxT - view.mx) * k;
+    view.my += (view.myT - view.my) * k;
 
     const p = view.p;
     u.uMelt.value = THREE.MathUtils.clamp(1 - p / 0.7, 0, 1);
     u.uIgnite.value = smoothstep(0.72, 0.92, p);
-    u.uStir.value = THREE.MathUtils.clamp(view.stir, 0, 1.4);
 
     if (group.current) {
-      // cursor tilt — stronger while liquid, settles as it casts solid
-      const liquid = u.uMelt.value;
-      const tilt = 0.22 * (0.4 + liquid * 0.6);
-      group.current.rotation.y += (view.mx * tilt - group.current.rotation.y) * Math.min(1, dt * 3);
-      group.current.rotation.x += (-view.my * tilt * 0.6 - group.current.rotation.x) * Math.min(1, dt * 3);
-      // gentle constant breathing so reflections always move
-      group.current.position.y = Math.sin(state.clock.elapsedTime * 0.4) * 0.04;
+      // subtle cursor tilt, capped small so it never looks frantic
+      const tilt = 0.1;
+      group.current.rotation.y += (view.mx * tilt - group.current.rotation.y) * k;
+      group.current.rotation.x += (-view.my * tilt * 0.5 - group.current.rotation.x) * k;
     }
   });
 
@@ -258,11 +253,8 @@ export default function CinemaHero() {
       return v === null ? null : Math.min(1, Math.max(0, parseFloat(v)));
     })();
     const onMove = (e: PointerEvent) => {
-      const nx = (e.clientX / window.innerWidth) * 2 - 1;
-      const ny = (e.clientY / window.innerHeight) * 2 - 1;
-      view.stir = Math.min(1.4, view.stir + Math.abs(nx - view.mxT) * 6 + Math.abs(ny - view.myT) * 6);
-      view.mxT = nx;
-      view.myT = ny;
+      view.mxT = (e.clientX / window.innerWidth) * 2 - 1;
+      view.myT = (e.clientY / window.innerHeight) * 2 - 1;
     };
     window.addEventListener("pointermove", onMove);
 
