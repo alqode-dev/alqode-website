@@ -188,7 +188,7 @@ function Scene({ frozen }: { frozen: number | null }) {
         <MeltMesh frozen={frozen} />
         <StudioEnv />
         {mounted && (
-          <EffectComposer disableNormalPass>
+          <EffectComposer>
             {/* same recipe as the lab: bloom only the hottest chrome specular +
                 the green ignite, so liquid chrome reads identically to the solid */}
             <Bloom

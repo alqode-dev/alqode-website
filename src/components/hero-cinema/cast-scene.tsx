@@ -182,7 +182,7 @@ export default function CastScene() {
       </Suspense>
       <directionalLight position={[4, 6, 5]} intensity={0.4} />
       {ready && greenRef.current && (
-        <EffectComposer disableNormalPass>
+        <EffectComposer>
           <SelectiveBloom
             selection={[greenRef.current]}
             lights={[]}
