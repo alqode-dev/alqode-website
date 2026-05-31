@@ -1,0 +1,4 @@
+commit-exit=1
+a5b0b26 v4 hero: moody cinematic chrome + editorial composition (not centered in void)
+afd8113 v4 hero: kill the melt explosion + frantic cursor (calm molten chrome)
+81a6901 v4: real interactive scroll hero at /v4 (cast on scroll + cursor-reactive)

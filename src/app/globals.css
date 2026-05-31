@@ -430,3 +430,28 @@
 @media (prefers-reduced-motion: reduce) {
   .grain::after { animation: none; }
 }
+
+/* ===== v4 cinema: scroll reveal (visible by default, motion enhances) ===== */
+.reveal {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal].reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s var(--ease-out-quart), transform 0.7s var(--ease-out-quart);
+  }
+  [data-reveal][data-shown="true"].reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ===== v4 cinema: custom cursor hides native on fine-pointer devices ===== */
+@media (hover: hover) and (pointer: fine) {
+  html.v4-cursor,
+  html.v4-cursor * {
+    cursor: none !important;
+  }
+}

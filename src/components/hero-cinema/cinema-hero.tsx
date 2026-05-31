@@ -192,7 +192,10 @@ function HeroMesh() {
                     /* glsl */ `
                     #include <emissivemap_fragment>
                     float greenMask = smoothstep(0.15, 0.4, vColor.g - max(vColor.r, vColor.b));
-                    totalEmissiveRadiance += greenMask * uIgnite * vec3(0.04, 0.85, 0.55) * 2.6;
+                    // deep saturated terminal-green ignite (not washed mint): darken
+                    // the base metal of the brackets so the emissive reads as the color
+                    diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(0.1, 0.5, 0.32), greenMask * uIgnite);
+                    totalEmissiveRadiance += greenMask * uIgnite * vec3(0.02, 0.72, 0.42) * 4.2;
                     `
                   );
               }}
