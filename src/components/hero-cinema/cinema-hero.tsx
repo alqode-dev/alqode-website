@@ -389,7 +389,7 @@ export default function CinemaHero() {
             ref={layerA}
             className="absolute left-6 top-[18%] max-w-[18ch] md:left-10 lg:left-16"
           >
-            <h1 className="text-balance font-sans text-[clamp(2.4rem,6.4vw,5.25rem)] font-bold leading-[0.92] tracking-[-0.03em] text-white">
+            <h1 className="v4-hero-enter text-balance font-sans text-[clamp(2.4rem,6.4vw,5.25rem)] font-bold leading-[0.92] tracking-[-0.03em] text-white">
               Every layer.
               <br />
               One studio.

@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import type { Metadata } from "next";
 import { PageSections } from "@/components/hero-cinema/page-sections";
 import { Cursor } from "@/components/hero-cinema/cursor";
+import { IntroLoader } from "@/components/hero-cinema/intro-loader";
 
 const CinemaHero = dynamic(() => import("@/components/hero-cinema/cinema-hero"), {
   ssr: false,
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
 export default function V4Page() {
   return (
     <>
+      <IntroLoader />
       <Cursor />
       <CinemaHero />
       <PageSections />

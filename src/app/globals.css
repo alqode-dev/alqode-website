@@ -502,3 +502,74 @@
 .snake-flow {
   filter: drop-shadow(0 0 2px rgba(127, 136, 147, 0.35));
 }
+
+/* ===== v4 cinema: intro loader (front door) ===== */
+.v4-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #060708;
+  display: grid;
+  place-items: center;
+  transform: translateY(0);
+  transition: transform 1s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.v4-loader--done {
+  transform: translateY(-100.5%);
+  pointer-events: none;
+}
+.v4-loader__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.75rem, 2.5vw, 1.75rem);
+}
+.v4-loader__mark {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+  color: #eceef2;
+  opacity: 0.85;
+}
+.v4-loader__count {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 700;
+  font-size: clamp(3.5rem, 12vw, 9rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #eceef2;
+  font-variant-numeric: tabular-nums;
+}
+.v4-loader__bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.07);
+}
+.v4-loader__bar span {
+  display: block;
+  height: 100%;
+  transform-origin: left;
+  background: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+  transition: transform 0.2s linear;
+}
+
+/* hero headline entrance — visible by default (no-JS / reduced-motion safe),
+   choreographed only while JS drives the loader classes */
+@media (prefers-reduced-motion: no-preference) {
+  html.v4-loading .v4-hero-enter {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  html.v4-loaded .v4-hero-enter {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.9s var(--ease-out-quart) 0.15s,
+      transform 0.9s var(--ease-out-quart) 0.15s;
+  }
+}
