@@ -390,9 +390,9 @@ export default function CinemaHero() {
             className="absolute left-6 top-[18%] max-w-[18ch] md:left-10 lg:left-16"
           >
             <h1 className="text-balance font-sans text-[clamp(2.4rem,6.4vw,5.25rem)] font-bold leading-[0.92] tracking-[-0.03em] text-white">
-              One builder.
-              <br />
               Every layer.
+              <br />
+              One studio.
             </h1>
           </div>
 

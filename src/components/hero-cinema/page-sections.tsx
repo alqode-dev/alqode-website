@@ -245,6 +245,51 @@ export function PageSections() {
         </div>
       </section>
 
+      {/* ===== FOUNDER — face for trust ===== */}
+      <section className="border-t border-white/[0.06] px-6 py-[16vh] md:px-10 lg:px-16">
+        <div className="mx-auto max-w-[1400px]">
+          <p
+            data-reveal
+            className="reveal font-mono text-[11px] uppercase tracking-[0.3em] text-v4-faint"
+          >
+            Who you work with
+          </p>
+          <div className="mt-10 grid items-center gap-10 md:mt-12 md:grid-cols-[minmax(0,330px)_1fr] md:gap-16">
+            <div
+              data-reveal
+              className="reveal relative aspect-[4/5] overflow-hidden rounded-xl border border-white/10 bg-v4-bg-2"
+            >
+              <Image
+                src="/images/founder.jpg"
+                alt="Mohammed Hamdaan Dhaler, founder of alqode"
+                fill
+                sizes="(max-width: 768px) 100vw, 330px"
+                className="object-cover"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-v4-bg/55 via-transparent to-transparent" />
+              <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-white/[0.06]" />
+            </div>
+            <div data-reveal className="reveal">
+              <blockquote className="max-w-[20ch] text-balance font-sans text-[clamp(1.7rem,3.4vw,3rem)] font-bold leading-[1.08] tracking-[-0.025em] text-white">
+                Our job is to make you so successful,{" "}
+                <span className="text-v4-accent">your competitors run out of business.</span>
+              </blockquote>
+              <div className="mt-9 flex items-center gap-4">
+                <span className="h-px w-12 bg-white/20" />
+                <div>
+                  <p className="font-sans text-base font-semibold text-v4-ink">
+                    Mohammed Hamdaan Dhaler
+                  </p>
+                  <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.2em] text-v4-faint">
+                    Founder · Cape Town · building for SA + UAE
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ===== START / CTA ===== */}
       <section className="border-t border-white/[0.06] bg-v4-bg-2 px-6 py-[20vh] md:px-10 lg:px-16">
         <div className="mx-auto max-w-[1400px]">

@@ -187,8 +187,8 @@ export const PORTFOLIO = {
         "Full brand, site, and a custom game built into the experience. Every play feeds a loyalty database — driving revenue and the community that keeps it growing.",
       tags: ["Brand", "Game", "F&B"],
       tech: ["Next.js", "React", "Tailwind", "Vercel"],
-      image: "/images/bochi-cafe.webp",
-      fallbackImage: "/images/bochi.webp",
+      image: "/images/bochi-home.jpg",
+      fallbackImage: "/images/bochi-cafe.webp",
       url: "https://bochinsh.com",
     },
     {
