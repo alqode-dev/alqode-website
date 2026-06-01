@@ -136,9 +136,15 @@ export function PageSections() {
       {/* ===== CAPABILITIES — tight numbered index ===== */}
       <section className="border-t border-white/[0.06] bg-v4-bg-2 px-6 py-[14vh] md:px-10 lg:px-16">
         <div className="mx-auto max-w-[1400px]">
+          <p
+            data-reveal
+            className="reveal font-mono text-[11px] uppercase tracking-[0.3em] text-v4-faint"
+          >
+            What we do
+          </p>
           <h2
             data-reveal
-            className="reveal font-sans text-[clamp(1.6rem,3.4vw,2.8rem)] font-bold tracking-[-0.02em] text-white"
+            className="reveal mt-6 font-sans text-[clamp(1.6rem,3.4vw,2.8rem)] font-bold tracking-[-0.02em] text-white"
           >
             Six layers, one hand.
           </h2>
@@ -147,16 +153,28 @@ export function PageSections() {
               <li
                 key={c.k}
                 data-reveal
-                className="reveal group grid grid-cols-[3ch_1fr] items-baseline gap-x-6 border-b border-white/[0.08] py-6 md:grid-cols-[4ch_minmax(0,26ch)_1fr] md:gap-x-10 md:py-7"
+                className="reveal group relative -mx-3 grid grid-cols-[3ch_1fr] items-baseline gap-x-6 border-b border-white/[0.08] px-3 py-6 transition-colors duration-500 ease-snap hover:bg-white/[0.015] md:-mx-5 md:grid-cols-[4ch_minmax(0,26ch)_1fr] md:gap-x-10 md:px-5 md:py-7"
               >
+                {/* left accent bar grows on hover */}
+                <span
+                  aria-hidden
+                  className="absolute left-0 top-1/2 h-0 w-[2px] -translate-y-1/2 bg-v4-accent transition-all duration-500 ease-snap group-hover:h-[62%]"
+                />
                 <span className="font-mono text-xs text-v4-faint transition-colors duration-300 group-hover:text-v4-accent">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="font-sans text-[clamp(1.4rem,2.6vw,2.2rem)] font-semibold tracking-[-0.02em] text-v4-ink transition-colors duration-300 group-hover:text-v4-accent">
+                <span className="font-sans text-[clamp(1.4rem,2.6vw,2.2rem)] font-semibold tracking-[-0.02em] text-v4-ink transition-[color,transform] duration-300 ease-snap group-hover:translate-x-1 group-hover:text-v4-accent">
                   {c.k}
                 </span>
-                <span className="col-span-2 mt-2 max-w-[44ch] text-[0.98rem] leading-relaxed text-v4-muted md:col-span-1 md:mt-0">
+                <span className="col-span-2 mt-2 max-w-[44ch] text-[0.98rem] leading-relaxed text-v4-muted transition-colors duration-300 group-hover:text-v4-ink md:col-span-1 md:mt-0">
                   {c.d}
+                </span>
+                {/* hover arrow */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 font-mono text-base text-v4-accent opacity-0 transition-all duration-300 ease-snap group-hover:translate-x-1 group-hover:opacity-100 md:right-5 md:block"
+                >
+                  →
                 </span>
               </li>
             ))}
