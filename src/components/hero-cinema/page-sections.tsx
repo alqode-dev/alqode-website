@@ -5,6 +5,7 @@ import Image from "next/image";
 import { PORTFOLIO, waUrl, SITE } from "@/lib/constants";
 import { BudgetSlider } from "./budget-slider";
 import { StudioSnakeLine } from "./studio-snake-line";
+import { FounderOrbit } from "./founder-orbit";
 
 /* Brand mark used inline in copy */
 function Mark() {
@@ -245,31 +246,34 @@ export function PageSections() {
         </div>
       </section>
 
-      {/* ===== FOUNDER — face for trust ===== */}
-      <section className="border-t border-white/[0.06] px-6 py-[16vh] md:px-10 lg:px-16">
-        <div className="mx-auto max-w-[1400px]">
+      {/* ===== FOUNDER — face in the system (solar system) ===== */}
+      <section className="relative overflow-hidden border-t border-white/[0.06] bg-[#050608] px-6 py-[16vh] md:px-10 lg:px-16">
+        {/* faint starfield + deep-space vignette = its own universe */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.5]"
+          style={{
+            backgroundImage:
+              "radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.5), transparent), radial-gradient(1px 1px at 70% 65%, rgba(255,255,255,0.4), transparent), radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.35), transparent), radial-gradient(1px 1px at 85% 20%, rgba(255,255,255,0.4), transparent), radial-gradient(1.5px 1.5px at 55% 45%, rgba(16,185,129,0.4), transparent)",
+            backgroundSize: "auto",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_50%,transparent,rgba(5,6,8,0.85))]"
+        />
+        <div className="relative mx-auto max-w-[1400px]">
           <p
             data-reveal
             className="reveal font-mono text-[11px] uppercase tracking-[0.3em] text-v4-faint"
           >
             Who you work with
           </p>
-          <div className="mt-10 grid items-center gap-10 md:mt-12 md:grid-cols-[minmax(0,330px)_1fr] md:gap-16">
-            <div
-              data-reveal
-              className="reveal relative aspect-[4/5] overflow-hidden rounded-xl border border-white/10 bg-v4-bg-2"
-            >
-              <Image
-                src="/images/founder.jpg"
-                alt="Mohammed Hamdaan Dhaler, founder of alqode"
-                fill
-                sizes="(max-width: 768px) 100vw, 330px"
-                className="object-cover"
-              />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-v4-bg/55 via-transparent to-transparent" />
-              <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-white/[0.06]" />
+          <div className="mt-10 grid items-center gap-10 md:mt-12 md:grid-cols-2 md:gap-16">
+            <div data-reveal className="reveal order-1">
+              <FounderOrbit />
             </div>
-            <div data-reveal className="reveal">
+            <div data-reveal className="reveal order-2">
               <blockquote className="max-w-[20ch] text-balance font-sans text-[clamp(1.7rem,3.4vw,3rem)] font-bold leading-[1.08] tracking-[-0.025em] text-white">
                 Our job is to make you so successful,{" "}
                 <span className="text-v4-accent">your competitors run out of business.</span>
