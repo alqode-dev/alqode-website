@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { PORTFOLIO, waUrl, SITE } from "@/lib/constants";
 import { BudgetSlider } from "./budget-slider";
 import { StudioSnakeLine } from "./studio-snake-line";
@@ -48,6 +49,47 @@ const CAPABILITIES = [
   { k: "Automation", d: "n8n and WhatsApp pipelines that do the work while you sleep." },
   { k: "Software", d: "Custom tools and platforms when off-the-shelf will not cut it." },
 ];
+
+type Project = (typeof PORTFOLIO.projects)[number];
+
+/* Framed live screenshot for a Work row — tries image, then fallback, then a
+   branded placeholder if there is no shot yet (Trophy SA). */
+function ProjectVisual({ project }: { project: Project }) {
+  const [src, setSrc] = useState<string | null>(project.image);
+  const showImage = Boolean(src);
+
+  return (
+    <div className="group/vis relative aspect-[16/10] overflow-hidden rounded-xl border border-white/10 bg-v4-bg-2">
+      {showImage ? (
+        <Image
+          src={src as string}
+          alt={`${project.name} — live site`}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover object-top transition-transform duration-[900ms] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.05]"
+          onError={() =>
+            setSrc((cur) =>
+              cur === project.image && project.fallbackImage ? project.fallbackImage : null
+            )
+          }
+        />
+      ) : (
+        <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(120%_120%_at_30%_0%,#12161b_0%,#070809_70%)]">
+          <span className="font-sans text-[clamp(1.6rem,4vw,2.6rem)] font-bold tracking-[-0.03em] text-white/85">
+            {project.name}
+          </span>
+        </div>
+      )}
+      {/* depth + sheen */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-v4-bg/55 via-transparent to-transparent" />
+      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-white/[0.06]" />
+      {/* open affordance */}
+      <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-v4-accent/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-v4-bg opacity-0 translate-y-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+        Open ↗
+      </span>
+    </div>
+  );
+}
 
 export function PageSections() {
   const ref = useReveal();
@@ -137,7 +179,7 @@ export function PageSections() {
             </span>
           </div>
 
-          <div className="mt-16 flex flex-col gap-[12vh]">
+          <div className="mt-16 flex flex-col gap-[12vh] md:mt-24">
             {PORTFOLIO.projects.map((p, i) => {
               const right = i % 2 === 1;
               return (
@@ -147,34 +189,37 @@ export function PageSections() {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-reveal
-                  className={`reveal group block ${right ? "md:ml-auto md:text-right" : ""} max-w-[58ch]`}
+                  className="reveal group grid items-center gap-7 md:grid-cols-2 md:gap-14"
                 >
-                  <div
-                    className={`flex items-center gap-4 ${right ? "md:justify-end" : ""}`}
-                  >
-                    <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-v4-faint">
-                      {p.category === "community" ? "Community" : "Client"}
+                  {/* text column */}
+                  <div className={right ? "md:order-2" : ""}>
+                    <div className="flex items-center gap-4">
+                      <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-v4-faint">
+                        {p.category === "community" ? "Community" : "Client"}
+                      </span>
+                      <span className="h-px w-10 bg-white/15" />
+                      <span className="font-mono text-[11px] text-v4-faint">{p.deployedSince}</span>
+                    </div>
+                    <h3 className="mt-4 font-sans text-[clamp(2rem,4.6vw,3.6rem)] font-bold leading-[0.98] tracking-[-0.035em] text-v4-ink transition-colors duration-300 group-hover:text-v4-accent">
+                      {p.name}
+                    </h3>
+                    <p className="mt-4 text-[clamp(1.05rem,1.5vw,1.3rem)] font-medium leading-snug text-v4-ink">
+                      {p.result}
+                    </p>
+                    <p className="mt-3 max-w-[46ch] text-[0.98rem] leading-relaxed text-v4-muted">
+                      {p.description}
+                    </p>
+                    <span className="mt-6 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-v4-faint transition-colors duration-300 group-hover:text-v4-ink">
+                      Visit live site
+                      <span className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden>
+                        ↗
+                      </span>
                     </span>
-                    <span className="h-px w-10 bg-white/15" />
-                    <span className="font-mono text-[11px] text-v4-faint">{p.deployedSince}</span>
                   </div>
-                  <h3 className="mt-4 font-sans text-[clamp(2.2rem,6vw,4.6rem)] font-bold leading-[0.98] tracking-[-0.035em] text-v4-ink transition-colors duration-300 group-hover:text-v4-accent">
-                    {p.name}
-                  </h3>
-                  <p className="mt-4 text-[clamp(1.05rem,1.7vw,1.4rem)] font-medium leading-snug text-v4-ink">
-                    {p.result}
-                  </p>
-                  <p className="mt-3 max-w-[52ch] text-[0.98rem] leading-relaxed text-v4-muted">
-                    {p.description}
-                  </p>
-                  <span
-                    className={`mt-5 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-v4-faint transition-colors duration-300 group-hover:text-v4-ink ${right ? "md:flex-row-reverse" : ""}`}
-                  >
-                    Visit live site
-                    <span className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden>
-                      ↗
-                    </span>
-                  </span>
+                  {/* visual column */}
+                  <div className={right ? "md:order-1" : ""}>
+                    <ProjectVisual project={p} />
+                  </div>
                 </a>
               );
             })}
