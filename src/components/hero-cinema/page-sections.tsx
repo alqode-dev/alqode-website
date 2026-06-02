@@ -6,6 +6,7 @@ import { PORTFOLIO, waUrl, SITE } from "@/lib/constants";
 import { BudgetSlider } from "./budget-slider";
 import { StudioSnakeLine } from "./studio-snake-line";
 import { ControlCore } from "./control-core";
+import { CapabilityModules } from "./capability-modules";
 import { MachineSpine } from "./machine-spine";
 import { StatusReadout } from "./status-readout";
 
@@ -43,15 +44,6 @@ function useReveal() {
   }, []);
   return ref;
 }
-
-const CAPABILITIES = [
-  { k: "Brand", d: "Identity, logo, and the system that makes it recognisable anywhere." },
-  { k: "Web", d: "Sites and web apps on modern frameworks. Fast, custom, built to scale." },
-  { k: "Commerce", d: "Stores that convert. WooCommerce, payments, the full retail engine." },
-  { k: "Motion", d: "Real-time WebGL, animation, and the moments that make a brand stick." },
-  { k: "Automation", d: "n8n and WhatsApp pipelines that do the work while you sleep." },
-  { k: "Software", d: "Custom tools and platforms when off-the-shelf will not cut it." },
-];
 
 type Project = (typeof PORTFOLIO.projects)[number];
 
@@ -147,37 +139,7 @@ export function PageSections() {
           >
             Six layers, one hand.
           </h2>
-          <ul className="mt-12 border-t border-white/[0.08]">
-            {CAPABILITIES.map((c, i) => (
-              <li
-                key={c.k}
-                data-reveal
-                className="reveal group relative -mx-3 grid grid-cols-[3ch_1fr] items-baseline gap-x-6 border-b border-white/[0.08] px-3 py-6 transition-colors duration-500 ease-snap hover:bg-white/[0.015] md:-mx-5 md:grid-cols-[4ch_minmax(0,26ch)_1fr] md:gap-x-10 md:px-5 md:py-7"
-              >
-                {/* left accent bar grows on hover */}
-                <span
-                  aria-hidden
-                  className="absolute left-0 top-1/2 h-0 w-[2px] -translate-y-1/2 bg-v4-accent transition-all duration-500 ease-snap group-hover:h-[62%]"
-                />
-                <span className="font-mono text-xs text-v4-faint transition-colors duration-300 group-hover:text-v4-accent">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="font-sans text-[clamp(1.4rem,2.6vw,2.2rem)] font-semibold tracking-[-0.02em] text-v4-ink transition-[color,transform] duration-300 ease-snap group-hover:translate-x-1 group-hover:text-v4-accent">
-                  {c.k}
-                </span>
-                <span className="col-span-2 mt-2 max-w-[44ch] text-[0.98rem] leading-relaxed text-v4-muted transition-colors duration-300 group-hover:text-v4-ink md:col-span-1 md:mt-0">
-                  {c.d}
-                </span>
-                {/* hover arrow */}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 font-mono text-base text-v4-accent opacity-0 transition-all duration-300 ease-snap group-hover:translate-x-1 group-hover:opacity-100 md:right-5 md:block"
-                >
-                  →
-                </span>
-              </li>
-            ))}
-          </ul>
+          <CapabilityModules />
         </div>
       </section>
 
