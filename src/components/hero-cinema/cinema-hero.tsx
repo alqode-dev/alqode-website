@@ -246,7 +246,14 @@ function HeroMesh() {
 function Rig() {
   // subtle dolly-in as it casts + cursor parallax on the camera
   useFrame((state, dt) => {
-    const z = THREE.MathUtils.lerp(9.0, 7.6, smoothstep(0.2, 0.9, view.p));
+    const aspect = state.size.width / state.size.height;
+    // Portrait: the wordmark is wide, so pull the camera back far enough that the
+    // whole {alqode} fits the narrow viewport (no dolly, it would re-crop).
+    // Landscape/desktop: untouched — the dolly-in we love stays exactly as is.
+    const z =
+      aspect < 1
+        ? Math.min(30, 3.3 / (0.2679 * aspect))
+        : THREE.MathUtils.lerp(9.0, 7.6, smoothstep(0.2, 0.9, view.p));
     state.camera.position.z += (z - state.camera.position.z) * Math.min(1, dt * 2);
     state.camera.position.x += (view.mx * 0.5 - state.camera.position.x) * Math.min(1, dt * 2);
     state.camera.position.y += (view.my * 0.3 - state.camera.position.y) * Math.min(1, dt * 2);

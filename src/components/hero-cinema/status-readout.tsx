@@ -86,7 +86,7 @@ export function StatusReadout({
   return (
     <div
       ref={root}
-      className={`inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] ${className}`}
+      className={`flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[11px] uppercase tracking-[0.18em] sm:tracking-[0.22em] ${className}`}
     >
       <span className="text-v4-accent">▸</span>
       <span className="text-v4-faint">{label}</span>
