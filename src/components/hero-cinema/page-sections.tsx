@@ -5,7 +5,7 @@ import Image from "next/image";
 import { PORTFOLIO, waUrl, SITE } from "@/lib/constants";
 import { BudgetSlider } from "./budget-slider";
 import { StudioSnakeLine } from "./studio-snake-line";
-import { FounderOrbit } from "./founder-orbit";
+import { ControlCore } from "./control-core";
 import { MachineSpine } from "./machine-spine";
 import { StatusReadout } from "./status-readout";
 
@@ -248,38 +248,26 @@ export function PageSections() {
         </div>
       </section>
 
-      {/* ===== FOUNDER — face in the system (solar system) ===== */}
-      <section className="relative overflow-hidden border-t border-white/[0.06] bg-[#050608] px-6 py-[16vh] md:px-10 lg:px-16">
-        {/* faint starfield + deep-space vignette = its own universe */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.5]"
-          style={{
-            backgroundImage:
-              "radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.5), transparent), radial-gradient(1px 1px at 70% 65%, rgba(255,255,255,0.4), transparent), radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.35), transparent), radial-gradient(1px 1px at 85% 20%, rgba(255,255,255,0.4), transparent), radial-gradient(1.5px 1.5px at 55% 45%, rgba(16,185,129,0.4), transparent)",
-            backgroundSize: "auto",
-          }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_50%,transparent,rgba(5,6,8,0.85))]"
-        />
+      {/* ===== FOUNDER — THE CONTROL CORE (operator wired into the systems) ===== */}
+      <section className="machine-panel machine-edge relative overflow-hidden px-6 py-[16vh] md:px-10 lg:px-16">
         <div className="relative mx-auto max-w-[1400px]">
-          <p
-            data-reveal
-            className="reveal font-mono text-[11px] uppercase tracking-[0.3em] text-v4-faint"
-          >
-            Who you work with
-          </p>
+          <div data-reveal className="reveal">
+            <StatusReadout label="module.core" online="OPERATOR ONLINE" detail="one roof" />
+          </div>
           <div className="mt-10 grid items-center gap-10 md:mt-12 md:grid-cols-2 md:gap-16">
             <div data-reveal className="reveal order-1">
-              <FounderOrbit />
+              <ControlCore />
             </div>
             <div data-reveal className="reveal order-2">
               <blockquote className="max-w-[20ch] text-balance font-sans text-[clamp(1.7rem,3.4vw,3rem)] font-bold leading-[1.08] tracking-[-0.025em] text-white">
                 Our job is to make you so successful,{" "}
                 <span className="text-v4-accent">your competitors run out of business.</span>
               </blockquote>
+              <p className="mt-7 max-w-[40ch] text-[0.98rem] leading-relaxed text-v4-muted">
+                Every system you see routes through one person. No agency layers,
+                no handoffs, no junior on your account. The studio answers to you,
+                because it answers to me.
+              </p>
               <div className="mt-9 flex items-center gap-4">
                 <span className="h-px w-12 bg-white/20" />
                 <div>
