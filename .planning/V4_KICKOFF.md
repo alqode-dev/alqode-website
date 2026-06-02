@@ -3,7 +3,8 @@
 > Single entry point for a new session on the alqode v4 rebuild. Read this top to
 > bottom. Then the authoritative build spec **`.planning/V4_MACHINE_PLAN.md`**, then
 > the dated blocks in memory `MEMORY.md` for blow-by-blow. This doc is fully current
-> as of head `feb64e0` (2026-06-02).
+> current as of 2026-06-02. For the exact head, run `git log --oneline -1` on
+> `v4-cinema` (it was the "full session-4 handoff rewrite" commit at handoff).
 
 ---
 
@@ -43,7 +44,7 @@ good part) · Studio=SIGNAL FLOW (the snake) · Capabilities=MODULES powering on
 DEPLOYED UNITS (keep the screenshots) · Founder=CONTROL CORE (wired schematic — RIP OUT
 the current solar-system, it's a copy) · Budget=CONFIGURATOR console · Footer=STANDBY.
 
-## 3. EXACTLY WHERE WE ARE (head `feb64e0`, 2026-06-02)
+## 3. EXACTLY WHERE WE ARE (2026-06-02; `git log --oneline -1` for exact head)
 - Route **`/v4`** = `<IntroLoader/> + <Cursor/> + <CinemaHero/> (WebGL) + <PageSections/>`.
   Dev server floats ports — READ THE DEV LOG for the real port (last was 3001; stale
   servers may also sit on 3000). Build GREEN (`npx tsc --noEmit` exits 0).
