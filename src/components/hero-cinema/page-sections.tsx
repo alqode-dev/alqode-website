@@ -6,6 +6,8 @@ import { PORTFOLIO, waUrl, SITE } from "@/lib/constants";
 import { BudgetSlider } from "./budget-slider";
 import { StudioSnakeLine } from "./studio-snake-line";
 import { FounderOrbit } from "./founder-orbit";
+import { MachineSpine } from "./machine-spine";
+import { StatusReadout } from "./status-readout";
 
 /* Brand mark used inline in copy */
 function Mark() {
@@ -97,15 +99,13 @@ export function PageSections() {
 
   return (
     <main ref={ref} className="relative z-10 bg-v4-bg text-v4-ink">
+      <MachineSpine />
       {/* ===== MANIFESTO + STUDIO SNAKE LINE ===== */}
-      <section className="relative overflow-hidden px-6 pb-[14vh] pt-[18vh] md:pb-[40vh] md:px-10 lg:px-16">
+      <section className="machine-panel relative overflow-hidden px-6 pb-[14vh] pt-[18vh] md:pb-[40vh] md:px-10 lg:px-16">
         <div className="relative z-10 mx-auto max-w-[1400px]">
-          <p
-            data-reveal
-            className="reveal max-w-[20ch] font-mono text-[11px] uppercase tracking-[0.3em] text-v4-faint"
-          >
-            The studio
-          </p>
+          <div data-reveal className="reveal">
+            <StatusReadout label="module.studio" online="ONLINE" detail="every layer" />
+          </div>
           <h2
             data-reveal
             className="reveal mt-8 max-w-[16ch] text-balance font-sans text-[clamp(2rem,5.5vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.03em] text-white"
@@ -135,14 +135,12 @@ export function PageSections() {
       </section>
 
       {/* ===== CAPABILITIES — tight numbered index ===== */}
-      <section className="border-t border-white/[0.06] bg-v4-bg-2 px-6 py-[14vh] md:px-10 lg:px-16">
+      <section className="machine-panel machine-edge relative px-6 py-[14vh] md:px-10 lg:px-16">
         <div className="mx-auto max-w-[1400px]">
-          <p
-            data-reveal
-            className="reveal font-mono text-[11px] uppercase tracking-[0.3em] text-v4-faint"
-          >
-            What we do
-          </p>
+          <div data-reveal className="reveal">
+            <StatusReadout label="module.capabilities" online="ONLINE" detail="6 layers" />
+          </div>
+          <p className="sr-only">What we do</p>
           <h2
             data-reveal
             className="reveal mt-6 font-sans text-[clamp(1.6rem,3.4vw,2.8rem)] font-bold tracking-[-0.02em] text-white"
@@ -184,18 +182,22 @@ export function PageSections() {
       </section>
 
       {/* ===== WORK — large alternating editorial showcase (distinct from the index) ===== */}
-      <section className="border-t border-white/[0.06] px-6 py-[16vh] md:px-10 lg:px-16">
+      <section className="machine-panel machine-edge relative px-6 py-[16vh] md:px-10 lg:px-16">
         <div className="mx-auto max-w-[1400px]">
-          <div className="flex items-end justify-between gap-6">
+          <div data-reveal className="reveal">
+            <StatusReadout
+              label="module.work"
+              online="DEPLOYED"
+              detail={`${PORTFOLIO.projects.length} units live`}
+            />
+          </div>
+          <div className="mt-6 flex items-end justify-between gap-6">
             <h2
               data-reveal
               className="reveal max-w-[14ch] text-balance font-sans text-[clamp(1.8rem,4.4vw,3.4rem)] font-bold leading-[1.0] tracking-[-0.025em] text-white"
             >
               Shipped. Live. Earning.
             </h2>
-            <span className="reveal shrink-0 font-mono text-[11px] uppercase tracking-[0.28em] text-v4-faint">
-              {PORTFOLIO.projects.length} in production
-            </span>
           </div>
 
           <div className="mt-16 flex flex-col gap-[12vh] md:mt-24">
@@ -294,9 +296,12 @@ export function PageSections() {
         </div>
       </section>
 
-      {/* ===== START / CTA ===== */}
-      <section className="border-t border-white/[0.06] bg-v4-bg-2 px-6 py-[20vh] md:px-10 lg:px-16">
+      {/* ===== START / CTA — the configurator console ===== */}
+      <section className="machine-panel machine-edge machine-ember-rim relative px-6 py-[20vh] md:px-10 lg:px-16">
         <div className="mx-auto max-w-[1400px]">
+          <div data-reveal className="reveal mb-6">
+            <StatusReadout label="module.configurator" online="READY" detail="dial output" />
+          </div>
           <h2
             data-reveal
             className="reveal max-w-[18ch] text-balance font-sans text-[clamp(2.2rem,6vw,5rem)] font-bold leading-[1.0] tracking-[-0.035em] text-white"

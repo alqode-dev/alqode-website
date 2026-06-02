@@ -573,3 +573,80 @@
       transform 0.9s var(--ease-out-quart) 0.15s;
   }
 }
+
+/* ======================================================================
+   THE MACHINE — shared material language (v4)
+   Sections are dark brushed-metal panels with lit edges and, sparingly, one
+   warm ember heat-rim. Chrome is the raw stock; green means "powered".
+   ====================================================================== */
+
+/* Brushed-metal panel: layered cool-dark gradient + faint vertical machined
+   grain + a hairline top edge-light. Apply to a section instead of a flat bg. */
+.machine-panel {
+  position: relative;
+  background:
+    linear-gradient(180deg, #0c0f13 0%, #090b0f 52%, #06070a 100%);
+}
+.machine-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* machined vertical micro-grooves — only just perceptible */
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.014) 0,
+    rgba(255, 255, 255, 0.014) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.7;
+}
+/* lit top edge — the seam where a panel is machined onto the one above */
+.machine-edge {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.012);
+}
+/* single warm heat-rim, used at most once per panel (the ember signature) */
+.machine-ember-rim::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    60% 40% at 100% 0%,
+    rgba(255, 151, 66, 0.07),
+    transparent 60%
+  );
+}
+
+/* status dot — square pip that ignites green when its module powers on */
+.machine-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  background: #2b3138;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transition: background 0.5s var(--ease-snap), box-shadow 0.5s var(--ease-snap);
+}
+.machine-dot[data-on="true"] {
+  background: #10b981;
+  box-shadow:
+    0 0 8px 1px rgba(16, 185, 129, 0.7),
+    inset 0 0 0 1px rgba(174, 245, 216, 0.5);
+}
+
+/* a thin machined hairline used as a section divider seam */
+.machine-seam {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.09) 18%,
+    rgba(16, 185, 129, 0.22) 50%,
+    rgba(255, 255, 255, 0.09) 82%,
+    transparent
+  );
+}
