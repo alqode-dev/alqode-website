@@ -3,10 +3,21 @@
 import { useEffect, useRef, useState } from "react";
 import { useProgress } from "@react-three/drei";
 
-/* Front-door intro: a 0->100 count over the brand mark while the WebGL hero
-   preloads behind it, then a designed slide-away that reveals the hero. Adds
-   html.v4-loading on mount and html.v4-loaded on exit so the hero headline can
-   choreograph its own entrance off those classes (and stays visible without JS). */
+/* SYSTEM BOOT — the front door.
+   The machine powers up: terminal boot lines print as the power level climbs
+   0->100 while the WebGL hero preloads behind, then the panel ignites and
+   slides away to reveal the hero. Keeps the proven timing model (time-floor
+   blended with drei useProgress, hard cap) and the html.v4-loading ->
+   v4-loaded class swap the hero headline keys its entrance off of. The boot
+   lines are derived from the count, so they stay in lockstep and never stall. */
+
+const BOOT_LINES = [
+  { at: 3, text: "alqode.os" },
+  { at: 28, text: "mounting studio modules" },
+  { at: 55, text: "brand / web / commerce / motion / automation / software" },
+  { at: 84, text: "core online — igniting" },
+];
+
 export function IntroLoader() {
   const { active, progress } = useProgress();
   const [count, setCount] = useState(0);
@@ -15,14 +26,13 @@ export function IntroLoader() {
   const startRef = useRef<number | null>(null);
   const activeSeenRef = useRef(false);
 
-  // remember whether the 3D actually registered any loads
   useEffect(() => {
     if (active) activeSeenRef.current = true;
   }, [active]);
 
   useEffect(() => {
     document.documentElement.classList.add("v4-loading");
-    const MIN = 2200; // deliberate minimum so it reads as designed, not a stall
+    const MIN = 2400; // deliberate floor so the boot reads as designed, not a stall
     const MAX = 5000; // never hang
     let raf = 0;
 
@@ -46,7 +56,6 @@ export function IntroLoader() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // when the slide-away transition ends, flip the class and unmount
   const handleEnd = () => {
     if (phase !== "done") return;
     const html = document.documentElement;
@@ -57,20 +66,55 @@ export function IntroLoader() {
 
   if (phase === "gone") return null;
 
+  const lastVisible = BOOT_LINES.reduce(
+    (acc, l, i) => (count >= l.at ? i : acc),
+    -1
+  );
+
   return (
     <div
       className={`v4-loader ${phase === "done" ? "v4-loader--done" : ""}`}
       aria-hidden={phase === "done"}
       onTransitionEnd={handleEnd}
     >
-      <div className="v4-loader__inner">
-        <span className="v4-loader__mark">
-          <span className="text-v4-accent">{"{"}</span>
-          alqode
-          <span className="text-v4-accent">{"}"}</span>
-        </span>
-        <span className="v4-loader__count">{String(count).padStart(3, "0")}</span>
+      <div className="v4-boot">
+        <div className="v4-boot__head">
+          <span className="v4-loader__mark">
+            <span className="text-v4-accent">{"{"}</span>
+            alqode
+            <span className="text-v4-accent">{"}"}</span>
+          </span>
+          <span className="v4-boot__tag">system boot</span>
+        </div>
+
+        <div className="v4-boot__lines" aria-hidden>
+          {BOOT_LINES.map((l, i) => {
+            const visible = count >= l.at;
+            const done = i < lastVisible || count >= 100;
+            return (
+              <div
+                key={l.text}
+                className="v4-boot__line"
+                data-visible={visible ? "true" : "false"}
+              >
+                <span className="v4-boot__caret">{">"}</span>
+                <span className="v4-boot__text">{l.text}</span>
+                {visible && done ? (
+                  <span className="v4-boot__ok">ok</span>
+                ) : visible && i === lastVisible ? (
+                  <span className="v4-boot__cursor" />
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="v4-boot__meter">
+          <span className="v4-boot__power">power</span>
+          <span className="v4-loader__count">{String(count).padStart(3, "0")}</span>
+        </div>
       </div>
+
       <div className="v4-loader__bar">
         <span style={{ transform: `scaleX(${count / 100})` }} />
       </div>

@@ -507,7 +507,7 @@
 .v4-loader {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 130;
   background: #060708;
   display: grid;
   place-items: center;
@@ -530,7 +530,90 @@
   letter-spacing: -0.02em;
   font-size: clamp(1.05rem, 2.2vw, 1.4rem);
   color: #eceef2;
-  opacity: 0.85;
+  opacity: 0.9;
+}
+
+/* SYSTEM BOOT console layout */
+.v4-boot {
+  width: min(92vw, 540px);
+  padding: 0 clamp(0.5rem, 2vw, 1rem);
+}
+.v4-boot__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.v4-boot__tag {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(130, 138, 147, 0.85);
+}
+.v4-boot__lines {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-height: 6.5rem;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: clamp(0.66rem, 1.5vw, 0.78rem);
+  letter-spacing: 0.04em;
+}
+.v4-boot__line {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.4s var(--ease-snap), transform 0.4s var(--ease-snap);
+  color: rgba(236, 238, 242, 0.82);
+}
+.v4-boot__line[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+.v4-boot__caret {
+  color: #10b981;
+}
+.v4-boot__text {
+  flex: 1;
+}
+.v4-boot__ok {
+  color: #10b981;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.86em;
+}
+.v4-boot__cursor {
+  width: 7px;
+  height: 1em;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.7);
+  animation: cursor-blink 530ms infinite;
+}
+.v4-boot__meter {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.v4-boot__power {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(130, 138, 147, 0.85);
+  padding-bottom: 0.5rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .v4-boot__cursor {
+    animation: none;
+  }
 }
 .v4-loader__count {
   font-family: var(--font-space-grotesk), sans-serif;

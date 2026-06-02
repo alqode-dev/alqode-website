@@ -9,6 +9,7 @@ import * as THREE from "three";
 import { StudioEnv } from "./studio-env";
 import { useMeltGeometry } from "./wordmark-geometry";
 import { waUrl } from "@/lib/constants";
+import { registerMachine, prefersReducedMotion, gsap, SplitText } from "./machine";
 
 /**
  * THE HERO. A real-time chrome {alqode} that lives on scroll + cursor.
@@ -282,6 +283,60 @@ export default function CinemaHero() {
   const layerB = useRef<HTMLDivElement>(null);
   const layerC = useRef<HTMLDivElement>(null);
   const scrollHint = useRef<HTMLDivElement>(null);
+  const heroH1 = useRef<HTMLHeadingElement>(null);
+
+  // Headline boots in char-by-char (SplitText) the moment the SYSTEM BOOT
+  // loader finishes (html gets .v4-loaded). The CSS .v4-hero-enter stays as the
+  // no-JS / reduced-motion fallback; here JS takes ownership and prints it in.
+  useEffect(() => {
+    const h1 = heroH1.current;
+    if (!h1 || prefersReducedMotion()) return;
+    registerMachine();
+
+    // JS owns the entrance now — neutralise the CSS block transition
+    h1.style.opacity = "1";
+    h1.style.transform = "none";
+
+    // split words AND chars so whole words never break mid-word on wrap;
+    // the chars are what print in.
+    const split = new SplitText(h1, { type: "words,chars" });
+    gsap.set(split.chars, { yPercent: 60, opacity: 0 });
+
+    let played = false;
+    const play = () => {
+      if (played) return;
+      played = true;
+      gsap.to(split.chars, {
+        yPercent: 0,
+        opacity: 1,
+        duration: 0.62,
+        ease: "power3.out",
+        stagger: 0.028,
+      });
+    };
+
+    const html = document.documentElement;
+    let mo: MutationObserver | null = null;
+    let safety = 0;
+    if (html.classList.contains("v4-loaded")) {
+      play();
+    } else {
+      mo = new MutationObserver(() => {
+        if (html.classList.contains("v4-loaded")) {
+          play();
+          mo?.disconnect();
+        }
+      });
+      mo.observe(html, { attributes: true, attributeFilter: ["class"] });
+      safety = window.setTimeout(play, 7000); // never strand the headline hidden
+    }
+
+    return () => {
+      mo?.disconnect();
+      if (safety) clearTimeout(safety);
+      split.revert();
+    };
+  }, []);
 
   useEffect(() => {
     let raf = 0;
@@ -387,9 +442,12 @@ export default function CinemaHero() {
           {/* A — opening headline, anchored TOP-LEFT (asymmetric) */}
           <div
             ref={layerA}
-            className="absolute left-6 top-[18%] max-w-[18ch] md:left-10 lg:left-16"
+            className="absolute left-6 top-[18%] max-w-[min(90vw,42rem)] md:left-10 lg:left-16"
           >
-            <h1 className="v4-hero-enter text-balance font-sans text-[clamp(2.4rem,6.4vw,5.25rem)] font-bold leading-[0.92] tracking-[-0.03em] text-white">
+            <h1
+              ref={heroH1}
+              className="v4-hero-enter text-balance font-sans text-[clamp(2.4rem,6.4vw,5.25rem)] font-bold leading-[0.92] tracking-[-0.03em] text-white"
+            >
               Every layer.
               <br />
               One studio.
