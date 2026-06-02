@@ -52,3 +52,6 @@ _ul
 .playwright-mcp/
 .planning/v4-assets/devserver.log
 .planning/v4-assets/probe.mjs
+
+# local MCP config (contains API keys)
+.mcp.json
