@@ -156,7 +156,7 @@ export const PORTFOLIO = {
       name: "Masjid Notify",
       deployedSince: "2025",
       category: "community" as const,
-      result: "A 24/7 community hub — scheduling, archives, and access for everyone.",
+      result: "A 24/7 community hub. Scheduling, archives, and access for everyone.",
       description:
         "The digital backbone for a Masjid: prayer times, event scheduling, and a permanent archive of every recorded lecture. Open access, always live.",
       tags: ["WhatsApp API", "Community", "Database"],
@@ -171,7 +171,7 @@ export const PORTFOLIO = {
       category: "client" as const,
       result: "Lead-to-calendar automation. No manual step, no missed booking.",
       description:
-        "Brand site plus the automation pipeline that captures every form submission and books qualified leads straight into the calendar — built for a UAE finance brand.",
+        "Brand site plus the automation pipeline that captures every form submission and books qualified leads straight into the calendar. Built for a UAE finance brand.",
       tags: ["Automation", "Finance", "UAE"],
       tech: ["Python", "n8n", "JSON", "Airtable"],
       image: "/images/faida-automation.webp",
@@ -184,7 +184,7 @@ export const PORTFOLIO = {
       category: "client" as const,
       result: "An in-browser game that turns every play into a customer record.",
       description:
-        "Full brand, site, and a custom game built into the experience. Every play feeds a loyalty database — driving revenue and the community that keeps it growing.",
+        "Full brand, site, and a custom game built into the experience. Every play feeds a loyalty database that drives revenue and the community that keeps it growing.",
       tags: ["Brand", "Game", "F&B"],
       tech: ["Next.js", "React", "Tailwind", "Vercel"],
       image: "/images/bochi-home.jpg",
@@ -198,7 +198,7 @@ export const PORTFOLIO = {
       result:
         "Premium e-commerce experience on a free-tier WordPress budget.",
       description:
-        "Full WooCommerce store for South Africa's leading online awards shop. Built to feel premium, engineered to convert — without the premium plugin price tag.",
+        "Full WooCommerce store for South Africa's leading online awards shop. Built to feel premium, engineered to convert, without the premium plugin price tag.",
       tags: ["E-commerce", "WordPress", "Retail"],
       tech: ["WordPress", "WooCommerce", "PayFast"],
       image: "/images/trophy-sa.jpg",

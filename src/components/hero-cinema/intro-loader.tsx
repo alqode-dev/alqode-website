@@ -15,7 +15,7 @@ const BOOT_LINES = [
   { at: 3, text: "alqode.os" },
   { at: 28, text: "mounting studio modules" },
   { at: 55, text: "brand / web / commerce / motion / automation / software" },
-  { at: 84, text: "core online — igniting" },
+  { at: 84, text: "core online :: igniting" },
 ];
 
 export function IntroLoader() {
