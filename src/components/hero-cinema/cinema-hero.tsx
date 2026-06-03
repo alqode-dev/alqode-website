@@ -412,7 +412,7 @@ export default function CinemaHero() {
 
   return (
     <div ref={trackRef} style={{ height: `${SCROLL_VH}vh`, position: "relative" }} className="bg-[#040405]">
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+      <div className="sticky top-0 h-screen w-full overflow-hidden [height:100dvh]">
         <Canvas
           frameloop={heroActive ? "always" : "never"}
           camera={{ position: [0, 0, 9], fov: 30 }}
