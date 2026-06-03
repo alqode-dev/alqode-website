@@ -130,7 +130,7 @@ export function PageSections() {
       <section className="machine-panel relative overflow-hidden px-6 pb-[10vh] pt-[12vh] md:pb-[40vh] md:pt-[18vh] md:px-10 lg:px-16">
         <div className="relative z-10 mx-auto max-w-[1400px]">
           <div data-reveal className="reveal">
-            <StatusReadout label="module.studio" online="ONLINE" detail="every layer" />
+            <StatusReadout label="module.alqode" online="ONLINE" detail="every layer" />
           </div>
           <h2
             data-reveal
@@ -143,11 +143,11 @@ export function PageSections() {
               data-reveal
               className="reveal max-w-[42ch] text-pretty text-[clamp(1.05rem,1.6vw,1.35rem)] leading-relaxed text-v4-muted"
             >
-              <Mark /> is a digital studio in Cape Town, building for South Africa and
-              the UAE. Brand, web, commerce, motion, automation, software, from the
-              first sketch to the system that runs in production. Every layer under one
-              roof, no handoffs, no agency overhead, no middle layer between the idea
-              and the people building it.
+              <Mark /> builds digital systems in Cape Town, for South Africa and the
+              UAE. Brand, web, commerce, motion, automation, software, from the first
+              sketch to the system that runs in production. Every layer under one roof,
+              no handoffs, no agency overhead, no middle layer between the idea and the
+              people building it.
             </p>
             <p
               data-reveal
@@ -169,10 +169,16 @@ export function PageSections() {
           <p className="sr-only">What we do</p>
           <h2
             data-reveal
-            className="reveal mt-6 font-sans text-[clamp(1.6rem,3.4vw,2.8rem)] font-bold tracking-[-0.02em] text-white"
+            className="reveal mt-6 max-w-[18ch] text-balance font-sans text-[clamp(1.8rem,3.8vw,3rem)] font-bold leading-[1.05] tracking-[-0.02em] text-white"
           >
-            Six layers, one hand.
+            From your logo to your last automation.
           </h2>
+          <p
+            data-reveal
+            className="reveal mt-4 max-w-[48ch] text-[0.98rem] leading-relaxed text-v4-muted"
+          >
+            Take one module or hand us the whole machine. Every part powers the next.
+          </p>
           <CapabilityModules />
         </div>
       </section>

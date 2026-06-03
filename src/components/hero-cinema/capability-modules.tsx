@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { Palette, Globe, ShoppingBag, Clapperboard, Workflow, Code2, type LucideIcon } from "lucide-react";
 import {
   registerMachine,
   prefersReducedMotion,
@@ -20,13 +21,13 @@ import {
  * reads without JS / under reduced motion.
  */
 
-const MODULES = [
-  { k: "Brand", tag: "identity", d: "Identity, logo, and the system that makes it recognisable anywhere." },
-  { k: "Web", tag: "next.js", d: "Sites and web apps on modern frameworks. Fast, custom, built to scale." },
-  { k: "Commerce", tag: "woocommerce", d: "Stores that convert. Payments, catalogue, the full retail engine." },
-  { k: "Motion", tag: "webgl", d: "Real-time WebGL, animation, and the moments that make a brand stick." },
-  { k: "Automation", tag: "n8n", d: "n8n and WhatsApp pipelines that do the work while you sleep." },
-  { k: "Software", tag: "custom", d: "Custom tools and platforms when off-the-shelf will not cut it." },
+const MODULES: { k: string; tag: string; d: string; Icon: LucideIcon }[] = [
+  { k: "Brand", tag: "identity", d: "Identity, logo, and the system that makes it recognisable anywhere.", Icon: Palette },
+  { k: "Web", tag: "next.js", d: "Sites and web apps on modern frameworks. Fast, custom, built to scale.", Icon: Globe },
+  { k: "Commerce", tag: "woocommerce", d: "Stores that convert. Payments, catalogue, the full retail engine.", Icon: ShoppingBag },
+  { k: "Motion", tag: "webgl", d: "Real-time WebGL, animation, and the moments that make a brand stick.", Icon: Clapperboard },
+  { k: "Automation", tag: "n8n", d: "n8n and WhatsApp pipelines that do the work while you sleep.", Icon: Workflow },
+  { k: "Software", tag: "custom", d: "Custom tools and platforms when off-the-shelf will not cut it.", Icon: Code2 },
 ];
 
 export function CapabilityModules() {
@@ -108,9 +109,14 @@ export function CapabilityModules() {
             </span>
           </span>
 
-          {/* title */}
-          <span className="font-sans text-[clamp(1.4rem,2.6vw,2.2rem)] font-semibold tracking-[-0.02em] text-v4-ink transition-[color,transform] duration-300 ease-snap group-hover:translate-x-1 group-hover:text-v4-accent">
-            {m.k}
+          {/* glyph + title */}
+          <span className="flex items-center gap-3 transition-transform duration-300 ease-snap group-hover:translate-x-1">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-v4-muted transition-colors duration-300 group-hover:border-v4-accent/50 group-hover:text-v4-accent md:h-10 md:w-10">
+              <m.Icon size={18} strokeWidth={1.6} />
+            </span>
+            <span className="font-sans text-[clamp(1.4rem,2.6vw,2.2rem)] font-semibold tracking-[-0.02em] text-v4-ink transition-colors duration-300 ease-snap group-hover:text-v4-accent">
+              {m.k}
+            </span>
           </span>
 
           {/* description */}
