@@ -127,7 +127,7 @@ export function PageSections() {
     <main ref={ref} className="relative z-10 bg-v4-bg text-v4-ink">
       <MachineSpine />
       {/* ===== MANIFESTO + STUDIO SNAKE LINE ===== */}
-      <section className="machine-panel relative overflow-hidden px-6 pb-[14vh] pt-[18vh] md:pb-[40vh] md:px-10 lg:px-16">
+      <section className="machine-panel relative overflow-hidden px-6 pb-[10vh] pt-[12vh] md:pb-[40vh] md:pt-[18vh] md:px-10 lg:px-16">
         <div className="relative z-10 mx-auto max-w-[1400px]">
           <div data-reveal className="reveal">
             <StatusReadout label="module.studio" online="ONLINE" detail="every layer" />
@@ -161,7 +161,7 @@ export function PageSections() {
       </section>
 
       {/* ===== CAPABILITIES — tight numbered index ===== */}
-      <section className="machine-panel machine-edge relative px-6 py-[14vh] md:px-10 lg:px-16">
+      <section className="machine-panel machine-edge relative px-6 py-[10vh] md:py-[14vh] md:px-10 lg:px-16">
         <div className="mx-auto max-w-[1400px]">
           <div data-reveal className="reveal">
             <StatusReadout label="module.capabilities" online="ONLINE" detail="6 layers" />
@@ -178,7 +178,7 @@ export function PageSections() {
       </section>
 
       {/* ===== WORK — large alternating editorial showcase (distinct from the index) ===== */}
-      <section className="machine-panel machine-edge relative px-6 py-[16vh] md:px-10 lg:px-16">
+      <section className="machine-panel machine-edge relative px-6 py-[11vh] md:py-[16vh] md:px-10 lg:px-16">
         <div className="mx-auto max-w-[1400px]">
           <div data-reveal className="reveal">
             <StatusReadout
@@ -196,7 +196,7 @@ export function PageSections() {
             </h2>
           </div>
 
-          <div className="mt-16 flex flex-col gap-[12vh] md:mt-24">
+          <div className="mt-12 flex flex-col gap-[8vh] md:mt-24 md:gap-[12vh]">
             {PORTFOLIO.projects.map((p, i) => {
               const right = i % 2 === 1;
               return (
@@ -253,7 +253,7 @@ export function PageSections() {
       </section>
 
       {/* ===== FOUNDER — THE CONTROL CORE (operator wired into the systems) ===== */}
-      <section className="machine-panel machine-edge relative overflow-hidden px-6 py-[16vh] md:px-10 lg:px-16">
+      <section className="machine-panel machine-edge relative overflow-hidden px-6 py-[11vh] md:py-[16vh] md:px-10 lg:px-16">
         <div className="relative mx-auto max-w-[1400px]">
           <div data-reveal className="reveal">
             <StatusReadout label="module.core" online="OPERATOR ONLINE" detail="one roof" />
@@ -289,7 +289,7 @@ export function PageSections() {
       </section>
 
       {/* ===== START / CTA — the configurator console ===== */}
-      <section className="machine-panel machine-edge machine-ember-rim relative px-6 py-[20vh] md:px-10 lg:px-16">
+      <section className="machine-panel machine-edge machine-ember-rim relative px-6 py-[13vh] md:py-[20vh] md:px-10 lg:px-16">
         <div className="mx-auto max-w-[1400px]">
           <div data-reveal className="reveal mb-6">
             <StatusReadout label="module.configurator" online="READY" detail="dial output" />
