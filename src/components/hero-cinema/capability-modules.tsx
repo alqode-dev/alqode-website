@@ -12,75 +12,66 @@ import {
 } from "./machine";
 
 /**
- * CAPABILITIES — the modules.
+ * CAPABILITIES — a bento grid of module cards.
  *
- * Not a list. Six module bays that power on one-by-one as the signal reaches
- * them: the row assembles into its bay (clip + slide), its status pip ignites,
- * the status text scrambles IDLE -> ONLINE, and a power bar charges. The hover
- * is the "selected module" state. Content is fully present in the DOM so it
- * reads without JS / under reduced motion.
+ * Each capability is a card that powers on as it scrolls in: it assembles into
+ * place, its status pip ignites, the status scrambles IDLE -> ONLINE, and a
+ * power bar charges across the bottom edge. Card grid instead of a flat list
+ * so it is scannable and premium, not a wall of rows nobody reads. Content is
+ * always present in the DOM (readable without JS / reduced motion).
  */
 
-const MODULES: { k: string; tag: string; d: string; Icon: LucideIcon }[] = [
-  { k: "Brand", tag: "identity", d: "Identity, logo, and the system that makes it recognisable anywhere.", Icon: Palette },
-  { k: "Web", tag: "next.js", d: "Sites and web apps on modern frameworks. Fast, custom, built to scale.", Icon: Globe },
+const MODULES: { k: string; tag: string; d: string; Icon: LucideIcon; wide?: boolean }[] = [
+  { k: "Brand", tag: "identity", d: "Identity, logo, and the system that makes you recognisable anywhere.", Icon: Palette },
+  { k: "Web", tag: "next.js", d: "Sites and web apps on modern frameworks. Fast, custom, built to scale.", Icon: Globe, wide: true },
   { k: "Commerce", tag: "woocommerce", d: "Stores that convert. Payments, catalogue, the full retail engine.", Icon: ShoppingBag },
   { k: "Motion", tag: "webgl", d: "Real-time WebGL, animation, and the moments that make a brand stick.", Icon: Clapperboard },
-  { k: "Automation", tag: "n8n", d: "n8n and WhatsApp pipelines that do the work while you sleep.", Icon: Workflow },
+  { k: "Automation", tag: "n8n", d: "n8n and WhatsApp pipelines that do the work while you sleep.", Icon: Workflow, wide: true },
   { k: "Software", tag: "custom", d: "Custom tools and platforms when off-the-shelf will not cut it.", Icon: Code2 },
 ];
 
 export function CapabilityModules() {
-  const root = useRef<HTMLUListElement>(null);
+  const root = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       registerMachine();
       const reduce = prefersReducedMotion();
-      const rows = gsap.utils.toArray<HTMLElement>(".cap-row");
+      const cards = gsap.utils.toArray<HTMLElement>(".cap-card");
 
-      const settle = (row: HTMLElement) => {
-        const pip = row.querySelector<HTMLElement>(".cap-pip");
-        const fill = row.querySelector<HTMLElement>(".cap-fill");
-        const status = row.querySelector<HTMLElement>(".cap-status");
+      const settle = (card: HTMLElement) => {
+        const pip = card.querySelector<HTMLElement>(".cap-pip");
+        const fill = card.querySelector<HTMLElement>(".cap-fill");
+        const status = card.querySelector<HTMLElement>(".cap-status");
         if (pip) pip.dataset.on = "true";
-        if (fill) gsap.to(fill, { scaleX: 1, duration: 0.8, ease: "power3.out" });
+        if (fill) gsap.to(fill, { scaleX: 1, duration: 0.9, ease: "power3.out" });
         if (status) {
-          if (reduce) {
-            status.textContent = "ONLINE";
-          } else {
+          if (reduce) status.textContent = "ONLINE";
+          else
             gsap.to(status, {
               duration: 0.7,
               ease: "none",
               scrambleText: { text: "ONLINE", chars: SCRAMBLE_CHARS, speed: 0.7 },
             });
-          }
         }
       };
 
       if (reduce) {
-        rows.forEach(settle);
+        cards.forEach(settle);
         return;
       }
 
-      // resting: seated out of the bay, status idle, bar empty
-      gsap.set(rows, { opacity: 0, x: -22, clipPath: "inset(0 100% 0 0)" });
+      gsap.set(cards, { opacity: 0, y: 26 });
       gsap.set(".cap-fill", { scaleX: 0, transformOrigin: "left center" });
 
-      rows.forEach((row) => {
+      cards.forEach((card) => {
         ScrollTrigger.create({
-          trigger: row,
-          start: "top 86%",
+          trigger: card,
+          start: "top 88%",
           once: true,
           onEnter: () => {
-            gsap.to(row, {
-              opacity: 1,
-              x: 0,
-              clipPath: "inset(0 0% 0 0)",
-              duration: 0.7,
-              ease: "power3.out",
-            });
-            settle(row);
+            gsap.to(card, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" });
+            settle(card);
           },
         });
       });
@@ -89,57 +80,44 @@ export function CapabilityModules() {
   );
 
   return (
-    <ul ref={root} className="mt-12 border-t border-white/[0.08]">
+    <div
+      ref={root}
+      className="mt-12 grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3 md:gap-4"
+    >
       {MODULES.map((m, i) => (
-        <li
+        <div
           key={m.k}
-          className="cap-row group relative grid grid-cols-[2.5rem_1fr] items-center gap-x-5 border-b border-white/[0.08] px-1 py-6 transition-colors duration-500 ease-snap hover:bg-white/[0.02] md:grid-cols-[5rem_minmax(0,22ch)_1fr_8rem] md:gap-x-8 md:py-7"
+          className="cap-card group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[linear-gradient(180deg,#0d1014_0%,#090b0f_100%)] p-6 transition-colors duration-500 ease-snap hover:border-v4-accent/40 md:p-7"
         >
-          {/* left accent bar grows on hover */}
-          <span
-            aria-hidden
-            className="absolute left-0 top-1/2 h-0 w-[2px] -translate-y-1/2 bg-v4-accent transition-all duration-500 ease-snap group-hover:h-[64%]"
-          />
-
-          {/* module address + status pip */}
-          <span className="flex items-center gap-2 font-mono text-xs text-v4-faint">
-            <span className="cap-pip machine-dot" aria-hidden />
-            <span className="transition-colors duration-300 group-hover:text-v4-accent">
-              {String(i + 1).padStart(2, "0")}
+          {/* top row: glyph + live status */}
+          <div className="flex items-center justify-between">
+            <span className="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/[0.03] text-v4-muted transition-colors duration-300 group-hover:border-v4-accent/50 group-hover:text-v4-accent">
+              <m.Icon size={20} strokeWidth={1.6} />
             </span>
-          </span>
-
-          {/* glyph + title */}
-          <span className="flex items-center gap-3 transition-transform duration-300 ease-snap group-hover:translate-x-1">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-v4-muted transition-colors duration-300 group-hover:border-v4-accent/50 group-hover:text-v4-accent md:h-10 md:w-10">
-              <m.Icon size={18} strokeWidth={1.6} />
+            <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em]">
+              <span className="cap-pip machine-dot" aria-hidden />
+              <span className="cap-status text-v4-accent">ONLINE</span>
             </span>
-            <span className="font-sans text-[clamp(1.4rem,2.6vw,2.2rem)] font-semibold tracking-[-0.02em] text-v4-ink transition-colors duration-300 ease-snap group-hover:text-v4-accent">
-              {m.k}
-            </span>
-          </span>
+          </div>
 
-          {/* description */}
-          <span className="col-span-2 mt-2 max-w-[46ch] text-[0.98rem] leading-relaxed text-v4-muted transition-colors duration-300 group-hover:text-v4-ink md:col-span-1 md:mt-0">
+          {/* title + description */}
+          <h3 className="mt-6 font-sans text-[clamp(1.4rem,2.2vw,1.9rem)] font-semibold tracking-[-0.02em] text-v4-ink transition-colors duration-300 group-hover:text-v4-accent">
+            {m.k}
+          </h3>
+          <p className="mt-2 max-w-[42ch] flex-1 text-[0.95rem] leading-relaxed text-v4-muted">
             {m.d}
-          </span>
+          </p>
 
-          {/* status bay: ONLINE + power bar + module tag */}
-          <span className="col-span-2 mt-3 flex items-center gap-3 md:col-span-1 md:mt-0 md:flex-col md:items-end md:gap-1.5">
-            <span className="flex items-center gap-2">
-              <span className="cap-status font-mono text-[10px] uppercase tracking-[0.22em] text-v4-accent">
-                ONLINE
-              </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-v4-faint">
-                {m.tag}
-              </span>
-            </span>
-            <span className="h-[3px] w-24 overflow-hidden rounded-full bg-white/[0.08] md:w-full">
-              <span className="cap-fill block h-full w-full rounded-full bg-gradient-to-r from-v4-accent to-v4-accent/70" />
-            </span>
-          </span>
-        </li>
+          {/* footer: index + tag */}
+          <div className="mt-6 flex items-center justify-between border-t border-white/[0.06] pt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-v4-faint">
+            <span>mod.{String(i + 1).padStart(2, "0")}</span>
+            <span>{m.tag}</span>
+          </div>
+
+          {/* power bar along the bottom edge */}
+          <span className="cap-fill absolute bottom-0 left-0 h-[2px] w-full bg-gradient-to-r from-v4-accent to-v4-accent/60" />
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }
