@@ -330,16 +330,17 @@ export function PageSections() {
               <div className="text-2xl text-v4-ink">
                 <Mark />
               </div>
-              <p className="mt-3 max-w-[30ch] text-sm leading-relaxed text-v4-muted">
-                Every layer in house. We build machines that make you money.
+              <p className="mt-3 max-w-[32ch] text-sm leading-relaxed text-v4-muted">
+                Tell me what is costing you time or money. If a system can fix it,
+                we will build it.
               </p>
               <a
                 href={waUrl("v4_footer")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-6 inline-flex items-center gap-2 rounded-full bg-v4-accent px-6 py-3 font-sans text-sm font-semibold text-v4-bg transition-transform duration-300 ease-snap hover:scale-[1.03]"
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-v4-accent px-7 py-3.5 font-sans text-sm font-semibold text-v4-bg transition-transform duration-300 ease-snap hover:scale-[1.03]"
               >
-                Open a channel
+                Let&apos;s solve a problem
                 <span aria-hidden>→</span>
               </a>
             </div>
