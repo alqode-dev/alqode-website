@@ -202,7 +202,7 @@ export function PageSections() {
             </h2>
           </div>
 
-          <div className="mt-12 flex flex-col gap-[8vh] md:mt-24 md:gap-[12vh]">
+          <div className="mt-10 flex flex-col gap-[5vh] md:mt-24 md:gap-[12vh]">
             {PORTFOLIO.projects.map((p, i) => {
               const right = i % 2 === 1;
               return (
@@ -212,10 +212,10 @@ export function PageSections() {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-reveal
-                  className="reveal group grid items-center gap-7 md:grid-cols-2 md:gap-14"
+                  className="reveal group grid items-center gap-5 md:grid-cols-2 md:gap-14"
                 >
-                  {/* text column */}
-                  <div className={right ? "md:order-2" : ""}>
+                  {/* text column — image leads on mobile, alternates on desktop */}
+                  <div className={`order-2 ${right ? "md:order-2" : "md:order-1"}`}>
                     <div className="flex items-center gap-4">
                       <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-v4-accent">
                         unit.{String(i + 1).padStart(2, "0")}
@@ -225,11 +225,11 @@ export function PageSections() {
                         {p.category === "community" ? "community" : "client"} · {p.deployedSince}
                       </span>
                     </div>
-                    <h3 className="mt-4 font-sans text-[clamp(2rem,4.6vw,3.6rem)] font-bold leading-[0.98] tracking-[-0.035em] text-v4-ink transition-colors duration-300 group-hover:text-v4-accent">
+                    <h3 className="mt-3 font-sans text-[clamp(1.9rem,4.6vw,3.6rem)] font-bold leading-[0.98] tracking-[-0.035em] text-v4-ink transition-colors duration-300 group-hover:text-v4-accent md:mt-4">
                       {p.name}
                     </h3>
                     {/* result as a telemetry metric */}
-                    <div className="mt-5 flex items-start gap-3 border-l-2 border-v4-accent/60 pl-3">
+                    <div className="mt-3 flex items-start gap-3 border-l-2 border-v4-accent/60 pl-3 md:mt-5">
                       <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-v4-faint">
                         output
                       </span>
@@ -237,10 +237,10 @@ export function PageSections() {
                         {p.result}
                       </p>
                     </div>
-                    <p className="mt-4 max-w-[46ch] text-[0.98rem] leading-relaxed text-v4-muted">
+                    <p className="mt-3 line-clamp-2 max-w-[46ch] text-[0.95rem] leading-relaxed text-v4-muted md:line-clamp-none md:text-[0.98rem]">
                       {p.description}
                     </p>
-                    <span className="mt-6 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-v4-faint transition-colors duration-300 group-hover:text-v4-ink">
+                    <span className="mt-4 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-v4-faint transition-colors duration-300 group-hover:text-v4-ink md:mt-6">
                       Visit live site
                       <span className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden>
                         ↗
@@ -248,7 +248,7 @@ export function PageSections() {
                     </span>
                   </div>
                   {/* visual column */}
-                  <div className={right ? "md:order-1" : ""}>
+                  <div className={`order-1 ${right ? "md:order-1" : "md:order-2"}`}>
                     <ProjectVisual project={p} index={i} />
                   </div>
                 </a>
