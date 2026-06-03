@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Center } from "@react-three/drei";
+import { Center, PerformanceMonitor } from "@react-three/drei";
 import { EffectComposer, Bloom, ToneMapping } from "@react-three/postprocessing";
 import { ToneMappingMode } from "postprocessing";
 import { useEffect, useMemo, useRef, useState, Suspense } from "react";
@@ -391,14 +391,37 @@ export default function CinemaHero() {
     };
   }, []);
 
+  // Phones get a lower resolution ceiling (the shader + bloom are fragment-heavy);
+  // PerformanceMonitor drops it further on any device that can't hold frame rate.
+  const [dprMax, setDprMax] = useState(() =>
+    typeof window !== "undefined" && window.innerWidth < 768 ? 1.3 : 1.8
+  );
+
+  // Stop rendering the WebGL hero entirely once it scrolls out of view — no point
+  // burning the GPU while the visitor reads the body sections far below.
+  const [heroActive, setHeroActive] = useState(true);
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setHeroActive(e.isIntersecting), {
+      threshold: 0,
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
     <div ref={trackRef} style={{ height: `${SCROLL_VH}vh`, position: "relative" }} className="bg-[#040405]">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         <Canvas
+          frameloop={heroActive ? "always" : "never"}
           camera={{ position: [0, 0, 9], fov: 30 }}
-          dpr={[1, 1.85]}
-          gl={{ antialias: true, preserveDrawingBuffer: true }}
+          dpr={[1, dprMax]}
+          gl={{ antialias: true, preserveDrawingBuffer: true, powerPreference: "high-performance" }}
         >
+          <PerformanceMonitor
+            onDecline={() => setDprMax((d) => Math.max(1, +(d - 0.3).toFixed(2)))}
+          />
           <Scene />
         </Canvas>
 
