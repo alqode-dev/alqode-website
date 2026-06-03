@@ -313,28 +313,48 @@ export function PageSections() {
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="border-t border-white/[0.06] px-6 py-12 md:px-10 lg:px-16">
-        <div className="mx-auto flex max-w-[1400px] flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div className="text-lg text-v4-ink">
-            <Mark />
+      {/* ===== FOOTER — STANDBY ===== */}
+      <footer className="machine-panel machine-edge relative px-6 py-14 md:px-10 md:py-16 lg:px-16">
+        <div className="mx-auto max-w-[1400px]">
+          <div data-reveal className="reveal">
+            <StatusReadout label="module.standby" online="CHANNEL OPEN" detail="one message away" />
           </div>
-          <div className="flex flex-wrap gap-x-8 gap-y-2 font-mono text-[11px] uppercase tracking-[0.22em] text-v4-muted">
-            <a className="transition-colors hover:text-v4-ink" href={waUrl("v4_footer")} target="_blank" rel="noopener noreferrer">
-              WhatsApp
-            </a>
-            <a className="transition-colors hover:text-v4-ink" href={SITE.instagram} target="_blank" rel="noopener noreferrer">
-              Instagram
-            </a>
-            <a className="transition-colors hover:text-v4-ink" href={SITE.github} target="_blank" rel="noopener noreferrer">
-              GitHub
-            </a>
-            <a className="transition-colors hover:text-v4-ink" href={`mailto:${SITE.email}`}>
-              Email
-            </a>
+          <div className="mt-9 flex flex-col gap-9 md:flex-row md:items-end md:justify-between">
+            <div>
+              <div className="text-2xl text-v4-ink">
+                <Mark />
+              </div>
+              <p className="mt-3 max-w-[30ch] text-sm leading-relaxed text-v4-muted">
+                Every layer in house. We build machines that make you money.
+              </p>
+              <a
+                href={waUrl("v4_footer")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-v4-accent px-6 py-3 font-sans text-sm font-semibold text-v4-bg transition-transform duration-300 ease-snap hover:scale-[1.03]"
+              >
+                Open a channel
+                <span aria-hidden>→</span>
+              </a>
+            </div>
+            <div className="flex flex-wrap gap-x-8 gap-y-2 font-mono text-[11px] uppercase tracking-[0.22em] text-v4-muted">
+              <a className="transition-colors hover:text-v4-ink" href={waUrl("v4_footer_links")} target="_blank" rel="noopener noreferrer">
+                WhatsApp
+              </a>
+              <a className="transition-colors hover:text-v4-ink" href={SITE.instagram} target="_blank" rel="noopener noreferrer">
+                Instagram
+              </a>
+              <a className="transition-colors hover:text-v4-ink" href={SITE.github} target="_blank" rel="noopener noreferrer">
+                GitHub
+              </a>
+              <a className="transition-colors hover:text-v4-ink" href={`mailto:${SITE.email}`}>
+                Email
+              </a>
+            </div>
           </div>
-          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-v4-faint">
-            Cape Town · © 2026
+          <div className="mt-10 flex flex-col gap-2 border-t border-white/[0.06] pt-6 font-mono text-[11px] uppercase tracking-[0.22em] text-v4-faint sm:flex-row sm:items-center sm:justify-between">
+            <span>Cape Town · SA + UAE</span>
+            <span>© 2026 alqode</span>
           </div>
         </div>
       </footer>
