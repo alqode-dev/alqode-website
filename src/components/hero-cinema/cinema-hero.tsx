@@ -446,7 +446,7 @@ export default function CinemaHero() {
               <span className="text-[#10b981]">{"}"}</span>
             </div>
             <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.28em] text-white/40">
-              Digital studio
+              Digital systems
             </div>
           </div>
 
@@ -469,51 +469,53 @@ export default function CinemaHero() {
 
         {/* ===== scroll-driven copy (z-20, behind the frame furniture) ===== */}
         <div className="pointer-events-none absolute inset-0 z-20">
-          {/* A — opening headline, anchored TOP-LEFT (asymmetric) */}
+          {/* A — opening headline, centred above the casting logo */}
           <div
             ref={layerA}
-            className="absolute left-6 top-[18%] max-w-[min(90vw,42rem)] md:left-10 lg:left-16"
+            className="absolute left-1/2 top-[12%] w-[92%] max-w-[44rem] -translate-x-1/2 text-center md:top-[13%]"
           >
             <h1
               ref={heroH1}
-              className="v4-hero-enter text-balance font-sans text-[clamp(2.4rem,6.4vw,5.25rem)] font-bold leading-[0.92] tracking-[-0.03em] text-white"
+              className="v4-hero-enter font-sans text-[clamp(2.6rem,7vw,5.5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-white"
             >
               Every layer.
               <br />
-              One studio.
+              Built to earn.
             </h1>
           </div>
 
-          {/* B — the crafts, bottom-left rail */}
+          {/* B — the crafts, centred row below the cast logo */}
           <div
             ref={layerB}
-            className="absolute bottom-[12%] left-6 flex max-w-md flex-wrap gap-x-6 gap-y-1 opacity-0 md:left-10 lg:left-16"
+            className="absolute bottom-[15%] left-1/2 w-[92%] max-w-2xl -translate-x-1/2 opacity-0"
           >
-            {["Brand", "Web", "Commerce", "Motion", "Automation", "Software"].map((c) => (
-              <span
-                key={c}
-                className="font-sans text-[clamp(1rem,1.8vw,1.4rem)] font-medium tracking-tight text-white/65"
-              >
-                {c}
-              </span>
-            ))}
+            <div className="flex flex-wrap items-center justify-center gap-x-3.5 gap-y-1.5">
+              {["Brand", "Web", "Commerce", "Motion", "Automation", "Software"].map((c, i) => (
+                <span key={c} className="flex items-center gap-x-3.5">
+                  {i > 0 && <span className="text-terminal/70" aria-hidden>·</span>}
+                  <span className="font-sans text-[clamp(1rem,2vw,1.5rem)] font-medium tracking-tight text-white/75">
+                    {c}
+                  </span>
+                </span>
+              ))}
+            </div>
           </div>
 
-          {/* C — payoff + CTA, bottom-left (appears once cast + ignited) */}
+          {/* C — payoff + CTA, centred (appears once cast + ignited) */}
           <div
             ref={layerC}
-            className="absolute bottom-[11%] left-6 max-w-xl opacity-0 md:left-10 lg:left-16"
+            className="absolute bottom-[12%] left-1/2 flex w-[92%] max-w-2xl -translate-x-1/2 flex-col items-center text-center opacity-0"
           >
-            <p className="text-balance font-sans text-[clamp(1.15rem,2.6vw,1.9rem)] font-semibold leading-[1.12] tracking-[-0.02em] text-white">
+            <p className="text-balance font-sans text-[clamp(1.25rem,3vw,2.1rem)] font-semibold leading-[1.12] tracking-[-0.02em] text-white">
               We don&apos;t build websites. We build machines that make you money.
             </p>
             <a
               href={waUrl("v4_hero")}
               target="_blank"
               rel="noopener noreferrer"
-              className="pointer-events-auto mt-6 inline-flex items-center gap-2 rounded-full bg-[#10b981] px-7 py-3.5 font-sans text-sm font-semibold text-[#040405] transition-transform duration-300 ease-out hover:scale-[1.04]"
+              className="pointer-events-auto mt-7 inline-flex items-center gap-2 rounded-full bg-[#10b981] px-8 py-4 font-sans text-sm font-semibold text-[#040405] transition-transform duration-300 ease-out hover:scale-[1.04]"
             >
-              Start on WhatsApp
+              Let&apos;s solve a problem
               <span aria-hidden>→</span>
             </a>
           </div>

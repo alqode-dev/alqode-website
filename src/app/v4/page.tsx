@@ -9,9 +9,9 @@ const CinemaHero = dynamic(() => import("@/components/hero-cinema/cinema-hero"),
 });
 
 export const metadata: Metadata = {
-  title: "alqode — Every layer. One studio.",
+  title: "alqode — Every layer. Built to earn.",
   description:
-    "A Cape Town digital studio. Brand, web, commerce, motion, automation and software, every layer in house. We don't build websites, we build machines that make you money.",
+    "Brand, web, commerce, motion, automation and software, every layer built in house in Cape Town. We don't build websites, we build machines that make you money.",
 };
 
 export default function V4Page() {
