@@ -1,134 +1,79 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { Palette, Globe, ShoppingBag, Clapperboard, Workflow, Code2, type LucideIcon } from "lucide-react";
-import { prefersReducedMotion } from "./machine";
 
 /**
- * CAPABILITIES — an interactive module console.
+ * CAPABILITIES — "every layer", made literal.
  *
- * Not a list, not a card grid (both read as generic). It is a single control
- * console: a selector of the six modules on one side and one big detail bay
- * that swaps to whichever module is live. It AUTO-CYCLES through the modules
- * like a running machine, and you can drive it by hovering (desktop) or
- * tapping (mobile). One panel instead of six stacked cards, so mobile barely
- * scrolls. Content is always in the DOM; reduced motion just stops the cycle.
+ * Not a list, grid, or tab panel. The six capabilities are fused into ONE
+ * object: a cross-section of the machine, six material layers stacked flush
+ * with their coloured edges forming a continuous spine down the side. On
+ * desktop the whole slab tilts in 3D so you are looking at a real cross-section;
+ * on mobile it lies flat and compact. Each layer carries its own info, so there
+ * is no separate detail pane and nothing to scroll through.
  */
 
-const MODULES: { k: string; tag: string; d: string; Icon: LucideIcon }[] = [
-  { k: "Brand", tag: "identity", d: "Identity, logo, and the system that makes you recognisable anywhere. The look people remember and trust.", Icon: Palette },
-  { k: "Web", tag: "next.js", d: "Sites and web apps on modern frameworks. Fast, custom, and built to scale with your business, not break under it.", Icon: Globe },
-  { k: "Commerce", tag: "woocommerce", d: "Stores that sell while you sleep. Payments, catalogue, and the full retail engine, wired to convert.", Icon: ShoppingBag },
-  { k: "Motion", tag: "webgl", d: "Real-time WebGL, animation, and the moments that make a brand stick in someone's head after they leave.", Icon: Clapperboard },
-  { k: "Automation", tag: "n8n", d: "n8n and WhatsApp pipelines that capture, book, and follow up. The work that should run itself, running itself.", Icon: Workflow },
-  { k: "Software", tag: "custom", d: "Custom tools and platforms when off-the-shelf will not cut it. Built exactly around how your business actually works.", Icon: Code2 },
+type Layer = { k: string; tag: string; d: string; Icon: LucideIcon; edge: string };
+
+const LAYERS: Layer[] = [
+  { k: "Brand", tag: "identity", d: "The look people remember and trust.", Icon: Palette, edge: "#b48ef7" },
+  { k: "Web", tag: "next.js", d: "Fast, custom sites and web apps that scale.", Icon: Globe, edge: "#5b9df9" },
+  { k: "Commerce", tag: "woocommerce", d: "Stores that sell while you sleep.", Icon: ShoppingBag, edge: "#10b981" },
+  { k: "Motion", tag: "webgl", d: "Real-time WebGL and moments that stick.", Icon: Clapperboard, edge: "#ff9742" },
+  { k: "Automation", tag: "n8n", d: "Pipelines that capture, book and follow up.", Icon: Workflow, edge: "#ec5a8d" },
+  { k: "Software", tag: "custom", d: "Custom tools built around how you work.", Icon: Code2, edge: "#2dd4bf" },
 ];
 
-const CYCLE_MS = 3600;
-
 export function CapabilityModules() {
-  const [active, setActive] = useState(0);
-  const pausedRef = useRef(false);
-
-  useEffect(() => {
-    if (prefersReducedMotion()) return;
-    const id = window.setInterval(() => {
-      if (!pausedRef.current) setActive((a) => (a + 1) % MODULES.length);
-    }, CYCLE_MS);
-    return () => window.clearInterval(id);
-  }, []);
-
-  const m = MODULES[active];
-  const ActiveIcon = m.Icon;
-
   return (
-    <div
-      className="mt-10 grid gap-4 md:mt-12 md:grid-cols-[minmax(0,17rem)_1fr] md:gap-6"
-      onMouseEnter={() => (pausedRef.current = true)}
-      onMouseLeave={() => (pausedRef.current = false)}
-    >
-      {/* selector — vertical rail on desktop, horizontal scroll chips on mobile */}
-      <div
-        role="tablist"
-        aria-label="Capabilities"
-        className="scrollbar-hide -mx-6 flex gap-2 overflow-x-auto px-6 md:mx-0 md:flex-col md:gap-1.5 md:overflow-visible md:px-0"
-      >
-        {MODULES.map((mod, i) => {
-          const on = i === active;
-          const Icon = mod.Icon;
+    <div className="mt-12 md:mt-16 md:[perspective:1900px]">
+      {/* the cross-section slab */}
+      <div className="overflow-hidden rounded-xl border border-white/[0.1] bg-[linear-gradient(110deg,#11151b_0%,#0a0c11_70%)] shadow-[0_40px_80px_-50px_rgba(0,0,0,0.95)] md:origin-top md:[transform:rotateX(17deg)] md:[box-shadow:0_50px_90px_-40px_rgba(0,0,0,0.95)]">
+        {LAYERS.map((l, i) => {
+          const Icon = l.Icon;
           return (
-            <button
-              key={mod.k}
-              role="tab"
-              aria-selected={on}
-              type="button"
-              onClick={() => setActive(i)}
-              onMouseEnter={() => setActive(i)}
-              className={`group flex shrink-0 items-center gap-3 rounded-xl border px-3.5 py-3 text-left transition-colors duration-300 ease-snap md:rounded-lg md:border-0 md:border-l-2 md:px-3 ${
-                on
-                  ? "border-v4-accent/50 bg-v4-accent/[0.06] md:border-l-v4-accent md:bg-white/[0.02]"
-                  : "border-white/10 md:border-l-white/10 hover:border-white/25 md:hover:border-l-white/30"
-              }`}
+            <div
+              key={l.k}
+              className="group/layer relative flex items-center gap-3.5 border-t border-white/[0.06] py-3.5 pl-5 pr-4 transition-colors duration-300 first:border-t-0 hover:bg-white/[0.025] md:py-4 md:pl-6"
             >
+              {/* the material edge — these stack into a continuous spine */}
               <span
-                className={`grid h-8 w-8 shrink-0 place-items-center rounded-md transition-colors duration-300 ${
-                  on ? "bg-v4-accent/15 text-v4-accent" : "bg-white/[0.04] text-v4-muted"
-                }`}
-              >
-                <Icon size={16} strokeWidth={1.7} />
-              </span>
+                aria-hidden
+                className="absolute inset-y-0 left-0 w-[5px]"
+                style={{ background: l.edge, boxShadow: `0 0 12px -2px ${l.edge}` }}
+              />
+
+              {/* glyph */}
               <span
-                className={`font-sans text-[15px] font-semibold tracking-[-0.01em] transition-colors duration-300 md:text-base ${
-                  on ? "text-v4-ink" : "text-v4-muted group-hover:text-v4-ink"
-                }`}
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/[0.03] transition-transform duration-300 group-hover/layer:scale-105"
+                style={{ color: l.edge }}
               >
-                {mod.k}
+                <Icon size={18} strokeWidth={1.7} />
               </span>
-            </button>
+
+              {/* name + description */}
+              <div className="min-w-0 flex-1">
+                <h3 className="font-sans text-[clamp(1.2rem,2vw,1.7rem)] font-bold tracking-[-0.02em] text-v4-ink">
+                  {l.k}
+                </h3>
+                <p className="truncate text-[0.9rem] leading-snug text-v4-muted sm:overflow-visible sm:whitespace-normal">
+                  {l.d}
+                </p>
+              </div>
+
+              {/* layer index + tag */}
+              <div className="hidden shrink-0 flex-col items-end gap-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-v4-faint sm:flex">
+                <span style={{ color: l.edge }}>L{String(i + 1).padStart(2, "0")}</span>
+                <span>{l.tag}</span>
+              </div>
+            </div>
           );
         })}
       </div>
 
-      {/* detail bay */}
-      <div className="relative overflow-hidden rounded-2xl border border-white/[0.1] bg-[linear-gradient(160deg,#0e1116_0%,#08090d_100%)] p-7 md:p-10">
-        {/* huge ghost glyph */}
-        <ActiveIcon
-          aria-hidden
-          className="pointer-events-none absolute -right-6 -top-6 text-white/[0.04] md:-right-8 md:-top-8"
-          size={190}
-          strokeWidth={1}
-        />
-        {/* charge bar keyed to the cycle */}
-        <span
-          key={`bar-${active}`}
-          className="absolute left-0 top-0 h-[2px] w-full origin-left bg-gradient-to-r from-v4-accent to-v4-accent/50"
-          style={{ animation: prefersReducedMotion() ? "none" : `capCharge ${CYCLE_MS}ms linear forwards` }}
-        />
-
-        <div key={active} className="relative animate-fade-up">
-          <div className="flex items-center justify-between">
-            <span className="grid h-14 w-14 place-items-center rounded-xl border border-v4-accent/40 bg-v4-accent/10 text-v4-accent">
-              <ActiveIcon size={26} strokeWidth={1.6} />
-            </span>
-            <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em]">
-              <span className="machine-dot" data-on="true" aria-hidden />
-              <span className="text-v4-accent">online</span>
-            </span>
-          </div>
-
-          <h3 className="mt-6 font-sans text-[clamp(1.9rem,3.4vw,2.8rem)] font-bold tracking-[-0.025em] text-v4-ink">
-            {m.k}
-          </h3>
-          <p className="mt-3 max-w-[52ch] text-[1.02rem] leading-relaxed text-v4-muted">{m.d}</p>
-
-          <div className="mt-8 flex items-center justify-between border-t border-white/[0.07] pt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-v4-faint">
-            <span>
-              module {String(active + 1).padStart(2, "0")} / {String(MODULES.length).padStart(2, "0")}
-            </span>
-            <span className="text-v4-accent/80">{m.tag}</span>
-          </div>
-        </div>
-      </div>
+      <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.24em] text-v4-faint md:mt-9">
+        / one machine · six layers · take any of them
+      </p>
     </div>
   );
 }
