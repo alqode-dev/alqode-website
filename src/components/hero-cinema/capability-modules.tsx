@@ -1,123 +1,134 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Palette, Globe, ShoppingBag, Clapperboard, Workflow, Code2, type LucideIcon } from "lucide-react";
-import {
-  registerMachine,
-  prefersReducedMotion,
-  gsap,
-  useGSAP,
-  ScrollTrigger,
-  SCRAMBLE_CHARS,
-} from "./machine";
+import { prefersReducedMotion } from "./machine";
 
 /**
- * CAPABILITIES — a bento grid of module cards.
+ * CAPABILITIES — an interactive module console.
  *
- * Each capability is a card that powers on as it scrolls in: it assembles into
- * place, its status pip ignites, the status scrambles IDLE -> ONLINE, and a
- * power bar charges across the bottom edge. Card grid instead of a flat list
- * so it is scannable and premium, not a wall of rows nobody reads. Content is
- * always present in the DOM (readable without JS / reduced motion).
+ * Not a list, not a card grid (both read as generic). It is a single control
+ * console: a selector of the six modules on one side and one big detail bay
+ * that swaps to whichever module is live. It AUTO-CYCLES through the modules
+ * like a running machine, and you can drive it by hovering (desktop) or
+ * tapping (mobile). One panel instead of six stacked cards, so mobile barely
+ * scrolls. Content is always in the DOM; reduced motion just stops the cycle.
  */
 
-const MODULES: { k: string; tag: string; d: string; Icon: LucideIcon; wide?: boolean }[] = [
-  { k: "Brand", tag: "identity", d: "Identity, logo, and the system that makes you recognisable anywhere.", Icon: Palette },
-  { k: "Web", tag: "next.js", d: "Sites and web apps on modern frameworks. Fast, custom, built to scale.", Icon: Globe, wide: true },
-  { k: "Commerce", tag: "woocommerce", d: "Stores that convert. Payments, catalogue, the full retail engine.", Icon: ShoppingBag },
-  { k: "Motion", tag: "webgl", d: "Real-time WebGL, animation, and the moments that make a brand stick.", Icon: Clapperboard },
-  { k: "Automation", tag: "n8n", d: "n8n and WhatsApp pipelines that do the work while you sleep.", Icon: Workflow, wide: true },
-  { k: "Software", tag: "custom", d: "Custom tools and platforms when off-the-shelf will not cut it.", Icon: Code2 },
+const MODULES: { k: string; tag: string; d: string; Icon: LucideIcon }[] = [
+  { k: "Brand", tag: "identity", d: "Identity, logo, and the system that makes you recognisable anywhere. The look people remember and trust.", Icon: Palette },
+  { k: "Web", tag: "next.js", d: "Sites and web apps on modern frameworks. Fast, custom, and built to scale with your business, not break under it.", Icon: Globe },
+  { k: "Commerce", tag: "woocommerce", d: "Stores that sell while you sleep. Payments, catalogue, and the full retail engine, wired to convert.", Icon: ShoppingBag },
+  { k: "Motion", tag: "webgl", d: "Real-time WebGL, animation, and the moments that make a brand stick in someone's head after they leave.", Icon: Clapperboard },
+  { k: "Automation", tag: "n8n", d: "n8n and WhatsApp pipelines that capture, book, and follow up. The work that should run itself, running itself.", Icon: Workflow },
+  { k: "Software", tag: "custom", d: "Custom tools and platforms when off-the-shelf will not cut it. Built exactly around how your business actually works.", Icon: Code2 },
 ];
 
+const CYCLE_MS = 3600;
+
 export function CapabilityModules() {
-  const root = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const pausedRef = useRef(false);
 
-  useGSAP(
-    () => {
-      registerMachine();
-      const reduce = prefersReducedMotion();
-      const cards = gsap.utils.toArray<HTMLElement>(".cap-card");
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    const id = window.setInterval(() => {
+      if (!pausedRef.current) setActive((a) => (a + 1) % MODULES.length);
+    }, CYCLE_MS);
+    return () => window.clearInterval(id);
+  }, []);
 
-      const settle = (card: HTMLElement) => {
-        const pip = card.querySelector<HTMLElement>(".cap-pip");
-        const fill = card.querySelector<HTMLElement>(".cap-fill");
-        const status = card.querySelector<HTMLElement>(".cap-status");
-        if (pip) pip.dataset.on = "true";
-        if (fill) gsap.to(fill, { scaleX: 1, duration: 0.9, ease: "power3.out" });
-        if (status) {
-          if (reduce) status.textContent = "ONLINE";
-          else
-            gsap.to(status, {
-              duration: 0.7,
-              ease: "none",
-              scrambleText: { text: "ONLINE", chars: SCRAMBLE_CHARS, speed: 0.7 },
-            });
-        }
-      };
-
-      if (reduce) {
-        cards.forEach(settle);
-        return;
-      }
-
-      gsap.set(cards, { opacity: 0, y: 26 });
-      gsap.set(".cap-fill", { scaleX: 0, transformOrigin: "left center" });
-
-      cards.forEach((card) => {
-        ScrollTrigger.create({
-          trigger: card,
-          start: "top 88%",
-          once: true,
-          onEnter: () => {
-            gsap.to(card, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" });
-            settle(card);
-          },
-        });
-      });
-    },
-    { scope: root }
-  );
+  const m = MODULES[active];
+  const ActiveIcon = m.Icon;
 
   return (
     <div
-      ref={root}
-      className="mt-12 grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3 md:gap-4"
+      className="mt-10 grid gap-4 md:mt-12 md:grid-cols-[minmax(0,17rem)_1fr] md:gap-6"
+      onMouseEnter={() => (pausedRef.current = true)}
+      onMouseLeave={() => (pausedRef.current = false)}
     >
-      {MODULES.map((m, i) => (
-        <div
-          key={m.k}
-          className="cap-card group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[linear-gradient(180deg,#0d1014_0%,#090b0f_100%)] p-6 transition-colors duration-500 ease-snap hover:border-v4-accent/40 md:p-7"
-        >
-          {/* top row: glyph + live status */}
+      {/* selector — vertical rail on desktop, horizontal scroll chips on mobile */}
+      <div
+        role="tablist"
+        aria-label="Capabilities"
+        className="scrollbar-hide -mx-6 flex gap-2 overflow-x-auto px-6 md:mx-0 md:flex-col md:gap-1.5 md:overflow-visible md:px-0"
+      >
+        {MODULES.map((mod, i) => {
+          const on = i === active;
+          const Icon = mod.Icon;
+          return (
+            <button
+              key={mod.k}
+              role="tab"
+              aria-selected={on}
+              type="button"
+              onClick={() => setActive(i)}
+              onMouseEnter={() => setActive(i)}
+              className={`group flex shrink-0 items-center gap-3 rounded-xl border px-3.5 py-3 text-left transition-colors duration-300 ease-snap md:rounded-lg md:border-0 md:border-l-2 md:px-3 ${
+                on
+                  ? "border-v4-accent/50 bg-v4-accent/[0.06] md:border-l-v4-accent md:bg-white/[0.02]"
+                  : "border-white/10 md:border-l-white/10 hover:border-white/25 md:hover:border-l-white/30"
+              }`}
+            >
+              <span
+                className={`grid h-8 w-8 shrink-0 place-items-center rounded-md transition-colors duration-300 ${
+                  on ? "bg-v4-accent/15 text-v4-accent" : "bg-white/[0.04] text-v4-muted"
+                }`}
+              >
+                <Icon size={16} strokeWidth={1.7} />
+              </span>
+              <span
+                className={`font-sans text-[15px] font-semibold tracking-[-0.01em] transition-colors duration-300 md:text-base ${
+                  on ? "text-v4-ink" : "text-v4-muted group-hover:text-v4-ink"
+                }`}
+              >
+                {mod.k}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* detail bay */}
+      <div className="relative overflow-hidden rounded-2xl border border-white/[0.1] bg-[linear-gradient(160deg,#0e1116_0%,#08090d_100%)] p-7 md:p-10">
+        {/* huge ghost glyph */}
+        <ActiveIcon
+          aria-hidden
+          className="pointer-events-none absolute -right-6 -top-6 text-white/[0.04] md:-right-8 md:-top-8"
+          size={190}
+          strokeWidth={1}
+        />
+        {/* charge bar keyed to the cycle */}
+        <span
+          key={`bar-${active}`}
+          className="absolute left-0 top-0 h-[2px] w-full origin-left bg-gradient-to-r from-v4-accent to-v4-accent/50"
+          style={{ animation: prefersReducedMotion() ? "none" : `capCharge ${CYCLE_MS}ms linear forwards` }}
+        />
+
+        <div key={active} className="relative animate-fade-up">
           <div className="flex items-center justify-between">
-            <span className="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/[0.03] text-v4-muted transition-colors duration-300 group-hover:border-v4-accent/50 group-hover:text-v4-accent">
-              <m.Icon size={20} strokeWidth={1.6} />
+            <span className="grid h-14 w-14 place-items-center rounded-xl border border-v4-accent/40 bg-v4-accent/10 text-v4-accent">
+              <ActiveIcon size={26} strokeWidth={1.6} />
             </span>
             <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em]">
-              <span className="cap-pip machine-dot" aria-hidden />
-              <span className="cap-status text-v4-accent">ONLINE</span>
+              <span className="machine-dot" data-on="true" aria-hidden />
+              <span className="text-v4-accent">online</span>
             </span>
           </div>
 
-          {/* title + description */}
-          <h3 className="mt-6 font-sans text-[clamp(1.4rem,2.2vw,1.9rem)] font-semibold tracking-[-0.02em] text-v4-ink transition-colors duration-300 group-hover:text-v4-accent">
+          <h3 className="mt-6 font-sans text-[clamp(1.9rem,3.4vw,2.8rem)] font-bold tracking-[-0.025em] text-v4-ink">
             {m.k}
           </h3>
-          <p className="mt-2 max-w-[42ch] flex-1 text-[0.95rem] leading-relaxed text-v4-muted">
-            {m.d}
-          </p>
+          <p className="mt-3 max-w-[52ch] text-[1.02rem] leading-relaxed text-v4-muted">{m.d}</p>
 
-          {/* footer: index + tag */}
-          <div className="mt-6 flex items-center justify-between border-t border-white/[0.06] pt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-v4-faint">
-            <span>mod.{String(i + 1).padStart(2, "0")}</span>
-            <span>{m.tag}</span>
+          <div className="mt-8 flex items-center justify-between border-t border-white/[0.07] pt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-v4-faint">
+            <span>
+              module {String(active + 1).padStart(2, "0")} / {String(MODULES.length).padStart(2, "0")}
+            </span>
+            <span className="text-v4-accent/80">{m.tag}</span>
           </div>
-
-          {/* power bar along the bottom edge */}
-          <span className="cap-fill absolute bottom-0 left-0 h-[2px] w-full bg-gradient-to-r from-v4-accent to-v4-accent/60" />
         </div>
-      ))}
+      </div>
     </div>
   );
 }

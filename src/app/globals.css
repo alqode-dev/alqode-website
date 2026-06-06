@@ -721,6 +721,12 @@
     inset 0 0 0 1px rgba(174, 245, 216, 0.5);
 }
 
+/* capabilities console: the charge bar that fills over one auto-cycle */
+@keyframes capCharge {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
 /* a thin machined hairline used as a section divider seam */
 .machine-seam {
   height: 1px;
