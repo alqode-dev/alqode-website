@@ -721,6 +721,19 @@
     inset 0 0 0 1px rgba(174, 245, 216, 0.5);
 }
 
+/* control core: a chip's tool pops in when it swaps */
+@keyframes cc-pop {
+  0% { opacity: 0; transform: scale(0.6); }
+  60% { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.cc-swap {
+  animation: cc-pop 0.42s var(--ease-snap) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cc-swap { animation: none; }
+}
+
 /* capabilities console: the charge bar that fills over one auto-cycle */
 @keyframes capCharge {
   from { transform: scaleX(0); }

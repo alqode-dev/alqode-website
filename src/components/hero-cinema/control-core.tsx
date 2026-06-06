@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
   registerMachine,
@@ -12,10 +12,20 @@ import {
 import {
   NextjsIcon,
   ReactIcon,
+  TypeScriptIcon,
+  PythonIcon,
+  NodeIcon,
+  TailwindIcon,
   N8nIcon,
   SupabaseIcon,
+  AirtableIcon,
+  VercelIcon,
+  GitHubIcon,
+  WordPressIcon,
   WhatsAppIcon,
   MetaIcon,
+  FigmaIcon,
+  GsapIcon,
 } from "../tech-icons";
 
 /**
@@ -31,28 +41,68 @@ import {
  */
 
 type IconProps = { size?: number; style?: React.CSSProperties; className?: string };
+type Tech = { name: string; Icon: (p: IconProps) => JSX.Element; color: string };
 
-type Sys = {
-  name: string;
-  Icon: (p: IconProps) => JSX.Element;
-  color: string;
-  x: number; // node position in 0..100 square space
-  y: number;
-  d: string; // wire path: starts at the node, ends at the core (so pulses flow IN)
-};
-
-// two flanking columns of modules wired into the central operator core
-const SYSTEMS: Sys[] = [
-  { name: "Next.js", Icon: NextjsIcon, color: "#ffffff", x: 15, y: 17, d: "M15 17 C 31 17, 22 40, 34 40" },
-  { name: "Supabase", Icon: SupabaseIcon, color: "#3ECF8E", x: 8, y: 50, d: "M8 50 C 24 50, 22 50, 34 50" },
-  { name: "n8n", Icon: N8nIcon, color: "#EA4B71", x: 15, y: 83, d: "M15 83 C 31 83, 22 60, 34 60" },
-  { name: "React", Icon: ReactIcon, color: "#61DAFB", x: 85, y: 17, d: "M85 17 C 69 17, 78 40, 66 40" },
-  { name: "WhatsApp", Icon: WhatsAppIcon, color: "#25D366", x: 92, y: 50, d: "M92 50 C 76 50, 78 50, 66 50" },
-  { name: "Meta", Icon: MetaIcon, color: "#0866FF", x: 85, y: 83, d: "M85 83 C 69 83, 78 60, 66 60" },
+// the six wiring positions feeding the core (fixed); the modules plugged into
+// them cycle, so it reads as one operator running many tools.
+const POSITIONS: { x: number; y: number; d: string }[] = [
+  { x: 15, y: 17, d: "M15 17 C 31 17, 22 40, 34 40" },
+  { x: 8, y: 50, d: "M8 50 C 24 50, 22 50, 34 50" },
+  { x: 15, y: 83, d: "M15 83 C 31 83, 22 60, 34 60" },
+  { x: 85, y: 17, d: "M85 17 C 69 17, 78 40, 66 40" },
+  { x: 92, y: 50, d: "M92 50 C 76 50, 78 50, 66 50" },
+  { x: 85, y: 83, d: "M85 83 C 69 83, 78 60, 66 60" },
 ];
+
+// the pool of tools the operator works with — chips cycle through these
+const POOL: Tech[] = [
+  { name: "Next.js", Icon: NextjsIcon, color: "#ffffff" },
+  { name: "React", Icon: ReactIcon, color: "#61DAFB" },
+  { name: "TypeScript", Icon: TypeScriptIcon, color: "#3178C6" },
+  { name: "Python", Icon: PythonIcon, color: "#3776AB" },
+  { name: "Node.js", Icon: NodeIcon, color: "#339933" },
+  { name: "Tailwind", Icon: TailwindIcon, color: "#06B6D4" },
+  { name: "Supabase", Icon: SupabaseIcon, color: "#3ECF8E" },
+  { name: "Airtable", Icon: AirtableIcon, color: "#18BFFF" },
+  { name: "n8n", Icon: N8nIcon, color: "#EA4B71" },
+  { name: "Vercel", Icon: VercelIcon, color: "#ffffff" },
+  { name: "GitHub", Icon: GitHubIcon, color: "#ffffff" },
+  { name: "WordPress", Icon: WordPressIcon, color: "#21759B" },
+  { name: "Meta", Icon: MetaIcon, color: "#0866FF" },
+  { name: "WhatsApp", Icon: WhatsAppIcon, color: "#25D366" },
+  { name: "Figma", Icon: FigmaIcon, color: "#F24E1E" },
+  { name: "GSAP", Icon: GsapIcon, color: "#88CE02" },
+];
+
+const INITIAL_SLOTS = [0, 6, 8, 1, 13, 12]; // Next.js, Supabase, n8n, React, WhatsApp, Meta
 
 export function ControlCore() {
   const root = useRef<HTMLDivElement>(null);
+  const [slots, setSlots] = useState<number[]>(INITIAL_SLOTS);
+  const tickRef = useRef(0);
+
+  // continuously swap one module at a time for a different tool (round-robin
+  // over the six positions, each time picking a tool not currently shown).
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    const id = window.setInterval(() => {
+      setSlots((prev) => {
+        const slot = tickRef.current % prev.length;
+        tickRef.current += 1;
+        const used = new Set(prev);
+        let next = Math.floor(Math.random() * POOL.length);
+        let guard = 0;
+        while (used.has(next) && guard < 40) {
+          next = (next + 1) % POOL.length;
+          guard += 1;
+        }
+        const copy = [...prev];
+        copy[slot] = next;
+        return copy;
+      });
+    }, 1500);
+    return () => window.clearInterval(id);
+  }, []);
 
   useGSAP(
     () => {
@@ -125,43 +175,50 @@ export function ControlCore() {
         viewBox="0 0 100 100"
         fill="none"
       >
-        {SYSTEMS.map((s) => (
-          <g key={s.name}>
+        {POSITIONS.map((pos, i) => (
+          <g key={i}>
             <path
               className="cc-wire"
-              d={s.d}
-              stroke={s.color}
+              d={pos.d}
+              stroke="#3a434d"
               strokeWidth={0.5}
-              strokeOpacity={0.4}
+              strokeOpacity={0.6}
               strokeLinecap="round"
             />
-            <circle className="cc-pulse" cx={0} cy={0} r={1.1} fill={s.color}>
-            </circle>
+            <circle className="cc-pulse" cx={0} cy={0} r={1.1} fill="#10b981" />
           </g>
         ))}
       </svg>
 
-      {/* module chips, fixed in place and wired in */}
-      {SYSTEMS.map((s) => (
-        <div
-          key={s.name}
-          className="cc-chip absolute z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1.5"
-          style={{ left: `${s.x}%`, top: `${s.y}%` }}
-        >
-          <span
-            className="grid h-11 w-11 place-items-center rounded-lg border bg-[#0a0d11]"
-            style={{
-              borderColor: `color-mix(in srgb, ${s.color} 38%, rgba(255,255,255,0.06))`,
-              boxShadow: `0 0 14px -2px color-mix(in srgb, ${s.color} 45%, transparent)`,
-            }}
+      {/* module chips — fixed positions, the plugged-in tool cycles */}
+      {POSITIONS.map((pos, i) => {
+        const tech = POOL[slots[i]];
+        return (
+          <div
+            key={i}
+            className="cc-chip absolute z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1.5"
+            style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
           >
-            <s.Icon size={19} style={{ color: s.color }} />
-          </span>
-          <span className="font-mono text-[8.5px] uppercase tracking-[0.14em] text-v4-muted">
-            {s.name}
-          </span>
-        </div>
-      ))}
+            <span
+              className="grid h-11 w-11 place-items-center rounded-lg border bg-[#0a0d11] transition-[border-color,box-shadow] duration-500 ease-snap"
+              style={{
+                borderColor: `color-mix(in srgb, ${tech.color} 38%, rgba(255,255,255,0.06))`,
+                boxShadow: `0 0 14px -2px color-mix(in srgb, ${tech.color} 45%, transparent)`,
+              }}
+            >
+              <span key={tech.name} className="cc-swap grid place-items-center">
+                <tech.Icon size={19} style={{ color: tech.color }} />
+              </span>
+            </span>
+            <span
+              key={`${tech.name}-l`}
+              className="cc-swap font-mono text-[8.5px] uppercase tracking-[0.14em] text-v4-muted"
+            >
+              {tech.name}
+            </span>
+          </div>
+        );
+      })}
 
       {/* the operator core — a chrome housing, not a sun */}
       <div className="absolute left-1/2 top-1/2 z-20 aspect-[4/5] w-[32%] -translate-x-1/2 -translate-y-1/2">
