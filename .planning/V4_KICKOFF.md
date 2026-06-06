@@ -44,33 +44,28 @@ good part) · Studio=SIGNAL FLOW (the snake) · Capabilities=MODULES powering on
 DEPLOYED UNITS (keep the screenshots) · Founder=CONTROL CORE (wired schematic — RIP OUT
 the current solar-system, it's a copy) · Budget=CONFIGURATOR console · Footer=STANDBY.
 
-## 3. EXACTLY WHERE WE ARE (2026-06-02; `git log --oneline -1` for exact head)
-- Route **`/v4`** = `<IntroLoader/> + <Cursor/> + <CinemaHero/> (WebGL) + <PageSections/>`.
-  Dev server floats ports — READ THE DEV LOG for the real port (last was 3001; stale
-  servers may also sit on 3000). Build GREEN (`npx tsc --noEmit` exits 0).
-- **BUILT + verified on screen this session (0 console errors each):**
-  1. Hero — liquid-chrome `{alqode}` wordmark, scroll-melt + cursor pull-apart, green
-     brackets ignite. Headline now **"Every layer. One studio."** Hamdaan's favourite;
-     KEEP it, only enhance (SplitText boot is the planned upgrade).
-  2. Intro loader (`intro-loader.tsx`) — full-screen 0→100 over {alqode} + green bar,
-     slide-away reveal, swaps `html.v4-loading`→`v4-loaded` (hero headline `.v4-hero-enter`
-     keys off it, stays visible without JS). To be upgraded into the "SYSTEM BOOT".
-  3. Studio snake line (`studio-snake-line.tsx`) — 18 brand logos flow continuously
-     along an S-curve (gsap.ticker, NOT scroll-scrub), names under each, solid bubbles
-     so the line passes behind. SIGNED OFF by Hamdaan.
-  4. Work (`page-sections.tsx` + `ProjectVisual`) — 4 projects, framed LIVE screenshots
-     alternating L/R, hover zoom. All 4 now have real shots (I captured Bochi + Trophy).
-  5. Capabilities — "What we do" eyebrow + premium per-row hover. (To become MODULES.)
-  6. Founder (`founder-orbit.tsx`) — face-in-orbit "solar system". **THIS IS THE COPY
-     HAMDAAN HATED — REPLACE with the CONTROL CORE per the machine plan.**
-  7. Budget slider — drag R0→R30k+, 6 tiers. Good; becomes the CONFIGURATOR.
-  8. v4 color tokens in `tailwind.config.ts` (`v4-bg #060708`, `v4-bg-2 #0b0d10`,
-     `v4-ink #ECEEF2`, `v4-muted #828a93`, `v4-faint #565d66`, `v4-accent #10b981`,
-     `v4-ember #ff9742`).
-- **NEXT:** execute `V4_MACHINE_PLAN.md` build order with the now-assembled tool kit (§6),
-  starting: lock design system (ui-ux-pro-max) → machine foundation (brushed metal +
-  StatusReadout + DrawSVG spine) → loader into SYSTEM BOOT → founder CONTROL CORE → caps
-  MODULES → work DEPLOYED UNITS → budget/footer → MOBILE pass → perf → PREVIEW DEPLOY.
+## 3. EXACTLY WHERE WE ARE (END OF SESSION 7, 2026-06-06; `git log --oneline -1` for exact head)
+- Branch `v4-cinema`, head **`262f0a4`**, tree CLEAN, **60 commits ahead of main**, tsc GREEN,
+  `npm run build` PASSED earlier (/v4 ~458kB). `main` (live v3.1 alqode.com) UNTOUCHED.
+- Route **`/v4`** = `<IntroLoader/>(SYSTEM BOOT) + <Cursor/> + <CinemaHero/>(WebGL chrome
+  {alqode}) + <PageSections/>`. Dev FLOATS ports (currently 3000; read `/tmp/v4-dev.log`).
+- **THE WHOLE MACHINE IS BUILT + polished desktop AND mobile.** Flow: boot → hero (ignition)
+  → manifesto+snake (signal flow) → capabilities → work gallery (deployed units) → control
+  core → configurator → standby footer. Every section verified on screen, 0 console errors.
+- **The detailed section-by-section STATUS (locked vs open), the full CAPABILITIES SAGA, the
+  ship decision, and the session 6-7 technical lessons now live in `MEMORY.md`'s SNAP STATE
+  block (loaded automatically each session) — READ THAT, it supersedes the older detail here.**
+- **Quick version:** LOCKED + liked = hero ("Every layer. Built to earn." + "Let's solve a
+  problem" CTA; word "studio" BANNED), work horizontal gallery, control core (cycling tool
+  logos), configurator/budget slider (he loves it), footer, manifesto+snake. **OPEN WOUND =
+  CAPABILITIES** (`capability-modules.tsx`): wording+icons approved, FORMAT rejected 5× (list,
+  bento grid, selector+panel console, 3D layer stack, cross-section slab) — he rejects ANY
+  "6 labelled items in a row/stack/grid" regardless of styling. Next session must change the
+  KIND of thing (interactive experience / kinetic type) or DELETE the section, not re-skin a
+  roster. See MEMORY for the next-idea menu.
+- **OneDrive `.next` EPERM** kills the dev server after prod builds / randomly → kill repo next
+  procs + `rm -rf .next` + restart ONE dev. Hydration "text mismatch" after edits = stale
+  `.next`, not a bug (curl shows SSR is already new) → fresh rebuild clears it.
 
 ## 4. HOW HAMDAAN WANTS ME TO WORK (operating model — CRITICAL, he will end the sub if ignored)
 - **I am the architect / creative lead. I decide build order. Don't ask him "what should
@@ -191,14 +186,19 @@ Ships ONLY when deployable-first-try: `tsc` green, 0 console errors, MOBILE desi
 Lighthouse mobile 90+, then a Vercel PREVIEW deploy for his sign-off. main stays v3.1 until
 he signs off. Use `/vercel:deploy` skill for the preview.
 
-## 10. FIRST MOVES NEXT SESSION (be in flow immediately or he cancels)
-1. Confirm 21st Magic MCP is live: ToolSearch `mcp__magic__*`. If absent, the restart didn't
-   load it — check `.mcp.json` exists + tell him.
-2. Read `.planning/V4_MACHINE_PLAN.md` (authoritative build spec).
-3. Start the dev server, read the actual port from its log, `npx tsc --noEmit` to confirm green.
-4. Invoke `ui-ux-pro-max` to lock the machine design system (palette/type) — fixes the
-   colors/design fumbling.
-5. Execute the machine build order: foundation (brushed metal + StatusReadout + DrawSVG spine)
-   → SYSTEM BOOT loader → CONTROL CORE founder (replace orbit) → caps MODULES → work units →
-   budget/footer → MOBILE → perf → PREVIEW DEPLOY. Pull premium 21st components, reskin into
-   the machine, wire with Motion + full GSAP. Verify each step on screen + tsc. No hope.
+## 10. FIRST MOVES NEXT SESSION (be in flow immediately — he is frustrated, make it count)
+1. Read `MEMORY.md` SNAP STATE (it has section status + the capabilities saga + lessons) and
+   confirm head with `git log --oneline -1` (expect `262f0a4` unless work continued).
+2. Start ONE dev server, read its port from the log, `npx tsc --noEmit` to confirm green. If the
+   server is dead or hydration errors appear: kill repo next procs + `rm -rf .next` + restart.
+   Show Hamdaan via `Start-Process http://localhost:PORT/v4` (curl 200 first).
+3. **The one real open task = CAPABILITIES.** Do NOT build another roster of 6. Either (a) turn
+   it into an interactive experience / kinetic moment, (b) delete the dedicated section and let
+   the 6 live in the hero crafts + work + control core, or (c) study 3-4 Awwwards services
+   sections / pull a 21st Magic component for LEVEL, then invent something original. A single
+   sharp framing question to him about direction is acceptable here. Verify on screen + tsc;
+   show him; iterate to a genuine win before anything else.
+4. Then: add more tech logos to the snake (he asked). Optional real-device Safari/Lighthouse.
+5. SHIP GATE (only after his explicit GO): move v4 from `/v4` to `/` (or redirect) + merge
+   `v4-cinema`→`main` so alqode.com becomes v4. Old site stays live until that single flip.
+   NEVER touch main before he signs off.
