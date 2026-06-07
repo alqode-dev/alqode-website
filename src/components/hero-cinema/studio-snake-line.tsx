@@ -22,6 +22,13 @@ import {
   FigmaIcon,
   FramerIcon,
   GsapIcon,
+  JsonIcon,
+  ShopifyIcon,
+  StripeIcon,
+  PayFastIcon,
+  GoogleIcon,
+  NotionIcon,
+  SlackIcon,
   TECH_COLORS,
 } from "../tech-icons";
 
@@ -41,21 +48,28 @@ const TECHS: Tech[] = [
   { name: "Next.js", Icon: NextjsIcon },
   { name: "React", Icon: ReactIcon },
   { name: "TypeScript", Icon: TypeScriptIcon },
+  { name: "Tailwind", Icon: TailwindIcon },
   { name: "Node.js", Icon: NodeIcon },
   { name: "Python", Icon: PythonIcon },
-  { name: "Tailwind", Icon: TailwindIcon },
   { name: "Supabase", Icon: SupabaseIcon },
   { name: "Airtable", Icon: AirtableIcon },
   { name: "n8n", Icon: N8nIcon },
+  { name: "Stripe", Icon: StripeIcon },
+  { name: "PayFast", Icon: PayFastIcon },
+  { name: "WooCommerce", Icon: WooCommerceIcon },
+  { name: "Shopify", Icon: ShopifyIcon },
+  { name: "WordPress", Icon: WordPressIcon },
   { name: "Vercel", Icon: VercelIcon },
   { name: "GitHub", Icon: GitHubIcon },
-  { name: "WordPress", Icon: WordPressIcon },
-  { name: "WooCommerce", Icon: WooCommerceIcon },
   { name: "Meta", Icon: MetaIcon },
   { name: "WhatsApp", Icon: WhatsAppIcon },
+  { name: "Slack", Icon: SlackIcon },
+  { name: "Notion", Icon: NotionIcon },
+  { name: "Google", Icon: GoogleIcon },
   { name: "Figma", Icon: FigmaIcon },
   { name: "Framer", Icon: FramerIcon },
   { name: "GSAP", Icon: GsapIcon },
+  { name: "JSON", Icon: JsonIcon },
 ];
 
 const DURATION = 34; // seconds for one logo to travel the whole desktop snake
@@ -116,9 +130,10 @@ export function StudioSnakeLine() {
     { scope: rootRef }
   );
 
-  // two marquee rows (split the stack), opposite directions
-  const rowA = TECHS.slice(0, 9);
-  const rowB = TECHS.slice(9);
+  // two marquee rows (split the stack in half), opposite directions
+  const half = Math.ceil(TECHS.length / 2);
+  const rowA = TECHS.slice(0, half);
+  const rowB = TECHS.slice(half);
 
   return (
     <div ref={rootRef} aria-hidden className="pointer-events-none select-none">
