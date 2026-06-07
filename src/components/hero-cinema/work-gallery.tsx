@@ -2,9 +2,15 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { PORTFOLIO } from "@/lib/constants";
+import { PORTFOLIO, TESTIMONIALS } from "@/lib/constants";
 import { TECH_COLORS } from "../tech-icons";
 import { StatusReadout } from "./status-readout";
+
+/** match a project to its client testimonial by the brand's first word */
+function findVoice(projectName: string) {
+  const key = projectName.toLowerCase();
+  return TESTIMONIALS.items.find((t) => key.includes(t.client.toLowerCase().split(" ")[0]));
+}
 
 /**
  * WORK — DEPLOYED UNITS, shown as a premium horizontal showcase gallery.
@@ -24,6 +30,7 @@ function UnitCard({ project, index }: { project: Project; index: number }) {
   const live = project.category !== "community";
   const slug = project.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   const unit = String(index + 1).padStart(2, "0");
+  const voice = findVoice(project.name);
 
   return (
     <article className="snap-start shrink-0 w-[84vw] xs:w-[78vw] sm:w-[420px] lg:w-[470px]">
@@ -52,7 +59,7 @@ function UnitCard({ project, index }: { project: Project; index: number }) {
               {showImage ? (
                 <Image
                   src={src as string}
-                  alt={`${project.name} — live site`}
+                  alt={`${project.name} live site`}
                   fill
                   sizes="(max-width: 640px) 84vw, 470px"
                   className="object-cover object-top transition-transform duration-[900ms] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.05]"
@@ -112,6 +119,36 @@ function UnitCard({ project, index }: { project: Project; index: number }) {
               </span>
             ))}
           </div>
+
+          {/* field report — the client's own words, tied to this unit */}
+          {voice ? (
+            <div className="mt-5 border-t border-white/[0.08] pt-4">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-v4-accent">
+                ▸ field report
+              </span>
+              <p className="mt-2.5 text-[0.92rem] leading-relaxed text-v4-muted">
+                {`“${voice.quote}”`}
+              </p>
+              <div className="mt-3.5 flex items-center gap-2.5">
+                <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full ring-1 ring-white/15">
+                  <Image src={voice.photo} alt={`${voice.role} owner`} fill sizes="36px" className="object-cover" />
+                </span>
+                <span className="flex flex-col leading-tight">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-v4-ink">{voice.name}</span>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-v4-faint">{voice.role}</span>
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-5 border-t border-white/[0.08] pt-4">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-v4-ember">
+                ▸ community deployment
+              </span>
+              <p className="mt-2.5 text-[0.92rem] leading-relaxed text-v4-muted">
+                No client, no invoice. Built and maintained as a service to the community.
+              </p>
+            </div>
+          )}
         </div>
       </a>
     </article>

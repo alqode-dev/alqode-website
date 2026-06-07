@@ -217,7 +217,7 @@ export const TESTIMONIALS = {
   tag: "Client voices",
   heading: "In their words.",
   subline:
-    "Three businesses across two countries. Same outcome — systems that pay for themselves.",
+    "Three businesses across two countries. Same outcome: systems that pay for themselves.",
   items: [
     {
       client: "Faida",
@@ -226,7 +226,7 @@ export const TESTIMONIALS = {
       name: "Founder",
       role: "Faida · UAE",
       quote:
-        "Hamdaan thinks like a business operator, not just a developer. The automation he built turned hours of manual form processing into minutes — and the website now books qualified leads straight into my calendar.",
+        "Hamdaan thinks like a business operator, not just a developer. The automation he built turned hours of manual form processing into minutes, and the website now books qualified leads straight into my calendar.",
       photo: "/images/clients/faida-owner.png",
     },
     {
