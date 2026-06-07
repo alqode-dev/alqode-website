@@ -51,7 +51,7 @@ export function WhatsappFab() {
 
       {/* label — desktop only, hidden on phones to keep the disc compact */}
       <span className="hidden flex-col pr-1 leading-tight md:flex">
-        <span className="text-[13px] font-semibold text-v4-ink">Let's talk</span>
+        <span className="text-[13px] font-semibold text-v4-ink">{"Let's talk"}</span>
         <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-v4-muted">
           Usually replies in minutes
         </span>

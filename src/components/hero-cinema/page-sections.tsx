@@ -116,7 +116,7 @@ export function PageSections() {
               </blockquote>
               <p className="mt-7 max-w-[40ch] text-[0.98rem] leading-relaxed text-v4-muted">
                 Every system you see routes through one person. No agency layers,
-                no handoffs, no junior on your account. The studio answers to you,
+                no handoffs, no junior on your account. The work answers to you,
                 because it answers to me.
               </p>
               <div className="mt-9 flex items-center gap-4">
