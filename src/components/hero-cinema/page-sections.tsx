@@ -85,25 +85,13 @@ export function PageSections() {
         <StudioSnakeLine />
       </section>
 
-      {/* ===== CAPABILITIES — tight numbered index ===== */}
-      <section className="machine-panel machine-edge relative px-6 py-[10vh] md:py-[14vh] md:px-10 lg:px-16">
+      {/* ===== CAPABILITIES — one living line, the six cycle through it ===== */}
+      <section className="machine-panel machine-edge relative px-6 py-[12vh] md:py-[16vh] md:px-10 lg:px-16">
         <div className="mx-auto max-w-[1400px]">
           <div data-reveal className="reveal">
             <StatusReadout label="module.capabilities" online="ONLINE" detail="6 layers" />
           </div>
-          <p className="sr-only">What we do</p>
-          <h2
-            data-reveal
-            className="reveal mt-6 max-w-[18ch] text-balance font-sans text-[clamp(1.8rem,3.8vw,3rem)] font-bold leading-[1.05] tracking-[-0.02em] text-white"
-          >
-            From your logo to your last automation.
-          </h2>
-          <p
-            data-reveal
-            className="reveal mt-4 max-w-[48ch] text-[0.98rem] leading-relaxed text-v4-muted"
-          >
-            Take one module or hand us the whole machine. Every part powers the next.
-          </p>
+          <h2 className="sr-only">What we do: from your logo to your last automation</h2>
           <CapabilityModules />
         </div>
       </section>
