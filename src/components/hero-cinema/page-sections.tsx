@@ -7,6 +7,7 @@ import { StudioSnakeLine } from "./studio-snake-line";
 import { ControlCore } from "./control-core";
 import { CapabilityModules } from "./capability-modules";
 import { WorkGallery } from "./work-gallery";
+import { FieldSignal } from "./field-signal";
 import { MachineSpine } from "./machine-spine";
 import { StatusReadout } from "./status-readout";
 
@@ -98,6 +99,24 @@ export function PageSections() {
 
       {/* ===== WORK — DEPLOYED UNITS (premium horizontal showcase gallery) ===== */}
       <WorkGallery />
+
+      {/* ===== FIELD SIGNAL — client proof as the machine's return signal ===== */}
+      <section className="machine-panel machine-edge relative px-6 py-[11vh] md:py-[16vh] md:px-10 lg:px-16">
+        <div className="mx-auto max-w-[1100px]">
+          <div data-reveal className="reveal">
+            <StatusReadout label="module.signal" online="ONLINE" detail="return from the field" />
+          </div>
+          <h2
+            data-reveal
+            className="reveal mt-6 max-w-[16ch] text-balance font-sans text-[clamp(1.8rem,4.4vw,3.4rem)] font-bold leading-[1.0] tracking-[-0.025em] text-white"
+          >
+            The machine reports back.
+          </h2>
+          <div data-reveal className="reveal mt-10 md:mt-12">
+            <FieldSignal />
+          </div>
+        </div>
+      </section>
 
       {/* ===== FOUNDER — THE CONTROL CORE (operator wired into the systems) ===== */}
       <section className="machine-panel machine-edge relative overflow-hidden px-6 py-[11vh] md:py-[16vh] md:px-10 lg:px-16">

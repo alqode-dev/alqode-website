@@ -225,6 +225,7 @@ export const TESTIMONIALS = {
       url: "https://www.faida.ae",
       name: "Founder",
       role: "Faida · UAE",
+      metric: "Hours → minutes",
       quote:
         "Hamdaan thinks like a business operator, not just a developer. The automation he built turned hours of manual form processing into minutes, and the website now books qualified leads straight into my calendar.",
       photo: "/images/clients/faida-owner.png",
@@ -235,6 +236,7 @@ export const TESTIMONIALS = {
       url: "https://bochinsh.com",
       name: "Founder",
       role: "Bochi Croffle · Cape Town",
+      metric: "Buyers → community",
       quote:
         "He didn't just build us a website. He built the engine. Every customer who plays the game becomes part of our community, and the data fuels everything from promotions to new launches.",
       photo: "/images/clients/bochi-owner.png",
@@ -245,6 +247,7 @@ export const TESTIMONIALS = {
       url: "https://trophysa.co.za",
       name: "Founder",
       role: "Trophy SA · South Africa",
+      metric: "Budget → premium",
       quote:
         "Premium look on a budget I could afford. I'm running a full e-commerce store that looks like I paid ten times what I did. Hamdaan made every rand work twice.",
       photo: "/images/clients/trophy-owner.png",
