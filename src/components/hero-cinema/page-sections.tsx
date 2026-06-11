@@ -100,19 +100,25 @@ export function PageSections() {
       {/* ===== WORK — DEPLOYED UNITS (premium horizontal showcase gallery) ===== */}
       <WorkGallery />
 
-      {/* ===== FIELD SIGNAL — client proof as the machine's return signal ===== */}
+      {/* ===== CLIENT PROOF — what we solved, in their words ===== */}
       <section className="machine-panel machine-edge relative px-6 py-[11vh] md:py-[16vh] md:px-10 lg:px-16">
         <div className="mx-auto max-w-[1100px]">
           <div data-reveal className="reveal">
-            <StatusReadout label="module.signal" online="ONLINE" detail="return from the field" />
+            <StatusReadout label="module.proof" online="ONLINE" detail="3 clients · 2 countries" />
           </div>
           <h2
             data-reveal
-            className="reveal mt-6 max-w-[16ch] text-balance font-sans text-[clamp(1.8rem,4.4vw,3.4rem)] font-bold leading-[1.0] tracking-[-0.025em] text-white"
+            className="reveal mt-6 max-w-[18ch] text-balance font-sans text-[clamp(1.8rem,4.4vw,3.4rem)] font-bold leading-[1.0] tracking-[-0.025em] text-white"
           >
-            The machine reports back.
+            Real problems, solved.
           </h2>
-          <div data-reveal className="reveal mt-10 md:mt-12">
+          <p
+            data-reveal
+            className="reveal mt-4 max-w-[52ch] text-[0.98rem] leading-relaxed text-v4-muted"
+          >
+            What we built for three real businesses across two countries, and what it changed, in their words.
+          </p>
+          <div data-reveal className="reveal mt-10 md:mt-14">
             <FieldSignal />
           </div>
         </div>

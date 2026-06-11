@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
-import { SITE, FAQ } from "@/lib/constants";
+import { SITE, FAQ, TESTIMONIALS } from "@/lib/constants";
 import { LenisProvider } from "@/components/lenis-provider";
 import "./globals.css";
 
@@ -142,6 +142,11 @@ const serviceSchema = {
     ],
   },
   priceRange: "From R8,000",
+  review: TESTIMONIALS.items.map((t) => ({
+    "@type": "Review",
+    author: { "@type": "Organization", name: t.client },
+    reviewBody: t.quote,
+  })),
 };
 
 const faqSchema = {
