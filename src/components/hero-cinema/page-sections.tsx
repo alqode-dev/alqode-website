@@ -7,7 +7,7 @@ import { StudioSnakeLine } from "./studio-snake-line";
 import { ControlCore } from "./control-core";
 import { CapabilityModules } from "./capability-modules";
 import { WorkGallery } from "./work-gallery";
-import { FieldSignal } from "./field-signal";
+import { ClientProof } from "./client-proof";
 import { MachineSpine } from "./machine-spine";
 import { StatusReadout } from "./status-readout";
 
@@ -116,10 +116,10 @@ export function PageSections() {
             data-reveal
             className="reveal mt-4 max-w-[52ch] text-[0.98rem] leading-relaxed text-v4-muted"
           >
-            What we built for three real businesses across two countries, and what it changed, in their words.
+            Three real businesses, two countries. Drag each one to power on what we built, then hear it from them.
           </p>
-          <div data-reveal className="reveal mt-10 md:mt-14">
-            <FieldSignal />
+          <div className="mt-12 md:mt-16">
+            <ClientProof />
           </div>
         </div>
       </section>
