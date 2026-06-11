@@ -3,26 +3,40 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { TESTIMONIALS } from "@/lib/constants";
-import { registerMachine, prefersReducedMotion, gsap, useGSAP } from "./machine";
+import {
+  registerMachine,
+  prefersReducedMotion,
+  gsap,
+  useGSAP,
+  SplitText,
+} from "./machine";
 
 /**
- * CLIENT PROOF — "the voices": client faces float as bubbles in a dark
- * cinematic space. The active one comes FORWARD (large, lit, close) and a
- * speech bubble unfurls with their words; the others drift BACK (small, dim,
- * deep). Tap any face to bring it forward; it also auto-plays. The focus moving
- * between them reads like a camera pulling from one person to the next. Built
- * in the machine language (chrome-ringed nodes, accent glow), original to
- * alqode, not a copy.
+ * CLIENT PROOF — "the voices", cinematic.
+ *
+ * Client faces float as bubbles in a dark space with real depth (parallax,
+ * depth-of-field, drifting motes). One is speaking: it sits forward and lit
+ * while their words land LARGE below it, line by line, like film subtitles;
+ * the others drift back, small and blurred. It auto-plays and the focus moving
+ * person to person reads like a slow camera. Tap any face to bring it forward.
+ * Built in the machine language, original to alqode.
  */
 
 const VOICES = TESTIMONIALS.items;
 
-// slot geometry as % of the stage — speaker centred, the others drifting back
-// in the top corners (kept clear of the speech bubble below)
-const CENTER = { left: 50, top: 33, scale: 1, opacity: 1, blur: 0 };
+// face slots as % of the constellation area — speaker centred, others drifting back
+const CENTER = { left: 50, top: 52, scale: 1, opacity: 1, blur: 0 };
 const BG = [
-  { left: 13, top: 18, scale: 0.5, opacity: 0.4, blur: 2.5 },
-  { left: 87, top: 16, scale: 0.5, opacity: 0.4, blur: 2.5 },
+  { left: 12, top: 22, scale: 0.46, opacity: 0.38, blur: 3 },
+  { left: 88, top: 18, scale: 0.46, opacity: 0.38, blur: 3 },
+];
+
+// ambient motes (fixed positions so render is deterministic)
+const MOTES = [
+  { x: 8, y: 30, s: 3, d: 0 }, { x: 22, y: 68, s: 2, d: 1.2 }, { x: 35, y: 18, s: 2, d: 0.6 },
+  { x: 48, y: 80, s: 3, d: 1.8 }, { x: 62, y: 26, s: 2, d: 0.3 }, { x: 71, y: 72, s: 3, d: 1.1 },
+  { x: 84, y: 40, s: 2, d: 1.5 }, { x: 92, y: 64, s: 2, d: 0.9 }, { x: 16, y: 50, s: 2, d: 2.1 },
+  { x: 55, y: 12, s: 2, d: 0.7 }, { x: 78, y: 14, s: 2, d: 1.6 }, { x: 30, y: 88, s: 2, d: 0.4 },
 ];
 
 function slotFor(i: number, active: number) {
@@ -33,8 +47,10 @@ function slotFor(i: number, active: number) {
 
 export function ClientProof() {
   const root = useRef<HTMLDivElement>(null);
-  const stageInner = useRef<HTMLDivElement>(null);
-  const speech = useRef<HTMLDivElement>(null);
+  const field = useRef<HTMLDivElement>(null);
+  const quoteEl = useRef<HTMLQuoteElement>(null);
+  const meta = useRef<HTMLDivElement>(null);
+  const splitRef = useRef<SplitText | null>(null);
   const reduce = useRef(false);
   const paused = useRef(false);
   const [active, setActive] = useState(0);
@@ -42,32 +58,42 @@ export function ClientProof() {
   const focus = (i: number) => {
     setActive(i);
     paused.current = true;
-    window.setTimeout(() => (paused.current = false), 9000);
+    window.setTimeout(() => (paused.current = false), 10000);
   };
 
-  // auto-advance through the voices
   useEffect(() => {
     reduce.current = prefersReducedMotion();
     if (reduce.current) return;
     const id = window.setInterval(() => {
       if (!paused.current) setActive((a) => (a + 1) % VOICES.length);
-    }, 4400);
+    }, 5200);
     return () => window.clearInterval(id);
   }, []);
 
-  // idle drift + cursor parallax (cinematic depth)
+  // idle drift, parallax, drifting motes
   useGSAP(
     () => {
       registerMachine();
       if (prefersReducedMotion()) return;
       gsap.utils.toArray<HTMLElement>(".voice-float").forEach((el, i) => {
         gsap.to(el, {
-          y: i % 2 ? 14 : -14,
-          x: i % 2 ? -8 : 8,
-          duration: 3 + i * 0.6,
+          y: i % 2 ? 16 : -16,
+          x: i % 2 ? -10 : 10,
+          duration: 3.4 + i * 0.7,
           repeat: -1,
           yoyo: true,
           ease: "sine.inOut",
+        });
+      });
+      gsap.utils.toArray<HTMLElement>(".voice-mote").forEach((el, i) => {
+        gsap.to(el, {
+          y: i % 2 ? 22 : -22,
+          opacity: 0.5,
+          duration: 4 + (i % 5),
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: (i % 6) * 0.4,
         });
       });
       const el = root.current;
@@ -76,7 +102,7 @@ export function ClientProof() {
         const r = el.getBoundingClientRect();
         const dx = (e.clientX - r.left) / r.width - 0.5;
         const dy = (e.clientY - r.top) / r.height - 0.5;
-        gsap.to(stageInner.current, { x: dx * 26, y: dy * 18, duration: 0.7, ease: "power2.out" });
+        gsap.to(field.current, { x: dx * 34, y: dy * 22, duration: 0.8, ease: "power2.out" });
       };
       el.addEventListener("pointermove", onMove);
       return () => el.removeEventListener("pointermove", onMove);
@@ -84,34 +110,42 @@ export function ClientProof() {
     { scope: root }
   );
 
-  // move each face to its slot when focus changes; unfurl the speech bubble
+  // focus change: faces glide to slots, words land line by line
   useGSAP(
     () => {
-      const nodes = gsap.utils.toArray<HTMLElement>(".voice-node");
       const instant = reduce.current;
-      nodes.forEach((node) => {
+      gsap.utils.toArray<HTMLElement>(".voice-node").forEach((node) => {
         const i = Number(node.dataset.index);
         const s = slotFor(i, active);
         const scaleEl = node.querySelector<HTMLElement>(".voice-scale");
         node.style.zIndex = i === active ? "20" : "10";
-        const to = { left: `${s.left}%`, top: `${s.top}%`, duration: instant ? 0 : 0.95, ease: "power3.inOut" };
-        gsap.to(node, to);
+        gsap.to(node, { left: `${s.left}%`, top: `${s.top}%`, duration: instant ? 0 : 1.05, ease: "power3.inOut" });
         if (scaleEl)
           gsap.to(scaleEl, {
             scale: s.scale,
             opacity: s.opacity,
             filter: `blur(${s.blur}px)`,
-            duration: instant ? 0 : 0.95,
+            duration: instant ? 0 : 1.05,
             ease: "power3.inOut",
           });
       });
-      if (speech.current && !instant) {
-        gsap.fromTo(
-          speech.current,
-          { opacity: 0, scale: 0.92, y: 10 },
-          { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "power3.out" }
-        );
+
+      if (meta.current && !instant) {
+        gsap.fromTo(meta.current, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.15 });
       }
+      if (quoteEl.current && !instant) {
+        splitRef.current?.revert();
+        const st = new SplitText(quoteEl.current, { type: "lines" });
+        splitRef.current = st;
+        gsap.from(st.lines, {
+          yPercent: 40,
+          opacity: 0,
+          duration: 0.75,
+          stagger: 0.09,
+          ease: "power3.out",
+        });
+      }
+      return () => splitRef.current?.revert();
     },
     { scope: root, dependencies: [active] }
   );
@@ -122,105 +156,113 @@ export function ClientProof() {
   return (
     <div
       ref={root}
-      className="relative overflow-hidden rounded-2xl border border-white/[0.1] bg-[radial-gradient(130%_100%_at_50%_0%,#0e1218_0%,#070809_70%)]"
+      className="relative overflow-hidden rounded-[1.75rem] border border-white/[0.08] bg-[radial-gradient(140%_120%_at_50%_-10%,#0f141b_0%,#070809_72%)] px-5 pb-12 pt-8 md:px-10 md:pb-16 md:pt-12"
     >
-      {/* faint depth field */}
+      {/* atmosphere */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.4] [background:radial-gradient(circle_at_50%_30%,rgba(16,185,129,0.10),transparent_55%)]"
+        className="pointer-events-none absolute inset-0 [background:radial-gradient(circle_at_50%_22%,rgba(16,185,129,0.12),transparent_52%)]"
       />
-
-      <div ref={stageInner} className="relative h-[33rem] sm:h-[35rem] md:h-[40rem]">
-        {/* the floating faces */}
-        {VOICES.map((c, i) => {
-          const init = slotFor(i, 0);
-          return (
-            <button
-              key={c.clientKey}
-              data-index={i}
-              type="button"
-              onClick={() => focus(i)}
-              aria-label={`Hear from ${c.client}`}
-              className="voice-node absolute -translate-x-1/2 -translate-y-1/2 outline-none"
-              style={{ left: `${init.left}%`, top: `${init.top}%`, zIndex: i === 0 ? 20 : 10 }}
-            >
-              <span
-                className="voice-scale block"
-                style={{ transform: `scale(${init.scale})`, opacity: init.opacity, filter: `blur(${init.blur}px)` }}
-              >
-                <span className="voice-float relative block">
-                  <span
-                    className={`relative block h-28 w-28 overflow-hidden rounded-full ring-1 transition-[box-shadow] duration-500 ${
-                      i === active
-                        ? "ring-v4-accent/60 shadow-[0_0_50px_-6px_rgba(16,185,129,0.5)]"
-                        : "ring-white/15"
-                    }`}
-                  >
-                    <Image src={c.photo} alt={`${c.client} owner`} fill sizes="112px" className="object-cover" />
-                  </span>
-                  {/* speaking pulse on the active face */}
-                  {i === active && (
-                    <span className="pointer-events-none absolute -right-0.5 -top-0.5 grid h-5 w-5 place-items-center rounded-full border-2 border-[#0a0d11] bg-v4-accent">
-                      <span className="absolute inset-0 rounded-full bg-v4-accent opacity-70 [animation:ping_1.8s_cubic-bezier(0,0,0.2,1)_infinite]" />
-                    </span>
-                  )}
-                  <span className="mt-3 block whitespace-nowrap text-center font-mono text-[11px] uppercase tracking-[0.16em] text-v4-faint">
-                    {c.client}
-                  </span>
-                </span>
-              </span>
-            </button>
-          );
-        })}
-
-        {/* the speech bubble for the active voice */}
-        <div
-          ref={speech}
-          className="absolute left-1/2 top-[52%] w-[min(90%,560px)] -translate-x-1/2"
-        >
-          {/* tail pointing up to the active face */}
-          <span className="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 border-l border-t border-v4-accent/30 bg-[#0c1014]" />
-          <div className="relative rounded-2xl border border-v4-accent/25 bg-[#0c1014]/95 p-6 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.95)] backdrop-blur-sm md:p-8">
-            <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-v4-accent">
-              <span className="machine-dot" data-on="true" /> speaking · {location}
-            </span>
-            <blockquote className="mt-3 font-display text-[clamp(1.15rem,2vw,1.6rem)] italic leading-relaxed text-v4-ink">
-              {`“${cur.quote}”`}
-            </blockquote>
-            <div className="mt-4 flex items-center justify-between gap-4">
-              <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-v4-muted">
-                {cur.metric}
-              </span>
-              <a
-                href={cur.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-[11px] uppercase tracking-[0.14em] text-v4-accent transition-opacity hover:opacity-70"
-              >
-                view live ↗
-              </a>
-            </div>
-          </div>
+      <div ref={field} className="relative">
+        {/* drifting motes */}
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          {MOTES.map((m, i) => (
+            <span
+              key={i}
+              className="voice-mote absolute rounded-full bg-v4-accent/40"
+              style={{ left: `${m.x}%`, top: `${m.y}%`, width: m.s, height: m.s, opacity: 0.2 }}
+            />
+          ))}
         </div>
 
-        {/* progress dots */}
-        <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-2">
-          {VOICES.map((c, i) => (
-            <button
-              key={c.clientKey}
-              type="button"
-              onClick={() => focus(i)}
-              aria-label={`Show ${c.client}`}
-              aria-pressed={i === active}
-              className="grid h-6 place-items-center"
+        {/* the floating faces */}
+        <div className="relative h-[17rem] sm:h-[19rem] md:h-[23rem]">
+          {VOICES.map((c, i) => {
+            const init = slotFor(i, 0);
+            return (
+              <button
+                key={c.clientKey}
+                data-index={i}
+                type="button"
+                onClick={() => focus(i)}
+                aria-label={`Hear from ${c.client}`}
+                className="voice-node absolute -translate-x-1/2 -translate-y-1/2 outline-none"
+                style={{ left: `${init.left}%`, top: `${init.top}%`, zIndex: i === 0 ? 20 : 10 }}
+              >
+                <span
+                  className="voice-scale block"
+                  style={{ transform: `scale(${init.scale})`, opacity: init.opacity, filter: `blur(${init.blur}px)` }}
+                >
+                  <span className="voice-float relative block">
+                    {/* halo on the speaker */}
+                    {i === active && (
+                      <span className="pointer-events-none absolute -inset-6 rounded-full bg-[radial-gradient(circle,rgba(16,185,129,0.28),transparent_68%)] blur-md" />
+                    )}
+                    <span
+                      className={`relative block h-32 w-32 overflow-hidden rounded-full ring-1 md:h-36 md:w-36 ${
+                        i === active ? "ring-v4-accent/60" : "ring-white/15"
+                      }`}
+                    >
+                      <Image src={c.photo} alt={`${c.client} owner`} fill sizes="144px" className="object-cover" />
+                    </span>
+                    {i === active && (
+                      <span className="pointer-events-none absolute right-1 top-1 grid h-5 w-5 place-items-center rounded-full border-2 border-[#0a0d11] bg-v4-accent">
+                        <span className="absolute inset-0 rounded-full bg-v4-accent opacity-70 [animation:ping_1.9s_cubic-bezier(0,0,0.2,1)_infinite]" />
+                      </span>
+                    )}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* the words, large and cinematic */}
+        <div className="relative mx-auto mt-2 max-w-[46rem] text-center md:mt-4">
+          <div ref={meta} className="flex items-center justify-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.22em]">
+            <span className="machine-dot" data-on="true" />
+            <span className="text-v4-accent">{cur.client}</span>
+            <span className="text-v4-faint">· {location}</span>
+          </div>
+
+          <blockquote
+            ref={quoteEl}
+            className="mx-auto mt-5 max-w-[42rem] font-sans text-[clamp(1.45rem,3.4vw,2.6rem)] font-medium leading-[1.22] tracking-[-0.02em] text-v4-ink"
+          >
+            {cur.quote}
+          </blockquote>
+
+          <div className="mt-7 flex items-center justify-center gap-4 font-mono text-[11px] uppercase tracking-[0.18em]">
+            <span className="rounded-md border border-v4-accent/30 px-2.5 py-1 text-v4-accent">{cur.metric}</span>
+            <a
+              href={cur.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-v4-faint transition-colors hover:text-v4-ink"
             >
-              <span
-                className={`block h-1.5 rounded-full transition-all duration-500 ${
-                  i === active ? "w-7 bg-v4-accent" : "w-1.5 bg-white/25 hover:bg-white/50"
-                }`}
-              />
-            </button>
-          ))}
+              view live ↗
+            </a>
+          </div>
+
+          {/* which voice */}
+          <div className="mt-8 flex items-center justify-center gap-2">
+            {VOICES.map((c, i) => (
+              <button
+                key={c.clientKey}
+                type="button"
+                onClick={() => focus(i)}
+                aria-label={`Show ${c.client}`}
+                aria-pressed={i === active}
+                className="grid h-6 place-items-center"
+              >
+                <span
+                  className={`block h-1.5 rounded-full transition-all duration-500 ${
+                    i === active ? "w-8 bg-v4-accent" : "w-1.5 bg-white/25 hover:bg-white/50"
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
