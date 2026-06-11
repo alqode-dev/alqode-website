@@ -1,255 +1,237 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { TESTIMONIALS } from "@/lib/constants";
-import {
-  registerMachine,
-  prefersReducedMotion,
-  gsap,
-  useGSAP,
-  ScrollTrigger,
-} from "./machine";
+import { registerMachine, prefersReducedMotion, gsap, useGSAP } from "./machine";
 
 /**
- * CLIENT PROOF — each client as an interactive before → after "power-on".
- *
- * Not a testimonial card and not a console. Research says the proof that
- * actually converts is the TRANSFORMATION (before/after) made interactive. So
- * each real client is a draggable reveal: the dead, OFFLINE problem state on
- * one side; drag the handle and their ACTUAL live site powers on in full colour
- * with the result. Honest (the "after" is their real live site; the "before"
- * is the stated problem in the machine's offline style, not a faked old shot),
- * interactive like the configurator, and on-brand with the whole site's
- * boot/power-on motif. The owner's words anchor it underneath.
+ * CLIENT PROOF — "the voices": client faces float as bubbles in a dark
+ * cinematic space. The active one comes FORWARD (large, lit, close) and a
+ * speech bubble unfurls with their words; the others drift BACK (small, dim,
+ * deep). Tap any face to bring it forward; it also auto-plays. The focus moving
+ * between them reads like a camera pulling from one person to the next. Built
+ * in the machine language (chrome-ringed nodes, accent glow), original to
+ * alqode, not a copy.
  */
 
-type Case = (typeof TESTIMONIALS.items)[number];
+const VOICES = TESTIMONIALS.items;
 
-function domain(url: string) {
-  try {
-    return new URL(url).hostname.replace(/^www\./, "");
-  } catch {
-    return url;
-  }
-}
+// slot geometry as % of the stage — speaker centred, the others drifting back
+// in the top corners (kept clear of the speech bubble below)
+const CENTER = { left: 50, top: 33, scale: 1, opacity: 1, blur: 0 };
+const BG = [
+  { left: 13, top: 18, scale: 0.5, opacity: 0.4, blur: 2.5 },
+  { left: 87, top: 16, scale: 0.5, opacity: 0.4, blur: 2.5 },
+];
 
-function Stage({ c }: { c: Case }) {
-  const stage = useRef<HTMLDivElement>(null);
-  const overlay = useRef<HTMLDivElement>(null);
-  const handle = useRef<HTMLDivElement>(null);
-  const hint = useRef<HTMLSpanElement>(null);
-  const after = useRef<HTMLParagraphElement>(null);
-  const pos = useRef(0.16);
-
-  const apply = (p: number) => {
-    const v = Math.max(0, Math.min(1, p));
-    pos.current = v;
-    if (overlay.current) overlay.current.style.clipPath = `inset(0 ${(1 - v) * 100}% 0 0)`;
-    if (handle.current) handle.current.style.left = `${v * 100}%`;
-    // the result line fades in only as the site powers on, so it never
-    // collides with the problem text mid-reveal
-    if (after.current) after.current.style.opacity = String(Math.max(0, Math.min(1, (v - 0.5) / 0.28)));
-  };
-
-  const hideHint = () => {
-    if (hint.current) gsap.to(hint.current, { opacity: 0, duration: 0.3 });
-  };
-
-  const onPointerDown = (e: React.PointerEvent) => {
-    e.preventDefault();
-    hideHint();
-    const el = stage.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const move = (ev: PointerEvent) => apply((ev.clientX - rect.left) / rect.width);
-    const up = () => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", up);
-    };
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", up);
-    apply((e.clientX - rect.left) / rect.width);
-  };
-
-  useGSAP(
-    () => {
-      registerMachine();
-      apply(0.16);
-      if (prefersReducedMotion()) {
-        apply(1);
-        if (hint.current) hint.current.style.opacity = "0";
-        return;
-      }
-      const proxy = { v: 0.16 };
-      ScrollTrigger.create({
-        trigger: stage.current,
-        start: "top 78%",
-        once: true,
-        onEnter: () => {
-          gsap.to(proxy, {
-            v: 0.6,
-            duration: 1.1,
-            ease: "power2.inOut",
-            onUpdate: () => apply(proxy.v),
-            onComplete: () => {
-              gsap.to(proxy, {
-                v: 0.34,
-                duration: 0.7,
-                ease: "power2.inOut",
-                onUpdate: () => apply(proxy.v),
-              });
-            },
-          });
-        },
-      });
-    },
-    { scope: stage }
-  );
-
-  return (
-    <div className="overflow-hidden rounded-2xl border border-white/[0.12] bg-v4-bg-2 shadow-[0_40px_100px_-60px_rgba(0,0,0,0.95)]">
-      {/* browser chrome */}
-      <div className="flex items-center gap-3 border-b border-white/[0.08] bg-[#090c10] px-4 py-2.5">
-        <span className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-          <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-          <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-        </span>
-        <span className="truncate font-mono text-[11px] tracking-[0.02em] text-v4-faint">
-          {domain(c.url)}
-        </span>
-      </div>
-
-      {/* the stage */}
-      <div ref={stage} className="relative aspect-[4/5] touch-pan-y select-none sm:aspect-[3/2] md:aspect-[16/10]">
-        {/* BEFORE — the dead, offline problem state */}
-        <div className="absolute inset-0 bg-[radial-gradient(120%_100%_at_70%_20%,#13171c_0%,#070809_75%)]">
-          <div
-            aria-hidden
-            className="absolute inset-0 opacity-[0.5] [background:repeating-linear-gradient(0deg,transparent_0,transparent_3px,rgba(255,255,255,0.025)_3px,rgba(255,255,255,0.025)_4px)]"
-          />
-          <div className="absolute right-4 top-4 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em]">
-            <span className="h-1.5 w-1.5 rounded-full bg-v4-ember/80" />
-            <span className="text-v4-faint">offline</span>
-          </div>
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-8 text-center">
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-v4-faint">
-              before
-            </span>
-            <p className="max-w-[22ch] font-sans text-[clamp(1.05rem,2.2vw,1.6rem)] font-semibold leading-snug text-v4-muted">
-              {c.before}
-            </p>
-          </div>
-        </div>
-
-        {/* AFTER — their real live site, powered on, revealed by the handle */}
-        <div
-          ref={overlay}
-          className="absolute inset-0 will-change-[clip-path]"
-          style={{ clipPath: "inset(0 84% 0 0)" }}
-        >
-          <Image
-            src={c.site}
-            alt={`${c.client} live site`}
-            fill
-            sizes="(max-width: 768px) 90vw, 1000px"
-            className="object-cover object-top"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/25" />
-          <div className="absolute left-4 top-4 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em]">
-            <span className="machine-dot" data-on="true" />
-            <span className="text-v4-accent">online</span>
-            <span className="rounded border border-v4-accent/30 px-1.5 py-0.5 text-[9px] text-v4-accent">
-              {c.metric}
-            </span>
-          </div>
-          <p
-            ref={after}
-            style={{ opacity: 0 }}
-            className="absolute bottom-4 left-4 right-4 max-w-[34ch] font-sans text-[clamp(0.95rem,1.7vw,1.25rem)] font-semibold leading-snug text-white [text-shadow:0_2px_12px_rgba(0,0,0,0.85)]"
-          >
-            {c.after}
-          </p>
-        </div>
-
-        {/* drag handle */}
-        <div
-          ref={handle}
-          onPointerDown={onPointerDown}
-          role="slider"
-          aria-label={`Reveal what we built for ${c.client}`}
-          aria-valuenow={50}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          tabIndex={0}
-          className="absolute top-0 bottom-0 z-20 -ml-6 w-12 cursor-ew-resize touch-none"
-          style={{ left: "16%" }}
-        >
-          <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-v4-accent/80 shadow-[0_0_14px_rgba(16,185,129,0.6)]" />
-          <span className="absolute left-1/2 top-1/2 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-v4-accent/50 bg-[#0a0d11]/90 font-mono text-[12px] text-v4-accent shadow-[0_0_18px_-2px_rgba(16,185,129,0.55)] backdrop-blur-sm">
-            ↔
-          </span>
-        </div>
-
-        {/* invite */}
-        <span
-          ref={hint}
-          className="pointer-events-none absolute bottom-4 left-1/2 z-30 -translate-x-1/2 rounded-full border border-white/10 bg-black/60 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-v4-ink backdrop-blur-sm"
-        >
-          ← drag to power it on →
-        </span>
-      </div>
-    </div>
-  );
+function slotFor(i: number, active: number) {
+  if (i === active) return CENTER;
+  const others = VOICES.map((_, k) => k).filter((k) => k !== active);
+  return BG[others.indexOf(i)] ?? BG[0];
 }
 
 export function ClientProof() {
+  const root = useRef<HTMLDivElement>(null);
+  const stageInner = useRef<HTMLDivElement>(null);
+  const speech = useRef<HTMLDivElement>(null);
+  const reduce = useRef(false);
+  const paused = useRef(false);
+  const [active, setActive] = useState(0);
+
+  const focus = (i: number) => {
+    setActive(i);
+    paused.current = true;
+    window.setTimeout(() => (paused.current = false), 9000);
+  };
+
+  // auto-advance through the voices
+  useEffect(() => {
+    reduce.current = prefersReducedMotion();
+    if (reduce.current) return;
+    const id = window.setInterval(() => {
+      if (!paused.current) setActive((a) => (a + 1) % VOICES.length);
+    }, 4400);
+    return () => window.clearInterval(id);
+  }, []);
+
+  // idle drift + cursor parallax (cinematic depth)
+  useGSAP(
+    () => {
+      registerMachine();
+      if (prefersReducedMotion()) return;
+      gsap.utils.toArray<HTMLElement>(".voice-float").forEach((el, i) => {
+        gsap.to(el, {
+          y: i % 2 ? 14 : -14,
+          x: i % 2 ? -8 : 8,
+          duration: 3 + i * 0.6,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+      });
+      const el = root.current;
+      if (!el) return;
+      const onMove = (e: PointerEvent) => {
+        const r = el.getBoundingClientRect();
+        const dx = (e.clientX - r.left) / r.width - 0.5;
+        const dy = (e.clientY - r.top) / r.height - 0.5;
+        gsap.to(stageInner.current, { x: dx * 26, y: dy * 18, duration: 0.7, ease: "power2.out" });
+      };
+      el.addEventListener("pointermove", onMove);
+      return () => el.removeEventListener("pointermove", onMove);
+    },
+    { scope: root }
+  );
+
+  // move each face to its slot when focus changes; unfurl the speech bubble
+  useGSAP(
+    () => {
+      const nodes = gsap.utils.toArray<HTMLElement>(".voice-node");
+      const instant = reduce.current;
+      nodes.forEach((node) => {
+        const i = Number(node.dataset.index);
+        const s = slotFor(i, active);
+        const scaleEl = node.querySelector<HTMLElement>(".voice-scale");
+        node.style.zIndex = i === active ? "20" : "10";
+        const to = { left: `${s.left}%`, top: `${s.top}%`, duration: instant ? 0 : 0.95, ease: "power3.inOut" };
+        gsap.to(node, to);
+        if (scaleEl)
+          gsap.to(scaleEl, {
+            scale: s.scale,
+            opacity: s.opacity,
+            filter: `blur(${s.blur}px)`,
+            duration: instant ? 0 : 0.95,
+            ease: "power3.inOut",
+          });
+      });
+      if (speech.current && !instant) {
+        gsap.fromTo(
+          speech.current,
+          { opacity: 0, scale: 0.92, y: 10 },
+          { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "power3.out" }
+        );
+      }
+    },
+    { scope: root, dependencies: [active] }
+  );
+
+  const cur = VOICES[active];
+  const location = cur.role.split(" · ")[1] ?? cur.role;
+
   return (
-    <div className="flex flex-col gap-16 md:gap-24">
-      {TESTIMONIALS.items.map((c, i) => {
-        const location = c.role.split(" · ")[1] ?? c.role;
-        return (
-          <div key={c.clientKey} data-reveal className="reveal">
-            <div className="mb-5 flex items-center gap-3 md:mb-7">
-              <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-v4-accent">
-                case.{String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="h-px flex-1 bg-white/10" />
-              <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-v4-faint">
-                {c.client} · {location}
-              </span>
-            </div>
+    <div
+      ref={root}
+      className="relative overflow-hidden rounded-2xl border border-white/[0.1] bg-[radial-gradient(130%_100%_at_50%_0%,#0e1218_0%,#070809_70%)]"
+    >
+      {/* faint depth field */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.4] [background:radial-gradient(circle_at_50%_30%,rgba(16,185,129,0.10),transparent_55%)]"
+      />
 
-            <Stage c={c} />
-
-            {/* the owner's words confirm the transformation */}
-            <div className="mt-6 flex flex-col gap-5 md:flex-row md:items-center md:justify-between md:gap-10">
-              <blockquote className="max-w-[58ch] border-l-2 border-v4-accent/40 pl-4 font-display text-[clamp(1.1rem,1.7vw,1.45rem)] italic leading-relaxed text-v4-muted">
-                {`“${c.quote}”`}
-              </blockquote>
-              <a
-                href={c.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex shrink-0 items-center gap-3 transition-opacity hover:opacity-80"
+      <div ref={stageInner} className="relative h-[33rem] sm:h-[35rem] md:h-[40rem]">
+        {/* the floating faces */}
+        {VOICES.map((c, i) => {
+          const init = slotFor(i, 0);
+          return (
+            <button
+              key={c.clientKey}
+              data-index={i}
+              type="button"
+              onClick={() => focus(i)}
+              aria-label={`Hear from ${c.client}`}
+              className="voice-node absolute -translate-x-1/2 -translate-y-1/2 outline-none"
+              style={{ left: `${init.left}%`, top: `${init.top}%`, zIndex: i === 0 ? 20 : 10 }}
+            >
+              <span
+                className="voice-scale block"
+                style={{ transform: `scale(${init.scale})`, opacity: init.opacity, filter: `blur(${init.blur}px)` }}
               >
-                <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-lg ring-1 ring-white/15">
-                  <Image src={c.photo} alt={`${c.client} owner`} fill sizes="44px" className="object-cover" />
-                </span>
-                <span className="flex flex-col leading-tight">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-v4-ink">
+                <span className="voice-float relative block">
+                  <span
+                    className={`relative block h-28 w-28 overflow-hidden rounded-full ring-1 transition-[box-shadow] duration-500 ${
+                      i === active
+                        ? "ring-v4-accent/60 shadow-[0_0_50px_-6px_rgba(16,185,129,0.5)]"
+                        : "ring-white/15"
+                    }`}
+                  >
+                    <Image src={c.photo} alt={`${c.client} owner`} fill sizes="112px" className="object-cover" />
+                  </span>
+                  {/* speaking pulse on the active face */}
+                  {i === active && (
+                    <span className="pointer-events-none absolute -right-0.5 -top-0.5 grid h-5 w-5 place-items-center rounded-full border-2 border-[#0a0d11] bg-v4-accent">
+                      <span className="absolute inset-0 rounded-full bg-v4-accent opacity-70 [animation:ping_1.8s_cubic-bezier(0,0,0.2,1)_infinite]" />
+                    </span>
+                  )}
+                  <span className="mt-3 block whitespace-nowrap text-center font-mono text-[11px] uppercase tracking-[0.16em] text-v4-faint">
                     {c.client}
                   </span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-v4-accent">
-                    view live ↗
-                  </span>
                 </span>
+              </span>
+            </button>
+          );
+        })}
+
+        {/* the speech bubble for the active voice */}
+        <div
+          ref={speech}
+          className="absolute left-1/2 top-[52%] w-[min(90%,560px)] -translate-x-1/2"
+        >
+          {/* tail pointing up to the active face */}
+          <span className="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 border-l border-t border-v4-accent/30 bg-[#0c1014]" />
+          <div className="relative rounded-2xl border border-v4-accent/25 bg-[#0c1014]/95 p-6 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.95)] backdrop-blur-sm md:p-8">
+            <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-v4-accent">
+              <span className="machine-dot" data-on="true" /> speaking · {location}
+            </span>
+            <blockquote className="mt-3 font-display text-[clamp(1.15rem,2vw,1.6rem)] italic leading-relaxed text-v4-ink">
+              {`“${cur.quote}”`}
+            </blockquote>
+            <div className="mt-4 flex items-center justify-between gap-4">
+              <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-v4-muted">
+                {cur.metric}
+              </span>
+              <a
+                href={cur.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-[11px] uppercase tracking-[0.14em] text-v4-accent transition-opacity hover:opacity-70"
+              >
+                view live ↗
               </a>
             </div>
           </div>
-        );
-      })}
+        </div>
+
+        {/* progress dots */}
+        <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-2">
+          {VOICES.map((c, i) => (
+            <button
+              key={c.clientKey}
+              type="button"
+              onClick={() => focus(i)}
+              aria-label={`Show ${c.client}`}
+              aria-pressed={i === active}
+              className="grid h-6 place-items-center"
+            >
+              <span
+                className={`block h-1.5 rounded-full transition-all duration-500 ${
+                  i === active ? "w-7 bg-v4-accent" : "w-1.5 bg-white/25 hover:bg-white/50"
+                }`}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* readable fallback for SEO / screen readers / no-JS */}
+      <ul className="sr-only">
+        {VOICES.map((c) => (
+          <li key={c.clientKey}>
+            {c.client}, {c.role}: {c.quote}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

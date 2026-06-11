@@ -110,13 +110,13 @@ export function PageSections() {
             data-reveal
             className="reveal mt-6 max-w-[18ch] text-balance font-sans text-[clamp(1.8rem,4.4vw,3.4rem)] font-bold leading-[1.0] tracking-[-0.025em] text-white"
           >
-            Real problems, solved.
+            Straight from the people I built for.
           </h2>
           <p
             data-reveal
             className="reveal mt-4 max-w-[52ch] text-[0.98rem] leading-relaxed text-v4-muted"
           >
-            Three real businesses, two countries. Drag each one to power on what we built, then hear it from them.
+            Three real businesses across two countries. Tap a face to hear what changed.
           </p>
           <div className="mt-12 md:mt-16">
             <ClientProof />
