@@ -7,6 +7,9 @@
 > learned the hard way (Part B).
 >
 > Last updated: 2026-06-07 · Version: **v4 "Cinema"** (the live design direction).
+>
+> **See also `RESOURCES.md`** — the complete inventory of every skill, agent, MCP,
+> library, reference site and knowledge base available on this project.
 
 ---
 
