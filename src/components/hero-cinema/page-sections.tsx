@@ -116,7 +116,7 @@ export function PageSections() {
             data-reveal
             className="reveal mt-4 max-w-[52ch] text-[0.98rem] leading-relaxed text-v4-muted"
           >
-            Three real businesses across two countries. Tap a face to hear what changed.
+            Three real businesses, two countries. The problem we walked in on, and what we shipped.
           </p>
           <div className="mt-12 md:mt-16">
             <ClientProof />
