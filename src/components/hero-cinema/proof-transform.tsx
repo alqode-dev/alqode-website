@@ -96,10 +96,7 @@ function Floor({ c, i }: { c: (typeof ITEMS)[number]; i: number }) {
       ref={root}
       className="relative flex min-h-[88vh] flex-col items-center justify-center overflow-hidden px-2 py-[10vh]"
     >
-      {/* darkened brand backplate (atmosphere, never a thumbnail) */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.06]">
-        <Image src={c.site} alt="" fill sizes="100vw" className="object-cover [filter:grayscale(1)_brightness(0.6)]" />
-      </div>
+      {/* atmosphere only — no client screenshot here (the work gallery owns those) */}
       <div aria-hidden className="pointer-events-none absolute inset-0 [background:radial-gradient(circle_at_50%_42%,rgba(16,185,129,0.07),transparent_60%)]" />
 
       {/* control strip */}
