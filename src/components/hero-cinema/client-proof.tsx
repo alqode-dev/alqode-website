@@ -156,7 +156,7 @@ export function ClientProof() {
                 <span className="pointer-events-none absolute -bottom-1 -right-1 h-2.5 w-2.5 border-b border-r border-v4-accent/70" />
               </span>
               <span className="flex flex-col gap-0.5 leading-tight">
-                <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-v4-faint">// operator · {cur.name}</span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-v4-faint">{`// operator · ${cur.name}`}</span>
                 <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-v4-accent">view live ↗</span>
               </span>
             </motion.a>

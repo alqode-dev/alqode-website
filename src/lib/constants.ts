@@ -1,10 +1,9 @@
 export const SITE = {
   name: "{alqode}",
   domain: "alqode.com",
-  title:
-    "{alqode} — Web Apps, Automation & WhatsApp Systems · Cape Town + UAE",
+  title: "alqode — Every layer. Built to earn.",
   description:
-    "Cape Town agency building custom web apps, n8n automation, and WhatsApp systems for SMBs in South Africa and the UAE. Free mockup in 24h. Projects from R8,000.",
+    "Brand, web, commerce, motion, automation and software, every layer built in house in Cape Town. We don't build websites, we build machines that make you money.",
   url: "https://alqode.com",
   founder: "Mohammed Hamdaan Dhaler",
   location: "Cape Town, South Africa",
