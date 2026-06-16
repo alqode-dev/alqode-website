@@ -228,6 +228,7 @@ export const TESTIMONIALS = {
       metric: "Hours → minutes",
       before: "Manual form processing. Hours lost, leads slipping through.",
       after: "Captures and books qualified leads on its own.",
+      pull: "Hamdaan thinks like a business operator, not just a developer.",
       quote:
         "Hamdaan thinks like a business operator, not just a developer. The automation he built turned hours of manual form processing into minutes, and the website now books qualified leads straight into my calendar.",
       photo: "/images/clients/faida-owner.png",
@@ -242,6 +243,7 @@ export const TESTIMONIALS = {
       metric: "Buyers → community",
       before: "A great product, but no way to bring customers back.",
       after: "A game that turns every buyer into a returning community.",
+      pull: "He didn't just build us a website. He built the engine.",
       quote:
         "He didn't just build us a website. He built the engine. Every customer who plays the game becomes part of our community, and the data fuels everything from promotions to new launches.",
       photo: "/images/clients/bochi-owner.png",
@@ -256,6 +258,7 @@ export const TESTIMONIALS = {
       metric: "Budget → premium",
       before: "Wanted a premium store, but stuck on a startup budget.",
       after: "A full e-commerce store that looks like 10× the spend.",
+      pull: "A premium look on a budget I could afford. Every rand worked twice.",
       quote:
         "Premium look on a budget I could afford. I'm running a full e-commerce store that looks like I paid ten times what I did. Hamdaan made every rand work twice.",
       photo: "/images/clients/trophy-owner.png",
