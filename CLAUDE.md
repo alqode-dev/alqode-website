@@ -6,7 +6,7 @@
 > anything. It is both the current-state spec (Part A) and the reusable method we
 > learned the hard way (Part B).
 >
-> Last updated: 2026-06-07 · Version: **v4 "Cinema"** (the live design direction).
+> Last updated: 2026-06-19 · Version: **v4 "Cinema"** — **SHIPPED LIVE** (it is alqode.com).
 >
 > **See also `RESOURCES.md`** — the complete inventory of every skill, agent, MCP,
 > library, reference site and knowledge base available on this project.
@@ -42,6 +42,10 @@
 22. How we test and verify (no "hope")
 23. Hard-won lessons (do not relearn)
 24. Version history
+25. **THE HARD-SECTION METHODOLOGY — the 2-strike rule (READ THIS)**
+26. Session-9 retrospective: the testimonials thrash + the REJECTED ledger
+27. Resource decision tree (reach for these FIRST, not at attempt #9)
+28. Get ahead / next session (be top 1%)
 
 ---
 
@@ -99,7 +103,7 @@ WhatsApp, there is no backend). Vercel CLI is authed as `alqodez-6669`; the
 | @gsap/react | 2.1 | `useGSAP` hook |
 | lenis | 1.1 | smooth scroll, synced to the GSAP ticker |
 | motion | 12.40 | (motion.dev, framer-motion successor) springs/gestures where useful |
-| framer-motion | 11.15 | legacy nav animation (v3); still installed |
+| framer-motion | 11.15 | powers the client-proof section (per-word flip, parallax); also legacy v3 |
 | lucide-react | 0.468 | icons |
 | opentype.js | 2.0 | parse the wordmark font for the 3D geometry |
 | @vercel/analytics | 1.4 | production analytics |
@@ -180,25 +184,39 @@ Single page. Route file renders, in order:
    community badge, tech-stack chips. Mobile swipes (peeking next card + "swipe →");
    desktop scrolls + arrows. Real screenshots in `public/images/`.
 
-6. **Control Core** (`control-core.tsx`). LOCKED + liked. The founder section as a wiring
+6. **Client proof — FIELD REPORTS** (`client-proof.tsx`). The testimonials / social-proof
+   section. **Reskinned from a premium 21st.dev Magic editorial component** into the machine
+   language (NOT a generic widget; deliberately carries NO client screenshots — the work
+   gallery already owns "live + earning", and re-showing them read as duplication). One compact
+   composition cycling the three real clients: an oversized ghosted case number with magnetic
+   cursor parallax, a vertical `FIELD REPORT` rail + green progress line, the outcome as a mono
+   readout (`Hours → minutes`), a SHORT punchy pull-quote that lands word-by-word with a 3D flip,
+   a chrome-housed operator plate, a faint client-name ticker. framer-motion; auto-advances;
+   reduced-motion + no-JS rest readable. The visible quote is the `pull` field; full quotes live
+   in an sr-only list + Review JSON-LD. **STATUS: shipped but only "average" to Hamdaan — the
+   explicit next-session improvement target.** It took ~10 attempts to get even this far; read
+   **§25 (the hard-section methodology)** before touching it. Content = `TESTIMONIALS` in
+   constants (`client/role/metric/before/after/pull/quote/photo/site`).
+
+7. **Control Core** (`control-core.tsx`). LOCKED + liked. The founder section as a wiring
    schematic, NOT a solar system (a copied orbit was ripped out). Operator photo in a
    bracketed chrome housing; 6 tool chips wired in, traces DrawSVG in, MotionPath current
    pulses flow toward the core. The 6 chips CONTINUOUSLY CYCLE through a 16-tool pool.
    Motto beside it: "Our job is to make you so successful, your competitors run out of
    business." + founder credit.
 
-7. **Configurator** (`budget-slider.tsx`). LOCKED + loved. "Tell me what should run
+8. **Configurator** (`budget-slider.tsx`). LOCKED + loved. "Tell me what should run
    itself." Drag a slider R0 → R30k+; the budget figure, tier label, and tier copy update
    (e.g. "a store that sells while you sleep"), with a per-tier WhatsApp CTA.
 
-8. **Footer — STANDBY** (`page-sections.tsx`). `module.standby :: CHANNEL OPEN`, the
+9. **Footer — STANDBY** (`page-sections.tsx`). `module.standby :: CHANNEL OPEN`, the
    problem-led line, "Let's solve a problem" CTA (`waUrl("v4_footer")`), social links.
 
-9. **Floating WhatsApp FAB** (`whatsapp-fab.tsx`). The only persistent CTA (the site is
-   headerless by design — no nav, confirmed). Machine-styled dark chrome pill (not a
-   bright green circle): green WhatsApp glyph, compact disc on mobile, reply-time label
-   on desktop. Honest live pip (soft pulse + "usually replies in minutes", never a fake
-   "online now"). Appears after the first screen. `waUrl("v4_fab", <prefilled message>)`.
+10. **Floating WhatsApp FAB** (`hero-cinema/whatsapp-fab.tsx`). The only persistent CTA (the
+   site is headerless by design — no nav, confirmed). Machine-styled dark chrome pill (not a
+   bright green circle): green WhatsApp glyph, compact disc on mobile, reply-time label on
+   desktop. Honest live pip (soft pulse + "usually replies in minutes", never a fake "online
+   now"). Appears after the first screen. `waUrl("v4_fab", <prefilled message>)`.
 
 ## 7. THE WEBGL HERO (how it works)
 
@@ -280,9 +298,9 @@ src/
   components/
     hero-cinema/        # THE v4 system:
       cinema-hero.tsx · intro-loader.tsx · cursor.tsx · page-sections.tsx
-      capability-modules.tsx · work-gallery.tsx · control-core.tsx · budget-slider.tsx
-      studio-snake-line.tsx · machine-spine.tsx · status-readout.tsx · studio-env.tsx
-      machine.ts · wordmark-geometry.ts · whatsapp-fab.tsx
+      capability-modules.tsx · work-gallery.tsx · client-proof.tsx · control-core.tsx
+      budget-slider.tsx · studio-snake-line.tsx · machine-spine.tsx · status-readout.tsx
+      studio-env.tsx · machine.ts · wordmark-geometry.ts · whatsapp-fab.tsx
     tech-icons.tsx      # 25 inline SVG brand logos + TECH_ICON_MAP + TECH_COLORS
     client-logos-svg.tsx · footer.tsx
     primitives/         # bracketed.tsx · live-status.tsx · mono-tag.tsx
@@ -302,8 +320,9 @@ ScrollTrigger scrub breaks.
 
 ## 12. PERFORMANCE + THE WEBGL TRADEOFF
 
-Production first-load JS: home (v4) ~462 kB — the WebGL hero (three + R3F + GSAP),
-dynamically imported behind the loader. This is the deliberate cost of the cinematic
+Production first-load JS: home (v4) ~499 kB — the WebGL hero (three + R3F + GSAP),
+dynamically imported behind the loader, plus framer-motion for the client-proof section
+(~37 kB of the rise from the earlier 462 kB). This is the deliberate cost of the cinematic
 direction Hamdaan signed off on; it will NOT score 90 on mobile Lighthouse performance,
 and that is an accepted tradeoff. **Be honest about this number; never fake it.**
 
@@ -365,9 +384,26 @@ carries JSON-LD (Organization / ProfessionalService / FAQPage). OG image via
 - **No em dashes, no AI-writing tells**, in site copy and in chat. Write like a person.
 - **Never touch `main` / the live site until he gives an explicit final GO.** Work on a
   branch; he takes one last look; then merge.
-- **He vents when I miss.** Stay calm, don't argue, don't grovel, just fix it.
+- **He vents when I miss.** "I'm done with you / you're so annoying / negative 100" is
+  VENTING, not a stop order (he re-engages every time). Zero groveling, zero arguing, zero long
+  explanations, zero promises. Don't mirror it. Raise the quality and return with something
+  different in KIND. If you're drafting an apology or justification, delete it.
 - **Leave docs + memory fully updated before winding down** (he ends sessions for a fresh
   brain and demands a clean handoff — this file is that handoff).
+
+**SHARPENED in session 9 (the testimonials thrash — see §25/§26, internalise these):**
+- **He gives a VIBE for LEVEL, never a SPEC to build.** When he says "I saw X I liked", take
+  the level, throw away the literal thing, invent original from the resources. **NEVER ask him
+  for a reference link / example / "show me what you mean"** on anything creative — it reads as
+  dodging the design job he pays me to own, and it enraged him ("you do not get design
+  inspiration from me"). Catch yourself about to chase his reference → STOP, pull a premium
+  pattern and invent instead.
+- **His rating words are FORMAT signals, not styling notes.** "vomit / 1/10 / super ass /
+  looked like my v3 / seen it / format is bad" = the KIND of thing is wrong. Name that format
+  category and BAN it; do not recolour it. (Recolouring a rejected kind is what cost 8 builds.)
+- **Present 1–2 pre-vetted divergent options as a CHOICE, never a stream of single raw bets.**
+  The taste skills are the FIRST reviewer; he is the SECOND. Converting his role from rejecter
+  to chooser is the biggest relationship saver.
 
 ## 17. THE TOOL KIT (the gap was never missing tools)
 
@@ -484,14 +520,21 @@ Mobile is ~99% of traffic, so it's designed, not shrunk. Patterns that worked:
 - **Displacement amplitude** must be a small fraction of feature size, never raw
   pointer-delta (cranked = torn "strings").
 - **Never copy a reference. The word "studio" is banned in copy. No em dashes / AI tells.**
+- **THE 2-STRIKE RULE (§25) — the executable version of the capabilities lesson above.** If a
+  taste-driven section is rejected TWICE, STOP hand-iterating: the format category is wrong, not
+  the paint. Switch immediately to premium-pull + divergent judged exploration. This lesson lived
+  here as prose and was inert under pressure — it cost ~10 builds on the testimonials (§26).
+  It is now a hard gate. Read §25 before touching any rejected section.
 
 ## 24. VERSION HISTORY
 
-- **v4 "Cinema" (current, 2026):** full rebuild into "THE MACHINE" — WebGL molten-chrome
-  hero, system-boot loader, signal-flow snake, kinetic capabilities, deployed-units work
-  gallery, wired control core, budget configurator, standby footer, floating WhatsApp FAB.
-  R3F + the full free GSAP plugin set + Lenis. Headerless by design. Built over multiple
-  hard sessions; capabilities took 6 attempts. Shipped to `main` replacing v3.
+- **v4 "Cinema" (current — SHIPPED LIVE 2026-06-19):** full rebuild into "THE MACHINE" —
+  WebGL molten-chrome hero, system-boot loader, signal-flow snake (25 logos), kinetic
+  capabilities, deployed-units work gallery, **client-proof FIELD REPORTS** (21st.dev reskin),
+  wired control core, budget configurator, standby footer, floating WhatsApp FAB. R3F + the
+  full free GSAP plugin set + Lenis + framer-motion. Headerless by design. Built over many hard
+  sessions; **capabilities took 6 attempts, the testimonials/client-proof took ~10** (see §25).
+  Migrated `/v4` → `/`, deleted the entire v3 site, merged to `main`. alqode.com IS v4.
 - **v3.1 / v3.0 (2026):** "Builder × Scene" dark terminal/automation aesthetic, single
   page, GSAP ScrollTrigger "The Build" pinned section, horizontal work carousel, light-bg
   About with founder motto, merged System/Talk sections. (Superseded by v4; preserved in
@@ -501,7 +544,181 @@ Mobile is ~99% of traffic, so it's designed, not shrunk. Patterns that worked:
 
 ---
 
+## 25. THE HARD-SECTION METHODOLOGY — the 2-strike rule (READ THIS on any taste-driven section)
+
+> Born from the testimonials thrash (§26): ~10 builds, the first 9 rejected, because the default
+> loop was **solo-guess-and-show with no escalation gate.** This turns that lesson from inert
+> prose into an executable ladder. A **hard section** = any taste-driven section Hamdaan rejects
+> **twice**. The ladder below is not a retry loop.
+
+**THE 8 BEHAVIOUR CHANGES (the whole playbook in 8 lines):**
+1. **2-STRIKE RULE:** a taste section rejected twice means the FORMAT CATEGORY is wrong. STOP
+   hand-iterating; switch to premium-pull + divergent judged exploration. Trigger is 2, not 9.
+2. On a hard section, **pull a premium 21st.dev component for the STRUCTURE first** and reskin
+   into the machine language. Hand-carve only signature moments that ARE the product (hero, snake,
+   control core).
+3. Run a **divergent exploration:** generate 3–4 genuinely DIFFERENT kinds behind `?variant=`,
+   self-judge with taste-skill/impeccable/emil, show him only the strongest 1–2 as a CHOICE.
+4. Run the **20-min code-free intake** before any hard-section build: load ui-ux-pro-max +
+   taste-skill, write the section's ONE unique job, audit the page for redundancy, pull an anchor.
+5. **NEVER ask him for a reference link**, and never treat a thing he "liked" as a spec — it's a
+   VIBE/LEVEL signal. Take the level, invent original. Asking for refs enrages him.
+6. Read his **rating words as FORMAT-category rejection**, not styling notes; name the dead
+   category and never recolour it.
+7. **Never bolt a gimmick** (waveform, slider, 3D, particles, halos) onto a weak concept. Build
+   the static greyscale composition to "strong" FIRST, then animate. Favour asymmetry + one
+   dominant focal device over uniform/centered grids.
+8. When he vents, **don't grovel/argue/explain** — return with something different in KIND. Keep a
+   per-section REJECTED ledger (§26) so no dead format is ever re-pitched.
+
+### The 2-strike rule (the single most important trigger)
+- **Strike 1 (first build rejected):** one re-skin allowed — fix hierarchy, type scale, motion,
+  composition — and re-show.
+- **Strike 2 (second build rejected): HARD STOP on solo hand-building.** Do NOT ship a third
+  bespoke variation. Switch methods now. A quote-card stays a quote-card whether it floats, glows,
+  or runs in WebGL; bubbles failed as CSS, grander CSS, and R3F — same KIND, three skins, three
+  rejections. **Diagnose the KIND and leave that kind entirely.**
+
+### The 20-minute code-free intake (before the first line; mandatory at strike 2)
+1. **Load the taste skills — don't just know they exist.** `Skill(ui-ux-pro-max)` for direction +
+   an explicit anti-pattern list for THIS section type, then `Skill(taste-skill)`/`Skill(impeccable)`
+   as the anti-slop lens. 30 seconds; it changes the output.
+2. **Write the section's ONE unique job** — the job no other section can do. (client-proof: "the
+   human VOICE / the transformation in WORDS — the work gallery already owns the live sites.")
+3. **Redundancy audit.** List what every OTHER section already does. If the new section reuses a
+   move already on the page (live-site reveal = work gallery; kinetic-scramble type = capabilities;
+   wired schematic = control core; the v3 case-card look is dead), it's auto-rejected — redesign
+   before building. (The owner, not the agent, caught the Showfloor/work-gallery dup — never again.)
+4. **Pull a premium structural anchor** via `mcp__magic__21st_magic_component_inspiration` /
+   `_component_builder`. This is the top-1% baseline; it should be day one, not attempt #10.
+
+### The divergent judged exploration (what to do at strike 2)
+- Generate **3–4 structurally DIFFERENT KINDS in parallel** (different *object*, not different
+  colours). Real option space for a proof section: (a) kinetic typographic statement, (b) an
+  interactive operated machine, (c) a receipt/artifact-of-the-running-system, (d) a premium
+  editorial composition, (e) **delete it / fold it smaller and more honest** (always a live option
+  on a roster-shaped section).
+- Prototype each rough-but-real behind a temporary `?variant=` switch (the move from commit
+  `1861d61`), or spin parallel subagents (Workflow) one per direction + a judge agent.
+- **Self-judge with the taste skills BEFORE he sees anything.** Gate: "Would a top-1% studio ship
+  this? Has he plausibly seen this exact KIND?" Kill the weak ones yourself. **He is the SECOND
+  reviewer, never the first.**
+- Surface only the strongest 1–2 as a CHOICE ("two directions — which feels like you?").
+
+### Pull-for-structure, reskin-for-soul (the build decision)
+- On a hard/supporting section, pull the SKELETON from 21st.dev; spend the whole originality budget
+  on the reskin into the machine language (chrome plate, mono readout, `{brackets}`, rationed
+  green/ember, GSAP entrance). This is NOT copying a reference (banned) — the source is a generic
+  component and the brand transform is total.
+- Hand-carve ONLY signature moments that ARE the product (WebGL hero, snake, control core). For
+  supporting sections (proof, footers, feature blocks), pull-and-reskin wins.
+
+### Anti-decoration rule
+- Never bolt a gimmick instrument (waveform, telemetry console, fake dashboard, drag-to-reveal, 3D
+  depth, particles, halos) onto a weak concept to rescue it — he reads it as desperate ("almost
+  made me vomit", "worst inventions"). **Motion/3D amplify the underlying composition; amplifying
+  average makes louder-average.** Build the static greyscale composition to "strong" first.
+- The craft tell he rejects is **uniform density / centered / evenly-weighted / 3-up equal grids.**
+  The accepted winner is deliberately ASYMMETRIC with one dominant focal device (a ~34vw ghost case
+  number against small mono text + huge negative space). One thing dominates; everything else is quiet.
+
+## 26. SESSION-9 RETROSPECTIVE — the testimonials thrash + the REJECTED ledger
+
+**What happened:** the client-proof / testimonials section took ~10 distinct builds in ONE session.
+Hamdaan rejected the first 9 and only "let slide for now" (rated "average") the 10th. **Root cause:
+the default loop was solo-guess-and-show with no escalation gate.** Each of the first 8 was ONE idea
+built to completion then shown — gambling, not exploring; rejections changed the *paint*, never the
+*method*. The two moves that finally worked — pull a premium 21st.dev component + reskin, and run a
+divergent multi-agent judged exploration — were available from minute one and used at attempts 9–10
+instead of attempt 2. Running attempt-10's pipeline FIRST lands "average-or-better" on build 1; one
+judged divergent round closes to accepted = ~2 reviews instead of 10. **This was a PROCESS failure,
+not a taste ceiling.** (The §23 capabilities lesson already said "change the KIND" — but as prose it
+was inert under pressure; §25 is its executable form.)
+
+**Secondary failures banked:** (1) the premium MCP + 4 taste skills sat idle for 9 attempts while
+hand-carving from a blank canvas — and blank-canvas + competent engineering reliably lands at
+"competent AI build", his exact rejection bar. (2) No redundancy audit (he caught the Showfloor dup).
+(3) He mentioned liking "floating bubbles"; the agent treated a VIBE as a SPEC, asked for the
+reference link, and burned ~3 attempts — he erupted "you do not get design inspiration from me".
+(4) Grovel/explain responses to his venting taxed the relationship.
+
+**THE REJECTED LEDGER — do NOT re-pitch any of these KINDS for client-proof:**
+1. `9955c5e` Quote + headshot woven into work-gallery cards ("field report") — "looked like my v3".
+2. `999fe18` "Return-signal" telemetry console + animated waveform + cycling quotes — "1/10, vomit".
+3. `66b8a87` Clean editorial "case notes" (problem headline + quote + face) — "the format is really bad".
+4. `80924ae` Interactive before→after "power-on" DRAG slider revealing the live site — "made me vomit".
+5. `261256a` CSS floating-bubble avatars + speech bubble — weak.
+6. `c0a383e` "Grander" floating voices (bigger type, halo, drifting motes, parallax) — "3/10, has potential".
+7. `dc317ca` Real WebGL/R3F 3D floating-bubbles scene (depth, bloom, particles) — "super ass, worst inventions".
+8. `1861d61` "Showfloor" — descend through each client's REAL live site as the hero — CUT, **duplicated the work gallery**.
+9. `1a6369b` "Transform Line" — monumental before→after kinetic type (HOURS→MINUTES scramble) — "very bad, very bad".
+10. `412d26f` **Premium 21st.dev editorial reskin = the SHIPPED `client-proof.tsx`** — "average, let it slide".
+- **Banned KINDS distilled:** avatar+quote+metric cards (1,3,9); floating-bubble avatars in any tech (5,6,7);
+  a gimmick instrument bolted onto a quote (2,4); the live-site-as-hero (8 = the work gallery's job).
+
+## 27. RESOURCE DECISION TREE — what to reach for FIRST (so it's not attempt #9)
+
+> The toolkit was NEVER the bottleneck (see RESOURCES.md §10). Art direction + actually *using* the
+> resources was. This tree forces the right pull early.
+
+- **Any taste-driven visual section, before the first build →** `Skill(ui-ux-pro-max)` (direction +
+  anti-pattern list) → `Skill(taste-skill)`/`Skill(impeccable)` (anti-slop lens). Non-negotiable on a
+  hard section.
+- **A top-1% structural starting point** (testimonials, pricing, feature blocks, footers, navs) **→
+  21st.dev Magic MCP FIRST:** `mcp__magic__21st_magic_component_inspiration` to browse,
+  `_component_builder` to pull, `_component_refiner` to iterate, then reskin. **DEFAULT for supporting
+  sections — do not hand-carve the skeleton.** `mcp__magic__logo_search` for brand logos.
+- **Polish / micro-interactions / the invisible details →** `Skill(emil-design-eng)` + `Skill(impeccable)`,
+  AFTER structure is right, BEFORE showing him (adversarial first reviewer).
+- **Motion / choreography (the real award-level gap) →** the eight `gsap-*` skills + `Skill(framer-motion)`
+  (client-proof uses Framer Motion `useSpring` for the magnetic parallax). All free GSAP plugins registered in `machine.ts`.
+- **Signature scroll-cinematic moment →** `Skill(video-to-website-natherk)` + R3F/drei/postprocessing.
+  **RESERVE for moments that ARE the product.** (The WebGL 3D bubbles were "worst inventions" because depth
+  was thrown at a section that needed WORDS.)
+- **Generative assets (a real reel/hero still/portrait) →** Higgsfield MCP + `nano-banana-pro` /
+  `seedance-2-0` / `hyper-motion-food-reel`. (Confirm the Higgsfield sub is still live — he was cancelling it.)
+- **Copy →** `Skill(humanizer)`; `constants.ts` is the source of truth; every WhatsApp link via `waUrl()`.
+- **A genuinely open question** (what proof format converts) **→** `deep-research`, ONCE, early, not as a
+  stall. (It already found: proof that converts is the TRANSFORMATION made interactive/immersive; video
+  out-converts text; a carousel of avatar quote cards is the canonical generic tell.)
+- **On-screen QC →** Playwright MCP; `?p=0..1` freezes hero progress; Lenis owns scroll → `scrollIntoView`.
+
+**The rule that ties it together:** on a hard section the first 20 minutes are skills + a 21st.dev pull +
+a redundancy audit, BEFORE the first bespoke line.
+
+## 28. GET AHEAD / NEXT SESSION — be top 1%
+
+1. **`client-proof.tsx` is the FLOOR, not a win.** Status: ACCEPTED-NOT-LOVED ("average, let it slide") —
+   the one section not signed off with enthusiasm and the most likely revisit. Flag it at session start.
+   Its `TESTIMONIALS` quotes are DRAFT — confirm the real quotes with each owner before any rebuild or wide ads.
+2. **If you reopen client-proof, run §25 from step one** — never from a blank canvas; read the §26 REJECTED
+   ledger first. Its unique job is the HUMAN VOICE / the transformation in WORDS (the work gallery owns the sites).
+3. **Bank the unused award-level proof DIRECTIONS** (kinds to invent originally, not skins): proof-as-state-change
+   led by the problem walked in on; the receipt/artifact of the running system (a calendar that books itself, a
+   community that returns, a store punching above budget); asymmetric progressive scroll-reveal (never a 3-up grid);
+   one monumental operator-to-operator line with the human attached small; or fold-it-away/ambient (with only 3
+   clients, fewer-and-stronger can beat any elaborate system). Award finding: **proof that converts is the
+   TRANSFORMATION made interactive/immersive, not a quoted compliment; the avatar-quote-card grid is the slop tell.**
+4. **Pre-load the §25 hard-section checklist at the top of any new visual work** — the 2-strike gate, the 20-min
+   intake, the divergent judged exploration. First move, not a recovery move.
+5. **Verify MCP + skills are live before relying on them:** 21st.dev Magic needs the key in gitignored `.mcp.json`
+   (NEVER commit) + an app restart; confirm Higgsfield is still subscribed.
+6. **Real-device pass on the LIVE site** (now on `main`, `5e3ac8e`): PageSpeed Insights on alqode.com for honest
+   mobile perf + CLS (headless Lighthouse perf is unreliable — no GPU). a11y/best-practices/SEO were 100/96/98.
+7. **Keep a REJECTED ledger per hard section** in this doc going forward, so no dead format is ever re-pitched.
+
+**Award-craft to bank:** the gap to award level is CHOREOGRAPHY (loader, transitions, reactive motion), not the
+chrome; the static composition must be strong UNANIMATED first; deliberate asymmetry + one dominant focal device +
+generous negative space is the line between "art-directed" and "tidy template". Sources worth revisiting: Awwwards
+testimonial inspiration + judging-criteria guides, creative-agency portfolios built around few clients.
+
+---
+
 *If you're starting a NEW client site from this folder: Part B is the method. Generate
 the design system with ui-ux-pro-max, pick an original direction (never copy a ref),
 use the full GSAP plugin set + R3F for signature moments, design mobile deliberately,
 verify on screen + build before claiming done, and keep ONE doc like this one.*
+
+*And the hardest-won lesson of all (§25): on any taste-driven section, run premium-pull +
+divergent judged exploration FROM THE START — two strikes, never ten. The toolkit was never
+the bottleneck; using it early, and changing the KIND not the paint, is the whole game.*
