@@ -30,6 +30,9 @@ export const metadata: Metadata = {
   title: SITE.title,
   description: SITE.description,
   metadataBase: new URL(SITE.url),
+  alternates: {
+    canonical: "/",
+  },
   keywords: [
     "web automation Cape Town",
     "WhatsApp automation South Africa",

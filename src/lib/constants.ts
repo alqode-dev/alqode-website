@@ -4,7 +4,11 @@ export const SITE = {
   title: "alqode — Every layer. Built to earn.",
   description:
     "Brand, web, commerce, motion, automation and software, every layer built in house in Cape Town. We don't build websites, we build machines that make you money.",
-  url: "https://alqode.com",
+  // Canonical host. Vercel currently serves www as primary (alqode.com 307→www),
+  // so metadata/OG/sitemap must use www to avoid a redirect on the og:image
+  // (a redirected image breaks WhatsApp/social link previews). If the Vercel
+  // primary domain is ever switched to the bare alqode.com, change this back.
+  url: "https://www.alqode.com",
   founder: "Mohammed Hamdaan Dhaler",
   location: "Cape Town, South Africa",
   email: "alqodez@gmail.com",
