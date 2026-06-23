@@ -184,19 +184,23 @@ Single page. Route file renders, in order:
    community badge, tech-stack chips. Mobile swipes (peeking next card + "swipe →");
    desktop scrolls + arrows. Real screenshots in `public/images/`.
 
-6. **Client proof — FIELD REPORTS** (`client-proof.tsx`). The testimonials / social-proof
-   section. **Reskinned from a premium 21st.dev Magic editorial component** into the machine
-   language (NOT a generic widget; deliberately carries NO client screenshots — the work
-   gallery already owns "live + earning", and re-showing them read as duplication). One compact
-   composition cycling the three real clients: an oversized ghosted case number with magnetic
-   cursor parallax, a vertical `FIELD REPORT` rail + green progress line, the outcome as a mono
-   readout (`Hours → minutes`), a SHORT punchy pull-quote that lands word-by-word with a 3D flip,
-   a chrome-housed operator plate, a faint client-name ticker. framer-motion; auto-advances;
-   reduced-motion + no-JS rest readable. The visible quote is the `pull` field; full quotes live
-   in an sr-only list + Review JSON-LD. **STATUS: shipped but only "average" to Hamdaan — the
-   explicit next-session improvement target.** It took ~10 attempts to get even this far; read
-   **§25 (the hard-section methodology)** before touching it. Content = `TESTIMONIALS` in
-   constants (`client/role/metric/before/after/pull/quote/photo/site`).
+6. **Client proof — THE TRANSFORMATION** (`client-proof.tsx`). The testimonials / social-proof
+   section, **rebuilt in session 10** (the old 21st.dev quote-cycler is GONE). Proof as the
+   machine's core move: each client's system **powering on**. One richly-built chrome unit (panel
+   + ember rim + corner brackets) shows the **before** (the problem they walked in on, dim like a
+   fault) → an ignition pulse runs the seam → **NOW RUNNING** (what the system actually does, lit,
+   big serif). The *result*, not a quoted compliment; the founder rides along as the operator
+   (photo + live link), a `BUDGET → PREMIUM` style readout anchors it. Auto-cycles the three; a
+   right rail switches them. framer-motion; carries NO client screenshots (the work gallery owns
+   "live + earning"); reduced-motion + no-JS rest on the running state with full quotes in an
+   sr-only list + Review JSON-LD. Content = `TESTIMONIALS` in constants
+   (`client/role/metric/before/after/pull/quote/photo/site`). **Why this kind:** RESOURCES.md §8
+   (twice): *proof that converts is the TRANSFORMATION made immersive, not quote cards.* The two
+   before→after attempts that failed earlier (§26 #4 drag, #9 kinetic type) failed on execution,
+   not concept. **STATUS: SHIPPED LIVE, tired-pass from Hamdaan** ("looks nice, doesn't reach my
+   bar but I'll give it a pass, I just wanna move on"). Accepted-not-loved, like the prior version,
+   so still a future-improvement candidate — but the KIND is now settled (transformation, not a
+   quote). Read **§25 + §26** before touching it.
 
 7. **Control Core** (`control-core.tsx`). LOCKED + liked. The founder section as a wiring
    schematic, NOT a solar system (a copied orbit was ripped out). Operator photo in a
@@ -652,9 +656,12 @@ reference link, and burned ~3 attempts — he erupted "you do not get design ins
 7. `dc317ca` Real WebGL/R3F 3D floating-bubbles scene (depth, bloom, particles) — "super ass, worst inventions".
 8. `1861d61` "Showfloor" — descend through each client's REAL live site as the hero — CUT, **duplicated the work gallery**.
 9. `1a6369b` "Transform Line" — monumental before→after kinetic type (HOURS→MINUTES scramble) — "very bad, very bad".
-10. `412d26f` **Premium 21st.dev editorial reskin = the SHIPPED `client-proof.tsx`** — "average, let it slide".
-- **Banned KINDS distilled:** avatar+quote+metric cards (1,3,9); floating-bubble avatars in any tech (5,6,7);
-  a gimmick instrument bolted onto a quote (2,4); the live-site-as-hero (8 = the work gallery's job).
+10. `412d26f` Premium 21st.dev editorial reskin (ghost case number + pull-quote cycler) — "average, let it slide".
+11. *(session 10)* "THE LINE" — one monumental operator pull-quote in big serif + quiet switch index — "none of them look good at ALL".
+12. *(session 10)* "THE REGISTER" — art-directed manifest of all three voices at once (lead big, two quiet) — same rejection.
+13. `9135f50` **"THE TRANSFORMATION" = the SHIPPED `client-proof.tsx`** — each client's system powers on (before→NOW RUNNING) in a rich chrome unit — **tired-pass: "looks nice, doesn't reach my bar, but move on".**
+- **Banned KINDS distilled:** avatar+quote+metric cards (1,3,9); **any big pull-quote in editorial type (10,11,12) — the whole "quote as the hero" family is dead, even fresh skins of it; it also reads as more-of-the-same vs the hero/capabilities/footer which are already big type**; floating-bubble avatars in any tech (5,6,7); a gimmick instrument bolted onto a quote (2,4); the live-site-as-hero (8 = the work gallery's job).
+- **The session-10 lesson (re-confirming §25):** I again opened with TWO options of the SAME kind (both pull-quotes) — the exact 2-strike trap. What landed was switching the *object* entirely to the **transformation made immersive** (RESOURCES.md §8, stated twice: that is what converts; quote cards do not). Lead with the transformation, not the compliment. If proof is reopened, do NOT pitch a quote; the open ceiling is richer/more-cinematic execution of the SAME transformation kind.
 
 ## 27. RESOURCE DECISION TREE — what to reach for FIRST (so it's not attempt #9)
 
