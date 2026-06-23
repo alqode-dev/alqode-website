@@ -351,7 +351,20 @@ CSS fallback). Decorative SVGs are `aria-hidden`; the kinetic capability block i
 Title (home): "alqode — Every layer. Built to earn." Description covers brand/web/
 commerce/motion/automation/software, in house, Cape Town. `layout.tsx` inherits these and
 carries JSON-LD (Organization / ProfessionalService / FAQPage). OG image via
-`opengraph-image.tsx` (edge). `sitemap.ts` lists `/`. `robots.txt` allows all.
+`opengraph-image.tsx` (edge, 1200×630 PNG ~146kB — branded `{alqode}` + the money line +
+"Free mockup in 24h"; renders pro, verified). `sitemap.ts` lists `/`. `robots.txt` allows all.
+
+**CANONICAL HOST = `https://www.alqode.com` (session 10).** Vercel currently serves **www as
+primary**: the bare `alqode.com` 307-redirects to `www`. So `SITE.url`, `metadataBase`, the
+explicit canonical (`alternates.canonical`), `sitemap.ts`, and the `robots.txt` Sitemap line
+all point at **www** — otherwise the auto-generated `og:image` (built from `metadataBase`)
+sits on the bare host and **returns a 307 → 15-byte text/plain**, which silently kills the
+WhatsApp/social link preview. **These must stay matched to the Vercel primary domain:** if the
+primary is ever flipped to the bare `alqode.com`, flip `SITE.url` back to non-www in the same
+change, or the image redirect bug returns (just inverted). The **H1** is an `sr-only`,
+keyword-rich line in `page.tsx` (SSR'd) because the hero is `ssr:false` (its visible headline
+is a `div`, ref-animated) — keep exactly one H1. To refresh a stale WhatsApp/FB preview cache
+after a change, re-scrape the URL in the Facebook Sharing Debugger.
 
 ## 15. HOW TO UPDATE CONTENT
 
