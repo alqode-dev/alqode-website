@@ -18,6 +18,13 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
+      {/* The semantic H1 — always present in the SSR HTML. The visible hero is
+          ssr:false, so its headline is not in the server response that crawlers
+          and non-JS clients read first. Keyword-rich, screen-reader only. */}
+      <h1 className="sr-only">
+        alqode, a digital agency in Cape Town building web, automation, e-commerce
+        and software for businesses across South Africa and the UAE.
+      </h1>
       <IntroLoader />
       <Cursor />
       <CinemaHero />

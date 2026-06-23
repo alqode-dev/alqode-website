@@ -290,7 +290,7 @@ export default function CinemaHero() {
   const layerB = useRef<HTMLDivElement>(null);
   const layerC = useRef<HTMLDivElement>(null);
   const scrollHint = useRef<HTMLDivElement>(null);
-  const heroH1 = useRef<HTMLHeadingElement>(null);
+  const heroH1 = useRef<HTMLDivElement>(null);
 
   // Headline boots in char-by-char (SplitText) the moment the SYSTEM BOOT
   // loader finishes (html gets .v4-loaded). The CSS .v4-hero-enter stays as the
@@ -474,14 +474,17 @@ export default function CinemaHero() {
             ref={layerA}
             className="absolute left-1/2 top-[12%] w-[92%] max-w-[44rem] -translate-x-1/2 text-center md:top-[13%]"
           >
-            <h1
+            {/* Visible hero headline. The semantic <h1> is an sr-only,
+                keyword-rich line in page.tsx (this hero is ssr:false, so its
+                text is not in the server HTML crawlers read first). */}
+            <div
               ref={heroH1}
               className="v4-hero-enter font-sans text-[clamp(2.6rem,7vw,5.5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-white"
             >
               Every layer.
               <br />
               Built to earn.
-            </h1>
+            </div>
           </div>
 
           {/* B — the crafts, centred row below the cast logo */}
